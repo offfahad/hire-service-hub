@@ -6,6 +6,7 @@ import 'package:e_commerce/screens/profile/profile_screen.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 
 class BottomNavigationBarScreen extends StatefulWidget {
@@ -75,50 +76,54 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
             ),
             onTap: onBottomNavTapped,
             items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/icons/house.svg',
-                  color: (currentPageIndex == 0)
-                      ? AppTheme.fMainColor
-                      : Colors.grey,
-                  height: MediaQuery.of(context).size.height * 0.035,
-                  width: MediaQuery.of(context).size.height * 0.035,
-                ),
+              const BottomNavigationBarItem(
+                // icon: SvgPicture.asset(
+                //   'assets/icons/house.svg',
+                //   color: (currentPageIndex == 0)
+                //       ? AppTheme.fMainColor
+                //       : Colors.grey,
+                //   height: MediaQuery.of(context).size.height * 0.035,
+                //   width: MediaQuery.of(context).size.height * 0.035,
+                // ),
+                icon: Icon(IconlyLight.home),
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/icons/favorite.svg',
-                  color: (currentPageIndex == 1)
-                      ? AppTheme.fMainColor
-                      : Colors.grey,
-                  height: MediaQuery.of(context).size.height * 0.035,
-                  width: MediaQuery.of(context).size.height * 0.035,
-                ),
+                // icon: SvgPicture.asset(
+                //   'assets/icons/favorite.svg',
+                //   color: (currentPageIndex == 1)
+                //       ? AppTheme.fMainColor
+                //       : Colors.grey,
+                //   height: MediaQuery.of(context).size.height * 0.035,
+                //   width: MediaQuery.of(context).size.height * 0.035,
+                // ),
+                icon: const Icon(IconlyLight.category),
                 label: authProvider.user!.role!.title == "service_provider"
                     ? "My Service"
                     : "Service",
               ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/icons/cart.svg',
-                  color: (currentPageIndex == 2)
-                      ? AppTheme.fMainColor
-                      : Colors.grey,
-                  height: MediaQuery.of(context).size.height * 0.035,
-                  width: MediaQuery.of(context).size.height * 0.035,
-                ),
+              const BottomNavigationBarItem(
+                // icon: SvgPicture.asset(
+                //   'assets/icons/cart.svg',
+                //   color: (currentPageIndex == 2)
+                //       ? AppTheme.fMainColor
+                //       : Colors.grey,
+                //   height: MediaQuery.of(context).size.height * 0.035,
+                //   width: MediaQuery.of(context).size.height * 0.035,
+                // ),
+                icon: Icon(IconlyLight.bag),
                 label: 'Orders',
               ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/icons/profile.svg',
-                  color: (currentPageIndex == 3)
-                      ? AppTheme.fMainColor
-                      : Colors.grey,
-                  height: MediaQuery.of(context).size.height * 0.035,
-                  width: MediaQuery.of(context).size.height * 0.035,
-                ),
+              const BottomNavigationBarItem(
+                // icon: SvgPicture.asset(
+                //   'assets/icons/profile.svg',
+                //   color: (currentPageIndex == 3)
+                //       ? AppTheme.fMainColor
+                //       : Colors.grey,
+                //   height: MediaQuery.of(context).size.height * 0.035,
+                //   width: MediaQuery.of(context).size.height * 0.035,
+                // ),
+                icon: Icon(IconlyLight.profile),
                 label: 'Profile',
               ),
             ],

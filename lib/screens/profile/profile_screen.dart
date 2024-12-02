@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:e_commerce/common/buttons/custom_gradient_button.dart';
 import 'package:e_commerce/common/dialog_box/logout_dialogbox.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/providers/authentication/authentication_provider.dart';
@@ -22,7 +21,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Consumer<AuthenticationProvider>(
         builder: (context, authProvider, child) {
       return Scaffold(

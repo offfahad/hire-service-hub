@@ -1,8 +1,10 @@
 import 'package:carded/carded.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:e_commerce/models/category/category.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
+import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/home/categories/category_widget.dart';
+import 'package:e_commerce/screens/home/services/small_service_card_widget.dart';
+import 'package:e_commerce/screens/service/widgets/service_card_widget.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,10 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<CategoryProvider>(context, listen: false).fetchCategories();
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ServiceProvider>(context, listen: false).fetchServices();
     });
   }
 
@@ -40,12 +44,14 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     Brightness brightness = Theme.of(context).brightness;
     bool isDarkMode = brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home"),
+        forceMaterialTransparency: true,
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 20),
+            padding: const EdgeInsets.only(right: 20),
             child: Row(
               children: [
                 InkWell(
@@ -55,9 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Icon(IconlyLight.message),
                   ),
                 ),
-                const SizedBox(
-                  width: 20,
-                ),
+                const SizedBox(width: 20),
                 InkWell(
                   onTap: () {},
                   child: const Badge(
@@ -75,31 +79,27 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Give the CarouselSlider a fixed height
+              // Carousel Section
               SizedBox(
-                height: screenHeight * 0.3, // Use 40% of screen height
+                height: screenHeight * 0.3,
                 child: Stack(
                   children: [
                     CarouselSlider(
                       options: CarouselOptions(
-                        height: screenHeight *
-                            0.4, // Ensure height matches the parent
-                        viewportFraction:
-                            1.0, // Take the full width of the screen
-                        autoPlay: true, // Enable auto-swiping
-                        autoPlayInterval:
-                            const Duration(seconds: 3), // Swipe every 3 seconds
+                        height: screenHeight * 0.3,
+                        viewportFraction: 1.0,
+                        autoPlay: true,
+                        autoPlayInterval: const Duration(seconds: 3),
                         autoPlayAnimationDuration:
                             const Duration(milliseconds: 800),
-                        enlargeCenterPage:
-                            false, // No enlargement of the center image
+                        enlargeCenterPage: false,
                       ),
                       items: images.map((imagePath) {
                         return Builder(
                           builder: (BuildContext context) {
                             return Image.asset(
                               imagePath,
-                              fit: BoxFit.cover, // Cover the entire space
+                              fit: BoxFit.cover,
                               width: MediaQuery.of(context).size.width,
                             );
                           },
@@ -107,53 +107,54 @@ class _HomeScreenState extends State<HomeScreen> {
                       }).toList(),
                     ),
                     Positioned(
-                        left: 20,
-                        bottom: 80,
-                        child: Column(
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: "Find the perfect ",
-                                    style: GoogleFonts.poppins(
-                                      textStyle: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                      ),
+                      left: 20,
+                      bottom: 80,
+                      child: Column(
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Find the perfect ",
+                                  style: GoogleFonts.poppins(
+                                    textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
                                     ),
                                   ),
-                                  TextSpan(
-                                    text: "freelancers",
-                                    style: GoogleFonts.poppins(
-                                      textStyle: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontStyle: FontStyle
-                                            .italic, // Italic style for "freelancer"
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                ),
+                                TextSpan(
+                                  text: "freelancers",
+                                  style: GoogleFonts.poppins(
+                                    textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  TextSpan(
-                                    text: "\nservices for your business",
-                                    style: GoogleFonts.poppins(
-                                      textStyle: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                      ),
+                                ),
+                                TextSpan(
+                                  text: "\nservices for your business",
+                                  style: GoogleFonts.poppins(
+                                    textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        )),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-              // Add additional widgets below the carousel if needed
               const SizedBox(height: 20),
+
+              // Search Section
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: CardyContainer(
@@ -164,16 +165,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 50,
                   child: Row(
                     children: [
-                      // Search Icon
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Icon(
-                          Icons.search,
-                          color: Colors.grey,
-                        ),
+                        child: Icon(Icons.search, color: Colors.grey),
                       ),
-
-                      // Input Field
                       Expanded(
                         child: TextField(
                           controller: searchController,
@@ -190,8 +185,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-
-                      // Search Button
                       GestureDetector(
                         onTap: () {
                           final query = searchController.text.trim();
@@ -223,9 +216,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
+
+              // Categories Section
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Text(
@@ -268,16 +261,64 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
+
+              // Services Section
               const Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 15,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Text(
                   "Popular Services",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
-              
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Consumer<ServiceProvider>(
+                  builder: (context, serviceProvider, child) {
+                    if (serviceProvider.isLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    if (serviceProvider.errorMessage != null &&
+                        serviceProvider.services.isEmpty) {
+                      return Center(
+                        child: Text(serviceProvider.errorMessage!),
+                      );
+                    }
+
+                    if (serviceProvider.services.isEmpty) {
+                      return const SizedBox(
+                        height: 120,
+                        child: Center(
+                          child: Text("No services available"),
+                        ),
+                      );
+                    }
+
+                    return GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 2,
+                        crossAxisSpacing: 2,
+                        childAspectRatio: 3.3 / 4,
+                      ),
+                      itemCount: serviceProvider.services.length > 4
+                          ? 4
+                          : serviceProvider.services.length,
+                      itemBuilder: (context, index) {
+                        return SmallServiceCard(
+                          service: serviceProvider.services[index],
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),

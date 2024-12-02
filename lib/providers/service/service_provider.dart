@@ -7,11 +7,11 @@ class ServiceProvider with ChangeNotifier {
 
   List<ServiceModel> _services = [];
   bool _isLoading = false;
-  String _errorMessage = '';
+  String? _errorMessage = '';
 
   List<ServiceModel> get services => _services;
   bool get isLoading => _isLoading;
-  String get errorMessage => _errorMessage;
+  String? get errorMessage => _errorMessage;
 
   Future<void> fetchServices() async {
     _isLoading = true;

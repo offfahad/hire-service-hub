@@ -16,8 +16,6 @@ class ServiceScreen extends StatefulWidget {
 class _ServiceScreenState extends State<ServiceScreen> {
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ServiceProvider>(context, listen: false).fetchServices();

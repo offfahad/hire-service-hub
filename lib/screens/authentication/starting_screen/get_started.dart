@@ -19,32 +19,34 @@ class _GetStartedState extends State<GetStarted> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Image.asset(
-            //   "assets/logo.png",
-            //   width: MediaQuery.of(context).size.width * 0.50,
-            //   height: MediaQuery.of(context).size.height * 0.30,
-            // ),
-            Text(
-              "E-Services",
-              style: TextStyle(
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.fMainColor,
+            // Center the title texts
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "E-Services",
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.fMainColor,
+                      ),
+                    ),
+                    Text(
+                      "Hub",
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.fMainColor,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            Text(
-              "Hub",
-              style: TextStyle(
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.fMainColor,
-              ),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
+            // Bottom content
             Column(
               children: [
                 const Text(
@@ -56,7 +58,7 @@ class _GetStartedState extends State<GetStarted> {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.width * 0.04,
+                  height: MediaQuery.of(context).size.width * 0.02,
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.80,
@@ -71,17 +73,19 @@ class _GetStartedState extends State<GetStarted> {
                   height: MediaQuery.of(context).size.width * 0.08,
                 ),
                 CustomGradientButton(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    text: "Get Started",
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        SlidePageRoute(
-                          page: const LoginScreen(),
-                        ),
-                      );
-                    }),
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  text: "Get Started",
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      SlidePageRoute(
+                        page: const LoginScreen(),
+                      ),
+                    );
+                  },
+                ),
               ],
-            )
+            ),
+            const SizedBox(height: 50), // Optional padding for the bottom
           ],
         ),
       ),

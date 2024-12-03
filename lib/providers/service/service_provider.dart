@@ -86,4 +86,34 @@ class ServiceProvider with ChangeNotifier {
     _cartList.clear();
     notifyListeners();
   }
+
+  List<ServiceModel> _filterServices = [];
+
+  List<ServiceModel> get filterServices => _filterServices;
+
+// Fetch services based on filters
+  Future<void> fetchFilterServices({
+    String? categoryId,
+    String? city,
+    String? price,
+    bool? priceHightToLow,
+    bool? priceLowToHigh,
+  }) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+    try {
+      _filterServices = await serviceRepository.getFilterServices(
+        categoryId: categoryId,
+        city: city,
+        priceHightToLow: priceHightToLow,
+        priceLowToHigh: priceLowToHigh,
+      );
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }

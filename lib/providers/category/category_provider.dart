@@ -50,4 +50,13 @@ class CategoryProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  // Method to get category by name
+  String? getCategoryIdByName(String categoryName) {
+    final category = _categories.firstWhere(
+      (category) => category.title == categoryName,
+      orElse: () => Category(id: '', title: ''),
+    );
+    return category.id;
+  }
 }

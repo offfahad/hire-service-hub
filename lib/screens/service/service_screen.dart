@@ -1,3 +1,4 @@
+import 'package:e_commerce/models/category/category.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/service/service_filter_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
@@ -41,6 +42,20 @@ class _ServiceScreenState extends State<ServiceScreen> {
               scrollDirection: Axis.horizontal,
               child: Consumer<FilterProvider>(
                   builder: (context, filterProvider, child) {
+                // Get the selected filters from the FilterProvider
+                // Get selected filters
+                Map<String, String?> filters = filterProvider.selectedFilters;
+
+                // Trigger API call after the build phase
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  // Only call the API if there are filter changes
+                  Provider.of<ServiceProvider>(context, listen: false)
+                      .fetchFilterServices(
+                    categoryId: filters['CategoryID'],
+                    city: filters['City'],
+                    price: filters['Price'],
+                  );
+                });
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -69,12 +84,15 @@ class _ServiceScreenState extends State<ServiceScreen> {
                       filterProvider,
                       isDarkMode,
                       "Price Range",
-                      ["Low To High", "High To Low"],
+                      ["PLTH", "PHTL"],
                     ),
                   ],
                 );
               }),
             ),
+          ),
+          const SizedBox(
+            height: 5,
           ),
           Expanded(
             child: Consumer<ServiceProvider>(
@@ -103,11 +121,12 @@ class _ServiceScreenState extends State<ServiceScreen> {
   }
 
   GestureDetector customChipWidget(
-      BuildContext context,
-      FilterProvider filterProvider,
-      bool isDarkMode,
-      String title,
-      List<String> options) {
+    BuildContext context,
+    FilterProvider filterProvider,
+    bool isDarkMode,
+    String title,
+    List<String> options,
+  ) {
     return GestureDetector(
       onTap: () {
         openFilterBottomSheet(
@@ -115,8 +134,21 @@ class _ServiceScreenState extends State<ServiceScreen> {
           title: title,
           options: options,
           onSelect: (String? value) {
+            if (title == "Category") {
+              // Get the selected category object from the CategoryProvider based on the category title
+              Category selectedCategory =
+                  Provider.of<CategoryProvider>(context, listen: false)
+                      .categories
+                      .firstWhere((category) => category.title == value);
+
+              // Set both the name and ID in the filter provider
+              filterProvider.setCategory(selectedCategory.title!,
+                  selectedCategory.id!); // Pass the ID (UUID)
+            }
+
             filterProvider.setFilter(
                 title, value); // Set the selected filter for this type
+
             Navigator.pop(context);
           },
           onReset: () {

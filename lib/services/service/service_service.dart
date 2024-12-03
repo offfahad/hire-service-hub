@@ -27,9 +27,7 @@ class ServiceService {
 
     try {
       final response = await http.get(url);
-      print(response);
       if (response.statusCode == 200) {
-        print(response.body);
         return fetchSingleServiceFromJson(response.body);
       } else {
         print("Failed to fetch service: ${response.statusCode}");
@@ -38,6 +36,38 @@ class ServiceService {
     } catch (e) {
       print("Error fetching service: $e");
       return null;
+    }
+  }
+
+  // Fetch services based on selected filters
+  Future<List<ServiceModel>> fetchFilteredServices({
+    String? categoryId,
+    String? city,
+    bool? priceHightToLow,
+    bool? priceLowToHigh,
+  }) async {
+    // Build query parameters based on selected filters
+    final filters = <String, String>{};
+    if (categoryId != null) filters['category_id'] = categoryId;
+    if (city != null) filters['city'] = city;
+    if (priceHightToLow != null) filters['PHTL'] = priceHightToLow.toString();
+    if (priceHightToLow != null) filters['PLTH'] = priceLowToHigh.toString();
+    print("${categoryId} - ${city} - ${priceHightToLow} - ${priceLowToHigh}");
+    // Build the final URL with query parameters
+    final uri =
+        Uri.parse("${Constants.baseUrl}${Constants.userApiService}/filter")
+            .replace(queryParameters: filters);
+    try {
+      final response = await http.get(uri);
+      print(response.body);
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body)['data'] as List;
+        return data.map((service) => ServiceModel.fromJson(service)).toList();
+      } else {
+        throw Exception('Failed to load filter services');
+      }
+    } catch (e) {
+      throw Exception('Failed to load filter services: $e');
     }
   }
 }

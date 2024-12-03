@@ -15,7 +15,6 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   bool connected = await InternetConnection().hasInternetAccess;
-
   if (connected) {
     runApp(const MyApp());
   } else {

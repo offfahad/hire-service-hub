@@ -4,7 +4,6 @@ import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/home/categories/category_widget.dart';
 import 'package:e_commerce/screens/home/services/small_service_card_widget.dart';
-import 'package:e_commerce/screens/service/widgets/service_card_widget.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -81,12 +80,12 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               // Carousel Section
               SizedBox(
-                height: screenHeight * 0.3,
+                height: screenHeight * 0.25,
                 child: Stack(
                   children: [
                     CarouselSlider(
                       options: CarouselOptions(
-                        height: screenHeight * 0.3,
+                        height: screenHeight * 0.25,
                         viewportFraction: 1.0,
                         autoPlay: true,
                         autoPlayInterval: const Duration(seconds: 3),
@@ -108,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Positioned(
                       left: 20,
-                      bottom: 80,
+                      bottom: 120,
                       child: Column(
                         children: [
                           RichText(
@@ -152,8 +151,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
-
+              const SizedBox(
+                height: 30,
+              ),
               // Search Section
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -305,7 +305,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisCount: 2,
                         mainAxisSpacing: 2,
                         crossAxisSpacing: 2,
-                        childAspectRatio: 3.3 / 4,
+                        childAspectRatio: 3.2 / 4,
                       ),
                       itemCount: serviceProvider.services.length > 4
                           ? 4

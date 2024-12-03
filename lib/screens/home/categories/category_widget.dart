@@ -28,7 +28,7 @@ class CategoryItem extends StatelessWidget {
             category.title ?? "No Title",
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 16,
+              fontSize: 14,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -37,8 +37,7 @@ class CategoryItem extends StatelessWidget {
           Text(
             category.description ?? "No Description",
             style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
+              fontSize: 12,
             ),
             maxLines: 3,
             overflow: TextOverflow.ellipsis,

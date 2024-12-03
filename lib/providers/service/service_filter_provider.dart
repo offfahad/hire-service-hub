@@ -5,11 +5,13 @@ class FilterProvider extends ChangeNotifier {
   Map<String, String?> selectedFilters = {
     'Category': null,
     'City': null,
+    'Price': null,
   };
 
   Map<String, bool> isFilterSelected = {
     'Category': false,
     'City': false,
+    'Price': false,
   };
 
   // Set the filter for a specific category (Category, City, etc.)

@@ -17,11 +17,15 @@ class ServiceProvider with ChangeNotifier {
   String? _errorMessageForServiceDetails = '';
   String? get errorMessageForServiceDetails => _errorMessageForServiceDetails;
 
+  List<String> _cityNames = [];
+  List<String> get cityNames => _cityNames;
+
   Future<void> fetchServices() async {
     _isLoading = true;
     notifyListeners();
     try {
       _services = await serviceRepository.getServices();
+      _cityNames = _services.map((service) => service.city).toSet().toList();
       _isLoading = false;
       notifyListeners();
     } catch (e) {

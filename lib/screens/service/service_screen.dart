@@ -16,17 +16,6 @@ class ServiceScreen extends StatefulWidget {
 }
 
 class _ServiceScreenState extends State<ServiceScreen> {
-  final List<String> cities = [
-    'Lahore',
-    'Islamabad',
-    'Multan',
-    'Sialkot',
-    'Karachi',
-    'Peshawar',
-  ];
-
-  final List<String> categories = [];
-
   @override
   void initState() {
     super.initState();
@@ -71,15 +60,16 @@ class _ServiceScreenState extends State<ServiceScreen> {
                       filterProvider,
                       isDarkMode,
                       "City",
-                      cities,
+                      Provider.of<ServiceProvider>(context, listen: false)
+                          .cityNames,
                     ),
                     const SizedBox(width: 10),
-                    Chip(
-                      label: const Text("Price Range"),
-                      deleteIcon: const Icon(IconlyLight.arrow_down_2),
-                      onDeleted: () {
-                        // Add logic for price filter here
-                      },
+                    customChipWidget(
+                      context,
+                      filterProvider,
+                      isDarkMode,
+                      "Price Range",
+                      ["Low To High", "High To Low"],
                     ),
                   ],
                 );
@@ -112,89 +102,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
     );
   }
 
-  // GestureDetector customChipWidget(
-  //     BuildContext context,
-  //     FilterProvider filterProvider,
-  //     bool isDarkMode,
-  //     String title,
-  //     List<String> options) {
-  //   return GestureDetector(
-  //     onTap: () {
-  //       openFilterBottomSheet(
-  //         context: context,
-  //         title: title,
-  //         options: options,
-  //         onSelect: (String? value) {
-  //           filterProvider.setFilter(value);
-  //           Navigator.pop(context);
-  //         },
-  //         onReset: () {
-  //           filterProvider.resetFilter();
-  //           Navigator.pop(context);
-  //         },
-  //       );
-  //     },
-  //     child: Chip(
-  //       label: Text(
-  //         filterProvider.selectedFilter ?? title,
-  //         style: TextStyle(
-  //           color: filterProvider.isFilterSelected
-  //               ? isDarkMode
-  //                   ? Colors.white
-  //                   : Colors.white // Ensure text is visible on dark background
-  //               : isDarkMode
-  //                   ? Colors.white
-  //                   : Colors
-  //                       .black, // Ensure text is visible on light background
-  //         ),
-  //       ),
-  //       backgroundColor: filterProvider.isFilterSelected
-  //           ? isDarkMode
-  //               ? AppTheme.fdarkBlue // Dark mode selected background
-  //               : AppTheme.fMainColor // Light mode selected background
-  //           : isDarkMode
-  //               ? AppTheme.fdarkBlue // Dark mode default background
-  //               : Colors.white, // Light mode default background
-  //       labelStyle: TextStyle(
-  //         color: filterProvider.isFilterSelected
-  //             ? isDarkMode
-  //                 ? Colors.white // Text color for selected chip in dark mode
-  //                 : Colors.white // Text color for selected chip in light mode
-  //             : isDarkMode
-  //                 ? Colors.white // Text color for default chip in dark mode
-  //                 : Colors.black, // Text color for default chip in light mode
-  //       ),
-  //       onDeleted: filterProvider.isFilterSelected
-  //           ? () => filterProvider.resetFilter()
-  //           : () {
-  //               openFilterBottomSheet(
-  //                 context: context,
-  //                 title: title,
-  //                 options: options,
-  //                 onSelect: (String? value) {
-  //                   filterProvider.setFilter(value);
-  //                   Navigator.pop(context);
-  //                 },
-  //                 onReset: () {
-  //                   filterProvider.resetFilter();
-  //                   Navigator.pop(context);
-  //                 },
-  //               );
-  //             },
-  //       deleteIcon: Icon(
-  //         filterProvider.isFilterSelected
-  //             ? Icons.cancel
-  //             : IconlyLight.arrow_down_2,
-  //         color: filterProvider.isFilterSelected
-  //             ? isDarkMode
-  //                 ? Colors.white // Icon color for selected chip in dark mode
-  //                 : Colors.white // Icon color for selected chip in light mode
-  //             : isDarkMode
-  //                 ? Colors.white // Icon color for default chip in dark mode
-  //                 : Colors.black, // Icon color for default chip in light mode
-  //       ),
-  //     ),
-  //   );
   GestureDetector customChipWidget(
       BuildContext context,
       FilterProvider filterProvider,

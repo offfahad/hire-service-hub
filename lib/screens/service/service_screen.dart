@@ -25,72 +25,90 @@ class _ServiceScreenState extends State<ServiceScreen> {
     'Peshawar',
   ];
 
-  // Function to show bottom sheet
+// Function to show draggable and expandable bottom sheet
   void _openCityBottomSheet(BuildContext context) {
     showModalBottomSheet(
       backgroundColor: Colors.white,
       context: context,
+      isScrollControlled: true, // Allow the bottom sheet to expand fully
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
       builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          height: 400, // Set height of bottom sheet
-          child: Column(
-            children: [
-              // Row with close button, title, and reset button
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return DraggableScrollableSheet(
+          initialChildSize:
+              0.5, // Initial height as a fraction of the screen height
+          minChildSize: 0.2, // Minimum height
+          maxChildSize: 0.9, // Maximum height
+          expand: false, // Prevents it from automatically expanding
+          builder: (context, scrollController) {
+            return Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      Navigator.pop(context); // Close bottom sheet
-                    },
+                  // Row with close button, title, and reset button
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          Navigator.pop(context); // Close bottom sheet
+                        },
+                      ),
+                      const Text(
+                        "City",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // Reset selection
+                          setState(() {
+                            selectedCity = null;
+                            isCitySelected = false;
+                          });
+                          Navigator.pop(
+                              context); // Close the sheet after resetting
+                        },
+                        child: const Text(
+                          "Reset",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
                   ),
-                  const Text(
-                    "City",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        selectedCity = null;
-                        isCitySelected = false;
-                      });
-                      Navigator.pop(context); // Close the sheet after resetting
-                    },
-                    child: const Text(
-                      "Reset",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                  // Radio list for cities
+                  Expanded(
+                    child: ListView.builder(
+                      controller: scrollController, // Attach scroll controller
+                      itemCount: cities.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(cities[index]),
+                          leading: SizedBox(
+                            child: Radio<String>(
+                              value: cities[index],
+                              groupValue: selectedCity,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  selectedCity = value;
+                                  isCitySelected = true;
+                                });
+                                Navigator.pop(
+                                    context); // Close the bottom sheet after selection
+                              },
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
               ),
-              // Radio list for cities
-              Expanded(
-                child: ListView.builder(
-                  itemCount: cities.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(cities[index]),
-                      leading: Radio<String>(
-                        value: cities[index],
-                        groupValue: selectedCity,
-                        onChanged: (String? value) {
-                          setState(() {
-                            selectedCity = value;
-                            isCitySelected = true;
-                          });
-                          Navigator.pop(
-                              context); // Close the bottom sheet after selection
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
@@ -136,7 +154,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
                     child: Chip(
                       label: Text(selectedCity ?? 'City'),
                       backgroundColor:
-                          isCitySelected ? Colors.green : Colors.white,
+                          isCitySelected ? Colors.black87 : Colors.white,
                       labelStyle: TextStyle(
                           color: isCitySelected ? Colors.white : Colors.black),
                       deleteIcon: Icon(

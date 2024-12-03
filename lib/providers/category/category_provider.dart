@@ -12,6 +12,8 @@ class CategoryProvider with ChangeNotifier {
   List<Category> get categories => _categories;
   String? get errorMessage => _errorMessage;
   bool get isLoading => _isLoading;
+  List<String> _categoryNames = []; // New list to store category names
+  List<String> get categoryNames => _categoryNames; // Getter for categoryNames
 
   Future<void> fetchCategories() async {
     _isLoading = true;
@@ -23,6 +25,9 @@ class CategoryProvider with ChangeNotifier {
     if (response['success']) {
       _categories = response['data'] as List<Category>;
       filteredCategories = _categories; // Initially, all categories are visible
+      // Extract category names using map and store in categoryNames
+      _categoryNames =
+          filteredCategories.map((category) => category.title ?? "").toList();
     } else {
       _errorMessage = response['message'];
     }

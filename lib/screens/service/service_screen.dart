@@ -1,6 +1,9 @@
-import 'package:carded/carded.dart';
+import 'package:e_commerce/providers/category/category_provider.dart';
+import 'package:e_commerce/providers/service/service_filter_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/service/widgets/service_card_widget.dart';
+import 'package:e_commerce/utils/app_theme.dart';
+import 'package:e_commerce/utils/bottom_sheet_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
@@ -13,9 +16,6 @@ class ServiceScreen extends StatefulWidget {
 }
 
 class _ServiceScreenState extends State<ServiceScreen> {
-  String? selectedCity;
-  bool isCitySelected = false;
-
   final List<String> cities = [
     'Lahore',
     'Islamabad',
@@ -25,94 +25,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
     'Peshawar',
   ];
 
-// Function to show draggable and expandable bottom sheet
-  void _openCityBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      backgroundColor: Colors.white,
-      context: context,
-      isScrollControlled: true, // Allow the bottom sheet to expand fully
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (BuildContext context) {
-        return DraggableScrollableSheet(
-          initialChildSize:
-              0.5, // Initial height as a fraction of the screen height
-          minChildSize: 0.2, // Minimum height
-          maxChildSize: 0.9, // Maximum height
-          expand: false, // Prevents it from automatically expanding
-          builder: (context, scrollController) {
-            return Container(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  // Row with close button, title, and reset button
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          Navigator.pop(context); // Close bottom sheet
-                        },
-                      ),
-                      const Text(
-                        "City",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          // Reset selection
-                          setState(() {
-                            selectedCity = null;
-                            isCitySelected = false;
-                          });
-                          Navigator.pop(
-                              context); // Close the sheet after resetting
-                        },
-                        child: const Text(
-                          "Reset",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                  // Radio list for cities
-                  Expanded(
-                    child: ListView.builder(
-                      controller: scrollController, // Attach scroll controller
-                      itemCount: cities.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: Text(cities[index]),
-                          leading: SizedBox(
-                            child: Radio<String>(
-                              value: cities[index],
-                              groupValue: selectedCity,
-                              onChanged: (String? value) {
-                                setState(() {
-                                  selectedCity = value;
-                                  isCitySelected = true;
-                                });
-                                Navigator.pop(
-                                    context); // Close the bottom sheet after selection
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
+  final List<String> categories = [];
 
   @override
   void initState() {
@@ -124,8 +37,11 @@ class _ServiceScreenState extends State<ServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Brightness brightness = Theme.of(context).brightness;
+    bool isDarkMode = brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
+        forceMaterialTransparency: true,
         title: const Text("Services"),
       ),
       body: Column(
@@ -134,55 +50,40 @@ class _ServiceScreenState extends State<ServiceScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Icon(IconlyLight.filter),
-                  const SizedBox(width: 10),
-                  Chip(
-                    label: const Text("Category"),
-                    deleteIcon: const Icon(IconlyLight.arrow_down_2),
-                    onDeleted: () {
-                      // Add logic for category filter here
-                    },
-                  ),
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {
-                      _openCityBottomSheet(context);
-                    },
-                    child: Chip(
-                      label: Text(selectedCity ?? 'City'),
-                      backgroundColor:
-                          isCitySelected ? Colors.black87 : Colors.white,
-                      labelStyle: TextStyle(
-                          color: isCitySelected ? Colors.white : Colors.black),
-                      deleteIcon: Icon(
-                          isCitySelected
-                              ? Icons.cancel
-                              : IconlyLight.arrow_down_2,
-                          color: isCitySelected ? Colors.white : Colors.black),
+              child: Consumer<FilterProvider>(
+                  builder: (context, filterProvider, child) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Icon(IconlyLight.filter),
+                    const SizedBox(width: 10),
+                    customChipWidget(
+                      context,
+                      filterProvider,
+                      isDarkMode,
+                      "Category",
+                      Provider.of<CategoryProvider>(context, listen: false)
+                          .categoryNames,
+                    ),
+                    const SizedBox(width: 10),
+                    customChipWidget(
+                      context,
+                      filterProvider,
+                      isDarkMode,
+                      "City",
+                      cities,
+                    ),
+                    const SizedBox(width: 10),
+                    Chip(
+                      label: const Text("Price Range"),
+                      deleteIcon: const Icon(IconlyLight.arrow_down_2),
                       onDeleted: () {
-                        if (selectedCity == null || isCitySelected == false) {
-                          _openCityBottomSheet(context);
-                        }
-                        setState(() {
-                          selectedCity = null;
-                          isCitySelected = false;
-                        });
+                        // Add logic for price filter here
                       },
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Chip(
-                    label: const Text("Price Range"),
-                    deleteIcon: const Icon(IconlyLight.arrow_down_2),
-                    onDeleted: () {
-                      // Add logic for price filter here
-                    },
-                  ),
-                ],
-              ),
+                  ],
+                );
+              }),
             ),
           ),
           Expanded(
@@ -207,6 +108,175 @@ class _ServiceScreenState extends State<ServiceScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  // GestureDetector customChipWidget(
+  //     BuildContext context,
+  //     FilterProvider filterProvider,
+  //     bool isDarkMode,
+  //     String title,
+  //     List<String> options) {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       openFilterBottomSheet(
+  //         context: context,
+  //         title: title,
+  //         options: options,
+  //         onSelect: (String? value) {
+  //           filterProvider.setFilter(value);
+  //           Navigator.pop(context);
+  //         },
+  //         onReset: () {
+  //           filterProvider.resetFilter();
+  //           Navigator.pop(context);
+  //         },
+  //       );
+  //     },
+  //     child: Chip(
+  //       label: Text(
+  //         filterProvider.selectedFilter ?? title,
+  //         style: TextStyle(
+  //           color: filterProvider.isFilterSelected
+  //               ? isDarkMode
+  //                   ? Colors.white
+  //                   : Colors.white // Ensure text is visible on dark background
+  //               : isDarkMode
+  //                   ? Colors.white
+  //                   : Colors
+  //                       .black, // Ensure text is visible on light background
+  //         ),
+  //       ),
+  //       backgroundColor: filterProvider.isFilterSelected
+  //           ? isDarkMode
+  //               ? AppTheme.fdarkBlue // Dark mode selected background
+  //               : AppTheme.fMainColor // Light mode selected background
+  //           : isDarkMode
+  //               ? AppTheme.fdarkBlue // Dark mode default background
+  //               : Colors.white, // Light mode default background
+  //       labelStyle: TextStyle(
+  //         color: filterProvider.isFilterSelected
+  //             ? isDarkMode
+  //                 ? Colors.white // Text color for selected chip in dark mode
+  //                 : Colors.white // Text color for selected chip in light mode
+  //             : isDarkMode
+  //                 ? Colors.white // Text color for default chip in dark mode
+  //                 : Colors.black, // Text color for default chip in light mode
+  //       ),
+  //       onDeleted: filterProvider.isFilterSelected
+  //           ? () => filterProvider.resetFilter()
+  //           : () {
+  //               openFilterBottomSheet(
+  //                 context: context,
+  //                 title: title,
+  //                 options: options,
+  //                 onSelect: (String? value) {
+  //                   filterProvider.setFilter(value);
+  //                   Navigator.pop(context);
+  //                 },
+  //                 onReset: () {
+  //                   filterProvider.resetFilter();
+  //                   Navigator.pop(context);
+  //                 },
+  //               );
+  //             },
+  //       deleteIcon: Icon(
+  //         filterProvider.isFilterSelected
+  //             ? Icons.cancel
+  //             : IconlyLight.arrow_down_2,
+  //         color: filterProvider.isFilterSelected
+  //             ? isDarkMode
+  //                 ? Colors.white // Icon color for selected chip in dark mode
+  //                 : Colors.white // Icon color for selected chip in light mode
+  //             : isDarkMode
+  //                 ? Colors.white // Icon color for default chip in dark mode
+  //                 : Colors.black, // Icon color for default chip in light mode
+  //       ),
+  //     ),
+  //   );
+  GestureDetector customChipWidget(
+      BuildContext context,
+      FilterProvider filterProvider,
+      bool isDarkMode,
+      String title,
+      List<String> options) {
+    return GestureDetector(
+      onTap: () {
+        openFilterBottomSheet(
+          context: context,
+          title: title,
+          options: options,
+          onSelect: (String? value) {
+            filterProvider.setFilter(
+                title, value); // Set the selected filter for this type
+            Navigator.pop(context);
+          },
+          onReset: () {
+            filterProvider
+                .resetFilter(title); // Reset the selected filter for this type
+            Navigator.pop(context);
+          },
+        );
+      },
+      child: Chip(
+        label: Text(
+          filterProvider.getFilter(title) ?? title,
+          style: TextStyle(
+            color: filterProvider.isFilterApplied(title)
+                ? isDarkMode
+                    ? Colors.white
+                    : Colors.white
+                : isDarkMode
+                    ? Colors.white
+                    : Colors.black,
+          ),
+        ),
+        backgroundColor: filterProvider.isFilterApplied(title)
+            ? isDarkMode
+                ? AppTheme.fdarkBlue
+                : AppTheme.fMainColor
+            : isDarkMode
+                ? AppTheme.fdarkBlue
+                : Colors.white,
+        labelStyle: TextStyle(
+          color: filterProvider.isFilterApplied(title)
+              ? isDarkMode
+                  ? Colors.white
+                  : Colors.white
+              : isDarkMode
+                  ? Colors.white
+                  : Colors.black,
+        ),
+        onDeleted: filterProvider.isFilterApplied(title)
+            ? () => filterProvider.resetFilter(title)
+            : () {
+                openFilterBottomSheet(
+                  context: context,
+                  title: title,
+                  options: options,
+                  onSelect: (String? value) {
+                    filterProvider.setFilter(title, value);
+                    Navigator.pop(context);
+                  },
+                  onReset: () {
+                    filterProvider.resetFilter(title);
+                    Navigator.pop(context);
+                  },
+                );
+              },
+        deleteIcon: Icon(
+          filterProvider.isFilterApplied(title)
+              ? Icons.cancel
+              : IconlyLight.arrow_down_2,
+          color: filterProvider.isFilterApplied(title)
+              ? isDarkMode
+                  ? Colors.white
+                  : Colors.white
+              : isDarkMode
+                  ? Colors.white
+                  : Colors.black,
+        ),
       ),
     );
   }

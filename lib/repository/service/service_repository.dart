@@ -13,15 +13,15 @@ class ServiceRepository {
     return await serviceService.fetchSingleService(serviceId);
   }
 
-  Future<List<ServiceModel>> getFilterServices(
-      {String? categoryId,
-      String? city,
-      bool? priceHightToLow,
-      bool? priceLowToHigh}) async {
+  Future<List<ServiceModel>> getFilterServices({
+    String? categoryId,
+    String? city,
+    String? priceRangeType,
+  }) async {
     return await serviceService.fetchFilteredServices(
-        categoryId: categoryId,
-        city: city,
-        priceHightToLow: priceHightToLow,
-        priceLowToHigh: priceHightToLow);
+      categoryId: categoryId,
+      city: city,
+      priceRangeType: priceRangeType,
+    );
   }
 }

@@ -43,23 +43,27 @@ class ServiceService {
   Future<List<ServiceModel>> fetchFilteredServices({
     String? categoryId,
     String? city,
-    bool? priceHightToLow,
-    bool? priceLowToHigh,
+    String? priceRangeType,
   }) async {
     // Build query parameters based on selected filters
     final filters = <String, String>{};
     if (categoryId != null) filters['category_id'] = categoryId;
     if (city != null) filters['city'] = city;
-    if (priceHightToLow != null) filters['PHTL'] = priceHightToLow.toString();
-    if (priceHightToLow != null) filters['PLTH'] = priceLowToHigh.toString();
-    print("${categoryId} - ${city} - ${priceHightToLow} - ${priceLowToHigh}");
+    if (priceRangeType != null) {
+      filters['PHTL'] = (priceRangeType == "PHTL" ? "true" : "false");
+    }
+    if (priceRangeType != null) {
+      filters['PLTH'] = (priceRangeType == "PLTH" ? "true" : "false");
+    }
+
+    print("${categoryId} - ${city} - ${filters["PHTL"]} - ${filters["PLTH"]}");
     // Build the final URL with query parameters
     final uri =
         Uri.parse("${Constants.baseUrl}${Constants.userApiService}/filter")
             .replace(queryParameters: filters);
     try {
       final response = await http.get(uri);
-      print(response.body);
+      //print(response.body);
       if (response.statusCode == 200) {
         final data = json.decode(response.body)['data'] as List;
         return data.map((service) => ServiceModel.fromJson(service)).toList();

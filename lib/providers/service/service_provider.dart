@@ -95,9 +95,7 @@ class ServiceProvider with ChangeNotifier {
   Future<void> fetchFilterServices({
     String? categoryId,
     String? city,
-    String? price,
-    bool? priceHightToLow,
-    bool? priceLowToHigh,
+    String? priceRangetype,
   }) async {
     _isLoading = true;
     _errorMessage = null;
@@ -106,8 +104,7 @@ class ServiceProvider with ChangeNotifier {
       _filterServices = await serviceRepository.getFilterServices(
         categoryId: categoryId,
         city: city,
-        priceHightToLow: priceHightToLow,
-        priceLowToHigh: priceLowToHigh,
+        priceRangeType: priceRangetype,
       );
     } catch (e) {
       _errorMessage = e.toString();

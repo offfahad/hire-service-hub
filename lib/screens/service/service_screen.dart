@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:e_commerce/models/category/category.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/service/service_filter_provider.dart';
@@ -10,7 +12,8 @@ import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 
 class ServiceScreen extends StatefulWidget {
-  const ServiceScreen({super.key});
+  final String? passedCategoryID;
+  const ServiceScreen({super.key, this.passedCategoryID});
 
   @override
   State<ServiceScreen> createState() => _ServiceScreenState();
@@ -51,10 +54,10 @@ class _ServiceScreenState extends State<ServiceScreen> {
                   // Only call the API if there are filter changes
                   Provider.of<ServiceProvider>(context, listen: false)
                       .fetchFilterServices(
-                    categoryId: filters['CategoryID'],
-                    city: filters['City'],
-                    price: filters['Price'],
-                  );
+                          categoryId:
+                              widget.passedCategoryID ?? filters['CategoryID'],
+                          city: filters['City'],
+                          priceRangetype: filters['Price']);
                 });
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -83,7 +86,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
                       context,
                       filterProvider,
                       isDarkMode,
-                      "Price Range",
+                      "Price",
                       ["PLTH", "PHTL"],
                     ),
                   ],
@@ -133,7 +136,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
           context: context,
           title: title,
           options: options,
-          onSelect: (String? value) {
+          onSelect: (String? value) async {
             if (title == "Category") {
               // Get the selected category object from the CategoryProvider based on the category title
               Category selectedCategory =
@@ -142,10 +145,9 @@ class _ServiceScreenState extends State<ServiceScreen> {
                       .firstWhere((category) => category.title == value);
 
               // Set both the name and ID in the filter provider
-              filterProvider.setCategory(selectedCategory.title!,
+              await filterProvider.setCategory(selectedCategory.title!,
                   selectedCategory.id!); // Pass the ID (UUID)
             }
-
             filterProvider.setFilter(
                 title, value); // Set the selected filter for this type
 
@@ -188,18 +190,42 @@ class _ServiceScreenState extends State<ServiceScreen> {
                   : Colors.black,
         ),
         onDeleted: filterProvider.isFilterApplied(title)
-            ? () => filterProvider.resetFilter(title)
+            ? () {
+                if (title == "Category") {
+                  filterProvider.resetCategoryID();
+                }
+                filterProvider.resetFilter(title);
+              }
             : () {
                 openFilterBottomSheet(
                   context: context,
                   title: title,
                   options: options,
-                  onSelect: (String? value) {
-                    filterProvider.setFilter(title, value);
+                  onSelect: (String? value) async {
+                    if (title == "Category") {
+                      // Get the selected category object from the CategoryProvider based on the category title
+                      Category selectedCategory = Provider.of<CategoryProvider>(
+                              context,
+                              listen: false)
+                          .categories
+                          .firstWhere((category) => category.title == value);
+
+                      // Set both the name and ID in the filter provider
+                      await filterProvider.setCategory(selectedCategory.title!,
+                          selectedCategory.id!); // Pass the ID (UUID)
+                    }
+
+                    filterProvider.setFilter(
+                        title, value); // Set the selected filter for this type
+
                     Navigator.pop(context);
                   },
                   onReset: () {
+                    if (title == "Category") {
+                      filterProvider.resetCategoryID();
+                    }
                     filterProvider.resetFilter(title);
+
                     Navigator.pop(context);
                   },
                 );

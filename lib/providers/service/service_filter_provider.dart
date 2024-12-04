@@ -27,6 +27,12 @@ class FilterProvider extends ChangeNotifier {
   void resetFilter(String filterType) {
     selectedFilters[filterType] = null;
     isFilterSelected[filterType] = false;
+
+    // Ensure related filters are reset, like CategoryID for Category
+    if (filterType == "Category") {
+      selectedFilters['CategoryID'] = null;
+      isFilterSelected['CategoryID'] = false;
+    }
     notifyListeners();
   }
 
@@ -45,9 +51,14 @@ class FilterProvider extends ChangeNotifier {
   }
 
   // Set the selected category ID when a category is chosen
-  void setCategory(String categoryName, String categoryId) {
+  Future<void> setCategory(String categoryName, String categoryId) async {
     // Get the category ID from the categoryProvider using category name
-      setFilter('CategoryID', categoryId); // Store category ID in selectedFilters
-    }
+    setFilter('CategoryID', categoryId); // Store category ID in selectedFilters
+    notifyListeners();
   }
 
+  void resetCategoryID() {
+    setFilter('CategoryID', null); // Reset category ID in selectedFilters
+    notifyListeners();
+  }
+}

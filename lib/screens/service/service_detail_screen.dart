@@ -30,7 +30,10 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Service Details"), forceMaterialTransparency: true,),
+      appBar: AppBar(
+        title: const Text("Service Details"),
+        forceMaterialTransparency: true,
+      ),
       body: Consumer<ServiceProvider>(
         builder: (context, serviceProvider, child) {
           if (serviceProvider.isLoading) {
@@ -82,7 +85,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                             Text(
                               service.serviceName ?? "No Name",
                               style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             Row(
                               children: [
@@ -110,9 +113,10 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
                           service.description ?? "",
-                          style: const TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       ),
+
                       const Divider(),
 
                       const Padding(
@@ -123,16 +127,43 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      ListTile(
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 16),
-                        leading: const Icon(IconlyLight.time_square),
-                        title: Text(
-                          "${formatTime(service.startTime.toString())}\n${formatTime(service.endTime.toString())}",
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            const Icon(IconlyLight.location),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            Text(
+                              "${service.city}",
+                              style: const TextStyle(fontSize: 14),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            const Icon(IconlyLight.calendar),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            Expanded(
+                              child: Text(
+                                  "FROM ${formatTime(service.startTime.toString())} VALID TILL ${formatTime(service.endTime.toString())}", style: TextStyle(fontSize: 14),),
+                            ),
+                          ],
                         ),
                       ),
                       const Divider(),
-                      //const SizedBox(height: 12),
                       // Reviews Section
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -142,10 +173,10 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      const SizedBox(height: 8),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: serviceProvider.service!.data!.specificService!.reviews ==
+                        child: serviceProvider.service!.data!.specificService!
+                                        .reviews ==
                                     null ||
                                 serviceProvider.service!.data!.specificService!
                                     .reviews!.isEmpty
@@ -153,7 +184,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                 child: Text(
                                   "No reviews yet!",
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                   ),
                                 ),
                               )
@@ -168,8 +199,8 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                                 "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg", // Placeholder image
                                           ),
                                         ),
-                                        title:
-                                            Text(review.userName ?? "Anonymous"),
+                                        title: Text(
+                                            review.userName ?? "Anonymous"),
                                         subtitle: Text(review.comment ??
                                             "No comment provided."),
                                       ),
@@ -177,9 +208,11 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                     .toList(), // Convert iterable to a list of widgets
                               ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(
+                        height: 12,
+                      ),
                       const Divider(),
-                      const SizedBox(height: 8,),
+
                       // User Information
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -208,18 +241,21 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                 Text(
                                   "${service.user?.firstName ?? "Unknown"} ${service.user?.lastName ?? "User"}",
                                   style: const TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  service.city ?? "",
-                                  style: const TextStyle(fontSize: 14),
+                                  service.user!.address!.location ?? "",
+                                  style: const TextStyle(fontSize: 12),
                                 ),
                               ],
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16,),
+                      const SizedBox(
+                        height: 16,
+                      ),
                     ],
                   ),
                 ),
@@ -280,7 +316,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 15),
                   ),
-                  child: const Text("Add to Cart"),
+                  child: const Text("Buy Now!"),
                 ),
               ],
             ),

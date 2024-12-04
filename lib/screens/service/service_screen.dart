@@ -4,16 +4,16 @@ import 'package:e_commerce/models/category/category.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/service/service_filter_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
+import 'package:e_commerce/screens/service/widgets/custom_chip_wiget_for_filtering.dart';
 import 'package:e_commerce/screens/service/widgets/service_card_widget.dart';
 import 'package:e_commerce/utils/app_theme.dart';
-import 'package:e_commerce/utils/bottom_sheet_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 
 class ServiceScreen extends StatefulWidget {
-  final String? passedCategoryID;
-  const ServiceScreen({super.key, this.passedCategoryID});
+  final Category? categoryModel;
+  const ServiceScreen({super.key, this.categoryModel});
 
   @override
   State<ServiceScreen> createState() => _ServiceScreenState();
@@ -24,7 +24,24 @@ class _ServiceScreenState extends State<ServiceScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ServiceProvider>(context, listen: false).fetchServices();
+      final filterProvider =
+          Provider.of<FilterProvider>(context, listen: false);
+
+      if (widget.categoryModel != null && widget.categoryModel!.id != null) {
+        // Set the category ID filter on initialization
+        filterProvider.setCategory(
+          widget.categoryModel!.title!,
+          widget.categoryModel!.id!,
+        );
+
+        filterProvider.setFilter("Category", widget.categoryModel!.title);
+
+        // Fetch services with applied filters
+        Provider.of<ServiceProvider>(context, listen: false)
+            .fetchFilterServices(
+          categoryId: filterProvider.selectedFilters['CategoryID'],
+        );
+      }
     });
   }
 
@@ -45,7 +62,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
               scrollDirection: Axis.horizontal,
               child: Consumer<FilterProvider>(
                   builder: (context, filterProvider, child) {
-                // Get the selected filters from the FilterProvider
                 // Get selected filters
                 Map<String, String?> filters = filterProvider.selectedFilters;
 
@@ -54,10 +70,10 @@ class _ServiceScreenState extends State<ServiceScreen> {
                   // Only call the API if there are filter changes
                   Provider.of<ServiceProvider>(context, listen: false)
                       .fetchFilterServices(
-                          categoryId:
-                              widget.passedCategoryID ?? filters['CategoryID'],
-                          city: filters['City'],
-                          priceRangetype: filters['Price']);
+                    categoryId: filters['CategoryID'],
+                    city: filters['City'],
+                    priceRangetype: filters['Price'],
+                  );
                 });
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -87,7 +103,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
                       filterProvider,
                       isDarkMode,
                       "Price",
-                      ["PLTH", "PHTL"],
+                      ["Low To High", "High To Low"],
                     ),
                   ],
                 );
@@ -101,7 +117,10 @@ class _ServiceScreenState extends State<ServiceScreen> {
             child: Consumer<ServiceProvider>(
               builder: (context, provider, child) {
                 if (provider.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(
+                      child: CircularProgressIndicator.adaptive(
+                    backgroundColor: AppTheme.fMainColor,
+                  ));
                 } else if ((provider.errorMessage ?? "").isNotEmpty) {
                   return Center(child: Text('Error: ${provider.errorMessage}'));
                 } else if (provider.services.isEmpty) {
@@ -119,129 +138,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  GestureDetector customChipWidget(
-    BuildContext context,
-    FilterProvider filterProvider,
-    bool isDarkMode,
-    String title,
-    List<String> options,
-  ) {
-    return GestureDetector(
-      onTap: () {
-        openFilterBottomSheet(
-          context: context,
-          title: title,
-          options: options,
-          onSelect: (String? value) async {
-            if (title == "Category") {
-              // Get the selected category object from the CategoryProvider based on the category title
-              Category selectedCategory =
-                  Provider.of<CategoryProvider>(context, listen: false)
-                      .categories
-                      .firstWhere((category) => category.title == value);
-
-              // Set both the name and ID in the filter provider
-              await filterProvider.setCategory(selectedCategory.title!,
-                  selectedCategory.id!); // Pass the ID (UUID)
-            }
-            filterProvider.setFilter(
-                title, value); // Set the selected filter for this type
-
-            Navigator.pop(context);
-          },
-          onReset: () {
-            filterProvider
-                .resetFilter(title); // Reset the selected filter for this type
-            Navigator.pop(context);
-          },
-        );
-      },
-      child: Chip(
-        label: Text(
-          filterProvider.getFilter(title) ?? title,
-          style: TextStyle(
-            color: filterProvider.isFilterApplied(title)
-                ? isDarkMode
-                    ? Colors.white
-                    : Colors.white
-                : isDarkMode
-                    ? Colors.white
-                    : Colors.black,
-          ),
-        ),
-        backgroundColor: filterProvider.isFilterApplied(title)
-            ? isDarkMode
-                ? AppTheme.fdarkBlue
-                : AppTheme.fMainColor
-            : isDarkMode
-                ? AppTheme.fdarkBlue
-                : Colors.white,
-        labelStyle: TextStyle(
-          color: filterProvider.isFilterApplied(title)
-              ? isDarkMode
-                  ? Colors.white
-                  : Colors.white
-              : isDarkMode
-                  ? Colors.white
-                  : Colors.black,
-        ),
-        onDeleted: filterProvider.isFilterApplied(title)
-            ? () {
-                if (title == "Category") {
-                  filterProvider.resetCategoryID();
-                }
-                filterProvider.resetFilter(title);
-              }
-            : () {
-                openFilterBottomSheet(
-                  context: context,
-                  title: title,
-                  options: options,
-                  onSelect: (String? value) async {
-                    if (title == "Category") {
-                      // Get the selected category object from the CategoryProvider based on the category title
-                      Category selectedCategory = Provider.of<CategoryProvider>(
-                              context,
-                              listen: false)
-                          .categories
-                          .firstWhere((category) => category.title == value);
-
-                      // Set both the name and ID in the filter provider
-                      await filterProvider.setCategory(selectedCategory.title!,
-                          selectedCategory.id!); // Pass the ID (UUID)
-                    }
-
-                    filterProvider.setFilter(
-                        title, value); // Set the selected filter for this type
-
-                    Navigator.pop(context);
-                  },
-                  onReset: () {
-                    if (title == "Category") {
-                      filterProvider.resetCategoryID();
-                    }
-                    filterProvider.resetFilter(title);
-
-                    Navigator.pop(context);
-                  },
-                );
-              },
-        deleteIcon: Icon(
-          filterProvider.isFilterApplied(title)
-              ? Icons.cancel
-              : IconlyLight.arrow_down_2,
-          color: filterProvider.isFilterApplied(title)
-              ? isDarkMode
-                  ? Colors.white
-                  : Colors.white
-              : isDarkMode
-                  ? Colors.white
-                  : Colors.black,
-        ),
       ),
     );
   }

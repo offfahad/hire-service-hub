@@ -10,7 +10,6 @@ class ServiceProvider with ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage = '';
 
-  List<ServiceModel> get services => _services;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
@@ -20,12 +19,19 @@ class ServiceProvider with ChangeNotifier {
   List<String> _cityNames = [];
   List<String> get cityNames => _cityNames;
 
+  bool _isFilterApplied = false;
+  List<ServiceModel> get services =>
+      _isFilterApplied ? _filterServices : _services;
+
+  bool get isFilterApplied => _isFilterApplied;
+
   Future<void> fetchServices() async {
     _isLoading = true;
     notifyListeners();
     try {
       _services = await serviceRepository.getServices();
       _cityNames = _services.map((service) => service.city).toSet().toList();
+      _isFilterApplied = false;
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -106,11 +112,19 @@ class ServiceProvider with ChangeNotifier {
         city: city,
         priceRangeType: priceRangetype,
       );
+      _isFilterApplied = _filterServices
+          .isNotEmpty; // Enable filtered view only if data exists
     } catch (e) {
       _errorMessage = e.toString();
     } finally {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void clearFilters() {
+    _isFilterApplied = false;
+    _filterServices = [];
+    notifyListeners();
   }
 }

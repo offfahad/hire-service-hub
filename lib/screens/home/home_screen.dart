@@ -152,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(
-                height: 30,
+                height: 20,
               ),
               // Search Section
               Padding(

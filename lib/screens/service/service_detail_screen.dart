@@ -3,7 +3,9 @@ import 'package:e_commerce/common/snakbar/custom_snakbar.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/utils/api_constnsts.dart';
 import 'package:e_commerce/utils/app_theme.dart';
+import 'package:e_commerce/utils/date_and_time_formatting.dart';
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 
 class ServiceDetailsScreen extends StatefulWidget {
@@ -28,7 +30,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Service Details")),
+      appBar: AppBar(title: const Text("Service Details"), forceMaterialTransparency: true,),
       body: Consumer<ServiceProvider>(
         builder: (context, serviceProvider, child) {
           if (serviceProvider.isLoading) {
@@ -44,53 +46,106 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
           return Column(
             children: [
               // Top Image Section
-              Stack(
-                children: [
-                  service.coverPhoto != null
-                      ? Image.network(
-                          '${Constants.baseUrl}${service.coverPhoto}',
-                          width: double.infinity,
-                          height: 180,
-                          fit: BoxFit.cover,
-                        )
-                      : Image.asset(
-                          'assets/images/content-writer.webp',
-                          width: double.infinity,
-                          height: 250,
-                          fit: BoxFit.cover,
-                        ),
-                ],
-              ),
+              // Stack(
+              //   children: [],
+              // ),
 
               // Scrollable Content
               Expanded(
                 child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Service Details
-                        Text(
-                          service.serviceName ?? "No Name",
-                          style: const TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Service Details
+                      service.coverPhoto != null
+                          ? Image.network(
+                              '${Constants.baseUrl}${service.coverPhoto}',
+                              width: double.infinity,
+                              height: 180,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              'assets/images/content-writer.webp',
+                              width: double.infinity,
+                              height: 250,
+                              fit: BoxFit.cover,
+                            ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              service.serviceName ?? "No Name",
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            Row(
+                              children: [
+                                const Icon(
+                                  IconlyBold.star,
+                                  color: Colors.amber,
+                                ),
+                                Text(
+                                  serviceProvider.service!.data!.averageRating
+                                              .toString() ==
+                                          "0"
+                                      ? "3.5"
+                                      : serviceProvider
+                                          .service!.data!.averageRating
+                                          .toString(),
+                                )
+                              ],
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 8),
-                        Text(
+                      ),
+
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
                           service.description ?? "",
                           style: const TextStyle(fontSize: 16),
                         ),
-                        const SizedBox(height: 16),
-                        // Reviews Section
-                        const Text(
+                      ),
+                      const Divider(),
+
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          "Availablity ",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      ListTile(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 16),
+                        leading: const Icon(IconlyLight.time_square),
+                        title: Text(
+                          "${formatTime(service.startTime.toString())}\n${formatTime(service.endTime.toString())}",
+                        ),
+                      ),
+                      const Divider(),
+                      //const SizedBox(height: 12),
+                      // Reviews Section
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
                           "Reviews",
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 8),
-                        serviceProvider.service!.data!.specificService!
-                                        .reviews ==
+                      ),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: serviceProvider.service!.data!.specificService!.reviews ==
                                     null ||
                                 serviceProvider.service!.data!.specificService!
                                     .reviews!.isEmpty
@@ -113,23 +168,31 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                                 "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg", // Placeholder image
                                           ),
                                         ),
-                                        title: Text(
-                                            review.userName ?? "Anonymous"),
+                                        title:
+                                            Text(review.userName ?? "Anonymous"),
                                         subtitle: Text(review.comment ??
                                             "No comment provided."),
                                       ),
                                     )
                                     .toList(), // Convert iterable to a list of widgets
                               ),
-                        const SizedBox(height: 16),
-                        // User Information
-                        const Text(
+                      ),
+                      const SizedBox(height: 12),
+                      const Divider(),
+                      const SizedBox(height: 8,),
+                      // User Information
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
                           "Service Provider",
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 8),
-                        Row(
+                      ),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
                           children: [
                             CircleAvatar(
                               backgroundImage: NetworkImage(
@@ -145,8 +208,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                 Text(
                                   "${service.user?.firstName ?? "Unknown"} ${service.user?.lastName ?? "User"}",
                                   style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                      fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   service.city ?? "",
@@ -156,8 +218,9 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                             ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 16,),
+                    ],
                   ),
                 ),
               ),

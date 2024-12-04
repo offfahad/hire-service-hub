@@ -49,14 +49,12 @@ class ServiceService {
     final filters = <String, String>{};
     if (categoryId != null) filters['category_id'] = categoryId;
     if (city != null) filters['city'] = city;
-    if (priceRangeType != null) {
-      filters['PHTL'] = (priceRangeType == "PHTL" ? "true" : "false");
+    // Add only the selected price range type to the filters
+    if (priceRangeType == "High To Low") {
+      filters['PHTL'] = "true";
+    } else if (priceRangeType == "Low To High") {
+      filters['PLTH'] = "true";
     }
-    if (priceRangeType != null) {
-      filters['PLTH'] = (priceRangeType == "PLTH" ? "true" : "false");
-    }
-
-    print("${categoryId} - ${city} - ${filters["PHTL"]} - ${filters["PLTH"]}");
     // Build the final URL with query parameters
     final uri =
         Uri.parse("${Constants.baseUrl}${Constants.userApiService}/filter")

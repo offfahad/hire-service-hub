@@ -2,6 +2,7 @@ import 'package:e_commerce/models/service/fetch_signle_service_model.dart';
 import 'package:e_commerce/models/service/service_model.dart';
 import 'package:e_commerce/repository/service/service_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ServiceProvider with ChangeNotifier {
   final ServiceRepository serviceRepository = ServiceRepository();
@@ -126,5 +127,49 @@ class ServiceProvider with ChangeNotifier {
     _isFilterApplied = false;
     _filterServices = [];
     notifyListeners();
+  }
+
+  void clearServicesList() {
+    _services = [];
+    notifyListeners();
+  }
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController startTimeController = TextEditingController();
+  final TextEditingController endTimeController = TextEditingController();
+
+  XFile? _coverPhoto;
+  String _selectedCategory = '';
+  bool _isAvailable = false;
+
+  XFile? get coverPhoto => _coverPhoto;
+  String get selectedCategory => _selectedCategory;
+  bool get isAvailable => _isAvailable;
+
+  void setCoverPhoto(XFile photo) {
+    _coverPhoto = photo;
+    notifyListeners();
+  }
+
+  void setCategory(String category) {
+    _selectedCategory = category;
+    notifyListeners();
+  }
+
+  void toggleAvailability(bool value) {
+    _isAvailable = value;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    descriptionController.dispose();
+    priceController.dispose();
+    startTimeController.dispose();
+    endTimeController.dispose();
+    super.dispose();
   }
 }

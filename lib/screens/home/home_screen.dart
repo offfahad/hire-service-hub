@@ -1,9 +1,12 @@
 import 'package:carded/carded.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
+import 'package:e_commerce/screens/home/categories/categories_detail_screen.dart';
 import 'package:e_commerce/screens/home/categories/category_widget.dart';
 import 'package:e_commerce/screens/home/services/small_service_card_widget.dart';
+import 'package:e_commerce/screens/service/service_screen.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,9 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ServiceProvider>(context, listen: false).clearServicesList();
+      Provider.of<CategoryProvider>(context, listen: false).resetCategories();
       Provider.of<CategoryProvider>(context, listen: false).fetchCategories();
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ServiceProvider>(context, listen: false).fetchServices();
     });
   }
@@ -219,11 +222,32 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 20),
 
               // Categories Section
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  "Popular Categories",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Popular Categories",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          SlidePageRoute(
+                            page: const CategoriesDetailScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "View All",
+                        style:
+                            TextStyle(fontSize: 16, color: AppTheme.fMainColor),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
@@ -263,11 +287,32 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               // Services Section
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  "Popular Services",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Popular Services",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          SlidePageRoute(
+                            page: const ServiceScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "View All",
+                        style:
+                            TextStyle(fontSize: 16, color: AppTheme.fMainColor),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(

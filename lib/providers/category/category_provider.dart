@@ -51,6 +51,12 @@ class CategoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void resetCategories() {
+    filteredCategories =
+        categories; // Reset to full list when reset button is clicked
+    notifyListeners();
+  }
+
   // Method to get category by name
   String? getCategoryIdByName(String categoryName) {
     final category = _categories.firstWhere(

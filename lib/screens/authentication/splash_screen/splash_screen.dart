@@ -24,19 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _checkInternetConnection();
-  }
-
-  Future<void> _checkInternetConnection() async {
-    var connectivityResult = await Connectivity().checkConnectivity();
-
-    if (connectivityResult == ConnectivityResult.none) {
-      // No internet connection
-      showCustomSnackBar(context, "No internet connection", Colors.red);
-    } else {
-      // Internet is available, proceed with checking login status
-      _checkUserLoginStatus();
-    }
+    _checkUserLoginStatus();
   }
 
   Future<void> _checkUserLoginStatus() async {

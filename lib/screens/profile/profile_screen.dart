@@ -4,6 +4,7 @@ import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/providers/authentication/authentication_provider.dart';
 import 'package:e_commerce/screens/profile/more_screens/account_screens/account_screen.dart';
 import 'package:e_commerce/screens/profile/profile_updation_screens/profile_details_screen.dart';
+import 'package:e_commerce/screens/service/create_services_screen.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -167,6 +168,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                   const Divider(),
+                  if (authProvider.user!.role!.title == "service_provider") ...[
+                    ListTile(
+                      leading: const Icon(
+                        IconlyLight.edit,
+                        size: 20,
+                      ),
+                      title: const Text(
+                        'Create New Service',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 14),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          SlidePageRoute(
+                            page: const CreateServiceScreen()
+                          ),
+                        );
+                      },
+                    ),
+                    const Divider(),
+                  ],
                   if (authProvider.user!.role!.title == "service_provider") ...[
                     ListTile(
                       leading: const Icon(

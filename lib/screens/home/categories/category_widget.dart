@@ -7,13 +7,22 @@ import 'package:flutter/material.dart';
 
 class CategoryItem extends StatelessWidget {
   final Category category;
+  final double? width; // Optional parameter with default value of null
 
-  const CategoryItem({super.key, required this.category});
+  const CategoryItem({
+    super.key,
+    required this.category,
+    this.width, // Accepts width as an optional parameter
+  });
 
   @override
   Widget build(BuildContext context) {
     Brightness brightness = Theme.of(context).brightness;
     bool isDarkMode = brightness == Brightness.dark;
+
+    // Use the provided width, or default to 200 if none is passed
+    double itemWidth = width ?? 200.0;
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -26,7 +35,7 @@ class CategoryItem extends StatelessWidget {
         );
       },
       child: CardyContainer(
-        width: 200,
+        width: itemWidth, // Set the width dynamically
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.only(top: 1, bottom: 1, right: 10, left: 1),
         color: isDarkMode ? AppTheme.fdarkBlue : Colors.white,
@@ -49,7 +58,7 @@ class CategoryItem extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               category.description ?? "No Description",
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
               ),
               maxLines: 3,

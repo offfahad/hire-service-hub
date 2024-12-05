@@ -49,12 +49,12 @@ class _GetStartedState extends State<GetStarted> {
             // Bottom content
             Column(
               children: [
-                const Text(
+                Text(
                   "Find, Order & Enjoy!",
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF33bf2e),
+                    color: AppTheme.fMainColor,
                   ),
                 ),
                 SizedBox(
@@ -65,8 +65,7 @@ class _GetStartedState extends State<GetStarted> {
                   child: const Text(
                     "Find services you want to buy at your mobile and pay by your phone & enjoy happy, friendly Shopping!",
                     textAlign: TextAlign.center,
-                    style:
-                        TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                   ),
                 ),
                 SizedBox(

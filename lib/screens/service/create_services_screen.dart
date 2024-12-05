@@ -1,15 +1,49 @@
 import 'package:e_commerce/common/buttons/custom_gradient_button.dart';
 import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
+import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/utils/app_theme.dart';
+import 'package:e_commerce/utils/bottom_sheet_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class CreateServiceScreen extends StatelessWidget {
+class CreateServiceScreen extends StatefulWidget {
   const CreateServiceScreen({super.key});
+
+  @override
+  State<CreateServiceScreen> createState() => _CreateServiceScreenState();
+}
+
+class _CreateServiceScreenState extends State<CreateServiceScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final categoryProvider =
+          Provider.of<CategoryProvider>(context, listen: false);
+
+      categoryProvider.fetchCategories();
+    });
+  }
+
+  Future<void> _selectDate(BuildContext context,
+      {required TextEditingController controller}) async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000), // Earliest date allowed
+      lastDate: DateTime(2100), // Latest date allowed
+    );
+
+    if (selectedDate != null) {
+      // Update the controller with the selected date
+      controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +62,8 @@ class CreateServiceScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
-          child: Consumer<ServiceProvider>(
-            builder: (context, serviceProvider, child) {
+          child: Consumer2<ServiceProvider, CategoryProvider>(
+            builder: (context, serviceProvider, categoryProvider, child) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -75,7 +109,18 @@ class CreateServiceScreen extends StatelessWidget {
                     height: 16,
                   ),
                   InkWell(
-                    onTap: () => _showCategoryBottomSheet(context),
+                    onTap: () => openFilterBottomSheet(
+                        title: "Select a Category",
+                        context: context,
+                        options: categoryProvider.categoryNames,
+                        onSelect: (String? value) {
+                          serviceProvider.setCategory(value!);
+                          Navigator.pop(context);
+                        },
+                        onReset: () {
+                          serviceProvider.setCategory('');
+                          Navigator.pop(context);
+                        }),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 12.0),
@@ -89,13 +134,18 @@ class CreateServiceScreen extends StatelessWidget {
                             ? 'Select a Category'
                             : serviceProvider.selectedCategory,
                         style: TextStyle(
-                          color:
-                              isDarkMode ? Colors.white : Colors.grey.shade500,
+                          color: isDarkMode
+                              ? Colors.white
+                              : serviceProvider.selectedCategory != "" &&
+                                      serviceProvider
+                                          .selectedCategory.isNotEmpty
+                                  ? Colors.black
+                                  : Colors.grey.shade500,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   // Name Field
@@ -114,7 +164,7 @@ class CreateServiceScreen extends StatelessWidget {
                   // Price Field
                   CustomTextFormField(
                     controller: serviceProvider.priceController,
-                    label: "Enter service price",
+                    label: "Enter service price (Rs)",
                     keyboardType: TextInputType.number,
                   ),
 
@@ -125,9 +175,16 @@ class CreateServiceScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomTextFormField(
-                              controller: serviceProvider.startTimeController,
-                              label: "Start Time",
+                            InkWell(
+                              onTap: () => _selectDate(
+                                context,
+                                controller: serviceProvider.startTimeController,
+                              ),
+                              child: CustomTextFormField(
+                                controller: serviceProvider.startTimeController,
+                                label: "Start Time",
+                                isEditable: false,
+                              ),
                             ),
                           ],
                         ),
@@ -137,9 +194,16 @@ class CreateServiceScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomTextFormField(
-                              controller: serviceProvider.endTimeController,
-                              label: "End Time",
+                            InkWell(
+                              onTap: () => _selectDate(
+                                context,
+                                controller: serviceProvider.endTimeController,
+                              ),
+                              child: CustomTextFormField(
+                                controller: serviceProvider.endTimeController,
+                                label: "End Time",
+                                isEditable: false,
+                              ),
                             ),
                           ],
                         ),
@@ -154,14 +218,17 @@ class CreateServiceScreen extends StatelessWidget {
                         height: 30,
                         width: 30,
                         child: Checkbox(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
                           value: serviceProvider.isAvailable,
                           onChanged: (value) {
                             serviceProvider.toggleAvailability(value!);
                           },
                         ),
                       ),
-                      const SizedBox(width: 5,),
+                      const SizedBox(
+                        width: 5,
+                      ),
                       const Text('Available'),
                     ],
                   ),
@@ -184,7 +251,6 @@ class CreateServiceScreen extends StatelessWidget {
                         print('Available: ${serviceProvider.isAvailable}');
                       },
                       text: "Save Service",
-                      
                     ),
                   ),
                 ],

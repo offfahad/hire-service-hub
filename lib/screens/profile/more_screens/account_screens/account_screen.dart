@@ -193,7 +193,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
                   ),
                   onTap: () {
-                    Navigator.of(context).push(
+                    Navigator.push(
+                      context,
                       SlidePageRoute(
                         page: const UpdatePasswordScreen(),
                       ),
@@ -209,11 +210,11 @@ class _AccountScreenState extends State<AccountScreen> {
                   height: 0,
                 ),
                 ListTile(
-                  title: const Text("Add travel credit",
+                  title: const Text("Add credit card",
                       style:
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
                   subtitle: const Text(
-                    "Travel Credit: \$0",
+                    "Credit Money: \$0",
                     style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
                   ),
                   onTap: () {
@@ -248,36 +249,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   height: 0,
                 ),
                 // Additional Settings
-                const SectionHeader(title: "Vehicle Settings"),
-                const Divider(
-                  height: 0,
-                ),
-                ListTile(
-                  onTap: () {
-                    showCustomDialog(context);
-                  },
-                  title: const Text(
-                    "Manual transmission",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
-                  ),
-                  subtitle: Text(
-                    transmissionStatus,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w400, fontSize: 12),
-                  ),
-                ),
 
-                const Divider(
-                  height: 0,
-                ),
-                const ListTile(
-                  title: Text("Approval status",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
-                ),
-                const Divider(
-                  height: 0,
-                ),
                 // Close Account Option
                 ListTile(
                   title: const Text(

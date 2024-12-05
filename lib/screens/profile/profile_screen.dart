@@ -148,42 +148,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const Divider(),
-                  // Account Options
-                  ListTile(
-                    leading: const Icon(
-                      IconlyLight.profile,
-                      size: 20,
-                    ),
-                    title: const Text(
-                      'Account',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        SlidePageRoute(
-                          page: const AccountScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const Divider(),
                   if (authProvider.user!.role!.title == "service_provider") ...[
                     ListTile(
                       leading: const Icon(
-                        IconlyLight.edit,
+                        IconlyLight.plus,
                         size: 20,
                       ),
                       title: const Text(
-                        'Create New Service',
+                        'Create a New Service',
                         style: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 14),
                       ),
                       onTap: () {
                         Navigator.of(context).push(
-                          SlidePageRoute(
-                            page: const CreateServiceScreen()
-                          ),
+                          SlidePageRoute(page: const CreateServiceScreen()),
                         );
                       },
                     ),
@@ -210,6 +188,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     const Divider(),
                   ],
+
+                  // Account Options
+                  ListTile(
+                    leading: const Icon(
+                      IconlyLight.profile,
+                      size: 20,
+                    ),
+                    title: const Text(
+                      'Account',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+                    ),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        SlidePageRoute(
+                          page: const AccountScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const Divider(),
 
                   ListTile(
                     leading: const Icon(

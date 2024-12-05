@@ -73,8 +73,8 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
               fontSize: 10, // Set the font size for the unselected label
             ),
             onTap: onBottomNavTapped,
-            items: <BottomNavigationBarItem>[
-              const BottomNavigationBarItem(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
                 // icon: SvgPicture.asset(
                 //   'assets/icons/house.svg',
                 //   color: (currentPageIndex == 0)
@@ -95,12 +95,13 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
                 //   height: MediaQuery.of(context).size.height * 0.035,
                 //   width: MediaQuery.of(context).size.height * 0.035,
                 // ),
-                icon: const Icon(IconlyLight.category),
-                label: authProvider.user!.role!.title == "service_provider"
-                    ? "My Service"
-                    : "Service",
+                icon: Icon(IconlyLight.category),
+                // label: authProvider.user!.role!.title == "service_provider"
+                //     ? "My Service"
+                //     : "Service",
+                label: "Services"
               ),
-              const BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 // icon: SvgPicture.asset(
                 //   'assets/icons/cart.svg',
                 //   color: (currentPageIndex == 2)
@@ -112,7 +113,7 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
                 icon: Icon(IconlyLight.bag),
                 label: 'Orders',
               ),
-              const BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 // icon: SvgPicture.asset(
                 //   'assets/icons/profile.svg',
                 //   color: (currentPageIndex == 3)

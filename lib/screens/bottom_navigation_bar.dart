@@ -1,5 +1,5 @@
 import 'package:e_commerce/providers/authentication/authentication_provider.dart';
-import 'package:e_commerce/screens/cart/cart_screen.dart';
+import 'package:e_commerce/screens/orders/orders_screen.dart';
 import 'package:e_commerce/screens/service/service_screen.dart';
 import 'package:e_commerce/screens/home/home_screen.dart';
 import 'package:e_commerce/screens/profile/profile_screen.dart';
@@ -37,7 +37,7 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
   final List<Widget> pages = [
     const HomeScreen(),
     const ServiceScreen(),
-    const CartScreen(),
+    const OrdersScreen(),
     const ProfileScreen(),
   ];
 
@@ -87,20 +87,19 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                // icon: SvgPicture.asset(
-                //   'assets/icons/favorite.svg',
-                //   color: (currentPageIndex == 1)
-                //       ? AppTheme.fMainColor
-                //       : Colors.grey,
-                //   height: MediaQuery.of(context).size.height * 0.035,
-                //   width: MediaQuery.of(context).size.height * 0.035,
-                // ),
-                icon: Icon(IconlyLight.category),
-                // label: authProvider.user!.role!.title == "service_provider"
-                //     ? "My Service"
-                //     : "Service",
-                label: "Services"
-              ),
+                  // icon: SvgPicture.asset(
+                  //   'assets/icons/favorite.svg',
+                  //   color: (currentPageIndex == 1)
+                  //       ? AppTheme.fMainColor
+                  //       : Colors.grey,
+                  //   height: MediaQuery.of(context).size.height * 0.035,
+                  //   width: MediaQuery.of(context).size.height * 0.035,
+                  // ),
+                  icon: Icon(IconlyLight.category),
+                  // label: authProvider.user!.role!.title == "service_provider"
+                  //     ? "My Service"
+                  //     : "Service",
+                  label: "Services"),
               BottomNavigationBarItem(
                 // icon: SvgPicture.asset(
                 //   'assets/icons/cart.svg',

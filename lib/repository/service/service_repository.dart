@@ -1,3 +1,4 @@
+import 'package:e_commerce/models/service/create_service_model.dart';
 import 'package:e_commerce/models/service/fetch_signle_service_model.dart';
 import 'package:e_commerce/models/service/service_model.dart';
 import 'package:e_commerce/services/service/service_service.dart';
@@ -23,5 +24,23 @@ class ServiceRepository {
       city: city,
       priceRangeType: priceRangeType,
     );
+  }
+
+  Future<CreateService?> createService(CreateService serviceData) async {
+    return await serviceService.createService(serviceData);
+  }
+
+  Future<bool> uploadServiceCoverPhoto(
+      String imagePath, String serviceId) async {
+    return await serviceService.uploadServiceCoverPhoto(imagePath, serviceId);
+  }
+
+  Future<bool> createServiceWithCoverPhoto(
+      CreateService serviceData, String imagePath) async {
+    final service = await createService(serviceData);
+    if (service != null && service.id != null) {
+      return await uploadServiceCoverPhoto(imagePath, service.id!);
+    }
+    return false;
   }
 }

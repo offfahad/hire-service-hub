@@ -1,8 +1,10 @@
+import 'package:e_commerce/models/service/create_service_model.dart';
 import 'package:e_commerce/models/service/fetch_signle_service_model.dart';
 import 'package:e_commerce/models/service/service_model.dart';
 import 'package:e_commerce/repository/service/service_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class ServiceProvider with ChangeNotifier {
   final ServiceRepository serviceRepository = ServiceRepository();
@@ -171,5 +173,32 @@ class ServiceProvider with ChangeNotifier {
     startTimeController.dispose();
     endTimeController.dispose();
     super.dispose();
+  }
+
+  CreateService? _createService;
+  CreateService get createService => _createService!;
+
+  Future<void> createServiceWithCoverPhoto(
+      CreateService serviceData, String imagePath) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      bool success = await serviceRepository.createServiceWithCoverPhoto(
+          serviceData, imagePath);
+
+      if (success) {
+        // Update state if needed
+        _createService = serviceData;
+      } else {
+        _errorMessage = "Failed to create service with cover photo.";
+      }
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }

@@ -1,5 +1,8 @@
 import 'package:e_commerce/common/buttons/custom_gradient_button.dart';
+import 'package:e_commerce/common/snakbar/custom_snakbar.dart';
 import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
+import 'package:e_commerce/models/service/create_service_model.dart';
+import 'package:e_commerce/models/service/service_model.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/utils/app_theme.dart';
@@ -38,7 +41,6 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
       firstDate: DateTime(2000), // Earliest date allowed
       lastDate: DateTime(2100), // Latest date allowed
     );
-
     if (selectedDate != null) {
       // Update the controller with the selected date
       controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
@@ -50,7 +52,6 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
     Brightness brightness = Theme.of(context).brightness;
     bool isDarkMode = brightness == Brightness.dark;
     final ImagePicker picker = ImagePicker();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -238,17 +239,38 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                     width: double.infinity,
                     child: CustomGradientButton(
                       onPressed: () {
-                        // Handle Save Logic
-                        print('Name: ${serviceProvider.nameController.text}');
-                        print(
-                            'Description: ${serviceProvider.descriptionController.text}');
-                        print('Price: ${serviceProvider.priceController.text}');
-                        print('Category: ${serviceProvider.selectedCategory}');
-                        print(
-                            'Start Time: ${serviceProvider.startTimeController.text}');
-                        print(
-                            'End Time: ${serviceProvider.endTimeController.text}');
-                        print('Available: ${serviceProvider.isAvailable}');
+                        if (_validateInputs(serviceProvider)) {
+                          final serviceData = CreateService(
+                            serviceName:
+                                serviceProvider.nameController.text.trim(),
+                            description: serviceProvider
+                                .descriptionController.text
+                                .trim(),
+                            price: double.tryParse(
+                                    serviceProvider.priceController.text.trim())
+                                .toString(),
+                            startTime: DateTime.parse(
+                                serviceProvider.startTimeController.text),
+                            endTime: DateTime.parse(
+                                serviceProvider.endTimeController.text.trim()),
+                            categoryId: categoryProvider.getCategoryIdByName(
+                                serviceProvider.selectedCategory),
+                            isAvailable: serviceProvider.isAvailable,
+                          );
+                          serviceProvider.createServiceWithCoverPhoto(
+                            serviceData,
+                            serviceProvider
+                                .coverPhoto!.path, // Cover photo path
+                          );
+                          showCustomSnackBar(context,
+                              "Services Created Successfully!", Colors.green);
+                          Navigator.pop(context);
+                        } else {
+                          showCustomSnackBar(
+                              context,
+                              'Please fill all fields and add a cover photo.',
+                              Colors.red);
+                        }
                       },
                       text: "Save Service",
                     ),
@@ -262,26 +284,14 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
     );
   }
 
-  void _showCategoryBottomSheet(BuildContext context) {
-    final serviceProvider =
-        Provider.of<ServiceProvider>(context, listen: false);
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        final categories = ['Category 1', 'Category 2', 'Category 3'];
-        return ListView.builder(
-          itemCount: categories.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(categories[index]),
-              onTap: () {
-                serviceProvider.setCategory(categories[index]);
-                Navigator.pop(context);
-              },
-            );
-          },
-        );
-      },
-    );
+  // Validation Method
+  bool _validateInputs(ServiceProvider serviceProvider) {
+    return serviceProvider.coverPhoto != null &&
+        serviceProvider.nameController.text.trim().isNotEmpty &&
+        serviceProvider.descriptionController.text.trim().isNotEmpty &&
+        serviceProvider.priceController.text.trim().isNotEmpty &&
+        serviceProvider.startTimeController.text.trim().isNotEmpty &&
+        serviceProvider.endTimeController.text.trim().isNotEmpty &&
+        serviceProvider.selectedCategory.isNotEmpty;
   }
 }

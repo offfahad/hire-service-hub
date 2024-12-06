@@ -123,13 +123,13 @@ class _ServiceScreenState extends State<ServiceScreen> {
                   ));
                 } else if ((provider.errorMessage ?? "").isNotEmpty) {
                   return Center(child: Text('Error: ${provider.errorMessage}'));
-                } else if (provider.services.isEmpty) {
+                } else if (provider.filteredServices.isEmpty) {
                   return const Center(child: Text('No services available'));
                 } else {
                   return ListView.builder(
-                    itemCount: provider.services.length,
+                    itemCount: provider.filteredServices.length,
                     itemBuilder: (context, index) {
-                      final service = provider.services[index];
+                      final service = provider.filteredServices[index];
                       return ServiceCard(service: service);
                     },
                   );

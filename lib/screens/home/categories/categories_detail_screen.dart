@@ -81,7 +81,8 @@ class _CategoriesDetailScreenState extends State<CategoriesDetailScreen> {
                                   );
                                 },
                                 child: CardyContainer(
-                                  padding: const EdgeInsets.all(16),
+                                  padding: const EdgeInsets.all(12),
+                                  width: MediaQuery.of(context).size.width * 0.9,
                                   color: isDarkMode
                                       ? AppTheme.fdarkBlue
                                       : Colors.white,

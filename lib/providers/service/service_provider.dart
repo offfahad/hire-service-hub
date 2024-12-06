@@ -10,6 +10,7 @@ class ServiceProvider with ChangeNotifier {
   final ServiceRepository serviceRepository = ServiceRepository();
 
   List<ServiceModel> _services = [];
+  List<ServiceModel> get services => _services;
   bool _isLoading = false;
   String? _errorMessage = '';
 
@@ -23,7 +24,7 @@ class ServiceProvider with ChangeNotifier {
   List<String> get cityNames => _cityNames;
 
   bool _isFilterApplied = false;
-  List<ServiceModel> get services =>
+  List<ServiceModel> get filteredServices =>
       _isFilterApplied ? _filterServices : _services;
 
   bool get isFilterApplied => _isFilterApplied;

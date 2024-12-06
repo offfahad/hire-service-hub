@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
         title: 'E-Commerce',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.dark,
+        themeMode: ThemeMode.light,
         home: const SplashScreen(),
       ),
     );

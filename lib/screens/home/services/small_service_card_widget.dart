@@ -22,7 +22,7 @@ class SmallServiceCard extends StatelessWidget {
         Navigator.push(
           context,
           SlidePageRoute(
-            page: ServiceDetailsScreen(serviceId: service.id),
+            page: ServiceDetailsScreen(service: service),
           ),
         );
       },

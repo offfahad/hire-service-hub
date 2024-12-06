@@ -18,7 +18,7 @@ class ServiceCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.push(context,
-            SlidePageRoute(page: ServiceDetailsScreen(serviceId: service.id)));
+            SlidePageRoute(page: ServiceDetailsScreen(service: service)));
       },
       child: CardyContainer(
         margin: const EdgeInsets.all(12),

@@ -1,13 +1,27 @@
+import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
 import 'package:e_commerce/models/orders/order_model.dart';
+import 'package:e_commerce/models/service/fetch_signle_service_model.dart';
 import 'package:e_commerce/providers/orders/orders_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class BookOrderScreen extends StatelessWidget {
+class BookOrderScreen extends StatefulWidget {
+  final SpecificService? service;
+
+  const BookOrderScreen({super.key, required this.service});
+
+  @override
+  State<BookOrderScreen> createState() => _BookOrderScreenState();
+}
+
+class _BookOrderScreenState extends State<BookOrderScreen> {
   final TextEditingController orderDateController = TextEditingController();
+
   final TextEditingController serviceIdController = TextEditingController();
+
   final TextEditingController additionalNotesController =
       TextEditingController();
+
   final TextEditingController paymentMethodController = TextEditingController();
 
   @override
@@ -15,22 +29,19 @@ class BookOrderScreen extends StatelessWidget {
     final orderProvider = Provider.of<OrderProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Book Order')),
+      appBar: AppBar(title: const Text('Book Order', style: TextStyle(fontSize: 18),), forceMaterialTransparency: true,),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
+            CustomTextFormField(
               controller: orderDateController,
-              decoration: const InputDecoration(labelText: 'Order Date'),
+              label: "Order Date",
             ),
-            TextField(
-              controller: serviceIdController,
-              decoration: const InputDecoration(labelText: 'Service ID'),
-            ),
-            TextField(
+            CustomTextFormField(
               controller: additionalNotesController,
-              decoration: const InputDecoration(labelText: 'Additional Notes'),
+              label: "Additional Notes",
+              maxLines: 2,
             ),
             TextField(
               controller: paymentMethodController,

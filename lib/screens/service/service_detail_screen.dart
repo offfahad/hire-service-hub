@@ -1,7 +1,10 @@
 import 'package:carded/carded.dart';
+import 'package:e_commerce/common/buttons/custom_elevated_button.dart';
+import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/models/service/service_model.dart';
 import 'package:e_commerce/providers/authentication/authentication_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
+import 'package:e_commerce/screens/orders/book_order_screen.dart';
 import 'package:e_commerce/screens/service/update_service_screen.dart';
 import 'package:e_commerce/utils/api_constnsts.dart';
 import 'package:e_commerce/utils/app_theme.dart';
@@ -292,19 +295,23 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                       ),
                     ],
                   ),
-                  ElevatedButton(
+                  CustomElevatedButton(
+                    width: 70,
+                    height: 50,
+                    backgroundColor: AppTheme.fMainColor,
+                    foregroundColor: Colors.white,
+                    text: "Book Order Now!",
                     onPressed: () {
-                      final result =
-                          serviceProvider.addToCart(widget.service.id);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          result
-                              ? "Service added to cart!"
-                              : "Service already added in cart!",
+                      Navigator.push(
+                        context,
+                        SlidePageRoute(
+                          page: BookOrderScreen(
+                            service:
+                                serviceProvider.service?.data?.specificService,
+                          ),
                         ),
-                      ));
+                      );
                     },
-                    child: const Text("Buy Now!"),
                   ),
                 ],
               ),

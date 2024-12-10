@@ -30,6 +30,8 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
           Provider.of<CategoryProvider>(context, listen: false);
 
       categoryProvider.fetchCategories();
+      Provider.of<ServiceProvider>(context, listen: false)
+          .resetCreateServiceValues();
     });
   }
 

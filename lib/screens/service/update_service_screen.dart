@@ -35,6 +35,7 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
       final service = widget.serviceDetail.data!.specificService;
       final serivceProvider =
           Provider.of<ServiceProvider>(context, listen: false);
+      serivceProvider.clearServicesList();
       serivceProvider.nameController.text = service!.serviceName!;
       serivceProvider.descriptionController.text = service.description!;
       serivceProvider.priceController.text = service.price!.toString();
@@ -45,7 +46,7 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
           DateFormat('yyyy-MM-dd').format(service.startTime!);
       serivceProvider.endTimeController.text =
           DateFormat('yyyy-MM-dd').format(service.endTime!);
-      serivceProvider.toggleAvailability(serivceProvider.isAvailable);
+      serivceProvider.toggleAvailability(service.isAvailable!);
     });
   }
 

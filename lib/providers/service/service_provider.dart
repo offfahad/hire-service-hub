@@ -202,4 +202,16 @@ class ServiceProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void resetCreateServiceValues() {
+    nameController.clear();
+    descriptionController.clear();
+    priceController.clear();
+    startTimeController.clear();
+    endTimeController.clear();
+    _coverPhoto = null;
+    _selectedCategory = '';
+    _isAvailable = false;
+    notifyListeners();
+  }
 }

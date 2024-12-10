@@ -41,6 +41,7 @@ class ServiceService {
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
+        print(response.body);
         return fetchSingleServiceFromJson(response.body);
       } else {
         print("Failed to fetch service: ${response.statusCode}");

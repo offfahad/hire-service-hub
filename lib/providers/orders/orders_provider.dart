@@ -3,11 +3,9 @@ import 'package:e_commerce/repository/orders/orders_repository.dart';
 import 'package:flutter/material.dart';
 
 class OrderProvider with ChangeNotifier {
-  final OrderRepository _orderRepository;
+  final OrderRepository _orderRepository  = OrderRepository();
   bool _isLoading = false;
   String? _errorMessage;
-
-  OrderProvider(this._orderRepository);
 
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;

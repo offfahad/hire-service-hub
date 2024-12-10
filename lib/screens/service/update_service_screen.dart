@@ -45,6 +45,7 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
           DateFormat('yyyy-MM-dd').format(service.startTime!);
       serivceProvider.endTimeController.text =
           DateFormat('yyyy-MM-dd').format(service.endTime!);
+      serivceProvider.toggleAvailability(serivceProvider.isAvailable);
     });
   }
 

@@ -296,7 +296,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                     ],
                   ),
                   CustomElevatedButton(
-                    width: 70,
+                    width: 200,
                     height: 50,
                     backgroundColor: AppTheme.fMainColor,
                     foregroundColor: Colors.white,

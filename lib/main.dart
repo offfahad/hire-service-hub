@@ -4,6 +4,7 @@ import 'package:e_commerce/providers/authentication/forget_password_provider.dar
 import 'package:e_commerce/providers/authentication/login_provider.dart';
 import 'package:e_commerce/providers/authentication/registration_provider.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
+import 'package:e_commerce/providers/orders/orders_provider.dart';
 import 'package:e_commerce/providers/profile_updation/profile_updation_provider.dart';
 import 'package:e_commerce/providers/profile_updation/update_password_provider.dart';
 import 'package:e_commerce/providers/service/service_filter_provider.dart';
@@ -50,6 +51,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ProfileUpdationProvider()),
         ChangeNotifierProvider(create: (_) => ServiceProvider()),
         ChangeNotifierProvider(create: (_) => FilterProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider(),),
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,
@@ -58,7 +60,7 @@ class _MyAppState extends State<MyApp> {
         title: 'E-Services',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.dark,
+        themeMode: ThemeMode.light,
         home: const SplashScreen(),
       ),
     );

@@ -10,7 +10,7 @@ class OrderService {
     if (accessToken == null) throw Exception("Access token is missing.");
 
     final url =
-        Uri.parse("${Constants.baseUrl}/${Constants.userApiBookingOrder}");
+        Uri.parse("${Constants.baseUrl}${Constants.userApiBookingOrder}/");
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',

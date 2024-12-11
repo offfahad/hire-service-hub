@@ -287,7 +287,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                       Text(
-                        "\$${price ?? 'N/A'}",
+                        "Rs${price ?? 'N/A'}",
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -297,7 +297,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                   ),
                   CustomElevatedButton(
                     width: 200,
-                    height: 50,
+                    height: 40,
                     backgroundColor: AppTheme.fMainColor,
                     foregroundColor: Colors.white,
                     text: "Book Order Now!",

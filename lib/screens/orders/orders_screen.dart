@@ -10,8 +10,9 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(child: Center(child: Text("Orders Screen"),)),
+    return Scaffold(
+      appBar: AppBar(title: const Text("Orders"),),
+      body: const SafeArea(child: Center(child: Text("No Orders Yet!"),)),
     );
   }
 }

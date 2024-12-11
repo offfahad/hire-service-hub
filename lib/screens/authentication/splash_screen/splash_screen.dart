@@ -78,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "E-Services",
+                  "Hire Service",
                   style: TextStyle(
                     fontSize: 35,
                     fontWeight: FontWeight.bold,

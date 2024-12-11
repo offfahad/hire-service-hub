@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   //   height: MediaQuery.of(context).size.height * 0.15,
                   // ),
                   Text(
-                    "E-Services",
+                    "Hire Service",
                     style: TextStyle(
                       fontSize: 35,
                       fontWeight: FontWeight.bold,
@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: 20,),
                   const Text(
-                    "Welcome to E-Services Hub",
+                    "Welcome to Hire-Service Hub",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                   ),
                   const Text(

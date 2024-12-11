@@ -27,7 +27,7 @@ class _GetStartedState extends State<GetStarted> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "E-Services",
+                      "Hire Service",
                       style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,

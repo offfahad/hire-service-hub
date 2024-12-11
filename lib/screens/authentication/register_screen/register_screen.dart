@@ -47,7 +47,7 @@ class RegisterScreen extends StatelessWidget {
                         ),
                       ),
                       const Text(
-                        "Welcome to our self-service application.",
+                        "Welcome to our hire-service application.",
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 15,

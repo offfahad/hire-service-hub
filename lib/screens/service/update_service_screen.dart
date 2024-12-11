@@ -35,7 +35,7 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
       final service = widget.serviceDetail.data!.specificService;
       final serivceProvider =
           Provider.of<ServiceProvider>(context, listen: false);
-      serivceProvider.clearServicesList();
+      serivceProvider.resetCreateServiceValues();
       serivceProvider.nameController.text = service!.serviceName!;
       serivceProvider.descriptionController.text = service.description!;
       serivceProvider.priceController.text = service.price!.toString();

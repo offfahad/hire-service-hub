@@ -28,4 +28,22 @@ class OrderService {
       throw Exception("Failed to book order: $e");
     }
   }
+
+  Future<http.Response> getMyOrders() async {
+    String? accessToken = await AuthService.getAccessToken();
+    if (accessToken == null) throw Exception("Access token is missing.");
+
+    try {
+      final response = await http.get(
+        Uri.parse("${Constants.baseUrl}${Constants.userApiBookingOrder}/"),
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Failed to fetch orders: $e');
+    }
+  }
 }

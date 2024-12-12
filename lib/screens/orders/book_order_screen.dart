@@ -16,16 +16,51 @@ class BookOrderScreen extends StatefulWidget {
 }
 
 class _BookOrderScreenState extends State<BookOrderScreen> {
-  final TextEditingController serviceIdController = TextEditingController();
   final TextEditingController additionalNotesController =
       TextEditingController();
+  final TextEditingController selectedDateController = TextEditingController();
 
-  String? selectedPaymentMethod; // Variable to store selected payment method
+  String? selectedPaymentMethod;
+  DateTime? selectedOrderDate;
 
-  checkIsServiceDateValid(DateTime day) {
-    DateTime startDate = widget.service!.startTime!;
-    DateTime endDate = widget.service!.endTime!;
-    return day.isAfter(startDate) && day.isBefore(endDate);
+  bool checkIsServiceDateValid() {
+    final DateTime currentDate = DateTime.now();
+    final DateTime startDate = widget.service!.startTime!;
+    final DateTime endDate = widget.service!.endTime!;
+
+    // Ensure service start and end dates are valid and not expired
+    return currentDate.isBefore(endDate) && startDate.isBefore(endDate);
+  }
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime currentDate = DateTime.now();
+    final DateTime startDate = widget.service!.startTime!;
+    final DateTime endDate = widget.service!.endTime!;
+
+    // Set the firstDate to either the start date or current date, whichever is later
+    final DateTime firstDate =
+        currentDate.isAfter(startDate) ? currentDate : startDate;
+
+    // Ensure initialDate is within the range
+    final DateTime initialDate =
+        currentDate.isBefore(endDate) ? currentDate : endDate;
+
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: endDate,
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        selectedOrderDate = pickedDate;
+        selectedDateController.text = pickedDate
+            .toLocal()
+            .toString()
+            .split(' ')[0]; // Format as YYYY-MM-DD
+      });
+    }
   }
 
   @override
@@ -62,16 +97,27 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
                   style: const TextStyle(fontSize: 20),
                 ),
               ),
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 10),
               const Text(
-                "Additional Notes",
+                "Select Order Date",
                 style: TextStyle(fontSize: 16),
               ),
-              const SizedBox(
-                height: 8,
+              const SizedBox(height: 8),
+              GestureDetector(
+                onTap: () => selectDate(context),
+                child: AbsorbPointer(
+                  child: CustomTextFormField(
+                    controller: selectedDateController,
+                    label: "Select a date",
+                  ),
+                ),
               ),
+              const SizedBox(height: 10),
+              const Text(
+                "Additional Notes (Optional)",
+                style: TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 8),
               CustomTextFormField(
                 controller: additionalNotesController,
                 label: "Any Special Instructions Here...",
@@ -85,7 +131,7 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
               const SizedBox(height: 8),
               RadioListTile<String>(
                 controlAffinity: ListTileControlAffinity.trailing,
-                value: 'COD',
+                value: 'cod',
                 contentPadding: EdgeInsets.zero,
                 groupValue: selectedPaymentMethod,
                 onChanged: (value) {
@@ -100,9 +146,7 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
                       width: 30,
                       height: 30,
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
+                    const SizedBox(width: 20),
                     const Text("Cash on Delivery")
                   ],
                 ),
@@ -110,7 +154,7 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
               RadioListTile<String>(
                 controlAffinity: ListTileControlAffinity.trailing,
                 contentPadding: EdgeInsets.zero,
-                value: 'JazzCash',
+                value: 'jazzcash',
                 groupValue: selectedPaymentMethod,
                 onChanged: (value) {
                   setState(() {
@@ -124,16 +168,14 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
                       width: 30,
                       height: 30,
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
+                    const SizedBox(width: 20),
                     const Text("JazzCash")
                   ],
                 ),
               ),
               RadioListTile<String>(
                 controlAffinity: ListTileControlAffinity.trailing,
-                value: 'EasyPaisa',
+                value: 'easypaisa',
                 contentPadding: EdgeInsets.zero,
                 groupValue: selectedPaymentMethod,
                 onChanged: (value) {
@@ -145,9 +187,7 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
                   children: [
                     Image.asset('assets/logos/easypaisa_logo.png',
                         width: 30, height: 30),
-                    const SizedBox(
-                      width: 20,
-                    ),
+                    const SizedBox(width: 20),
                     const Text("EasyPaisa")
                   ],
                 ),
@@ -155,31 +195,55 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
-                  DateTime currentDate = DateTime.now();
-                  if (checkIsServiceDateValid(currentDate)) {
-                    final order = Order(
-                      orderDate: currentDate.toString(),
-                      serviceId: serviceIdController.text,
-                      additionalNotes: additionalNotesController.text,
-                      paymentMethod: selectedPaymentMethod.toString(),
-                      orderPrice:
-                          widget.service?.price.toString(), // Example price
+                  if (!checkIsServiceDateValid()) {
+                    showCustomSnackBar(
+                      context,
+                      "Service availability date is expired!",
+                      Colors.red,
                     );
-          
-                    await orderProvider.bookOrder(order);
-          
-                    if (orderProvider.errorMessage != null) {
-                      // Handle error
-                      showCustomSnackBar(
-                          context, orderProvider.errorMessage!, Colors.red);
-                    } else {
-                      // Success
-                      showCustomSnackBar(
-                          context, "Order booked successfully!", Colors.green);
-                    }
+                    return;
+                  }
+
+                  if (selectedOrderDate == null) {
+                    showCustomSnackBar(
+                      context,
+                      "Please select a valid order date!",
+                      Colors.red,
+                    );
+                    return;
+                  }
+
+                  if (selectedPaymentMethod == null) {
+                    showCustomSnackBar(
+                      context,
+                      "Please select a payment method!",
+                      Colors.red,
+                    );
+                    return;
+                  }
+
+                  final order = Order(
+                    orderDate: selectedOrderDate.toString(),
+                    serviceId: widget.service!.id!,
+                    additionalNotes: additionalNotesController.text,
+                    paymentMethod: selectedPaymentMethod.toString(),
+                    orderPrice: widget.service?.price.toString(),
+                  );
+
+                  await orderProvider.bookOrder(order);
+
+                  if (orderProvider.errorMessage != null) {
+                    showCustomSnackBar(
+                      context,
+                      orderProvider.errorMessage!,
+                      Colors.red,
+                    );
                   } else {
-                    showCustomSnackBar(context,
-                        "Service availability date is expired!", Colors.red);
+                    showCustomSnackBar(
+                      context,
+                      "Order booked successfully!",
+                      Colors.green,
+                    );
                   }
                 },
                 child: orderProvider.isLoading

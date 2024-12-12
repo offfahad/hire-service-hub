@@ -5,7 +5,6 @@ import 'package:e_commerce/models/service/service_model.dart';
 import 'package:e_commerce/services/authentication/auth_servcies.dart';
 import 'package:e_commerce/utils/api_constnsts.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
 class ServiceService {
   Map<String, String> _generateHeaders({String? accessToken}) {

@@ -273,8 +273,8 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
               spreadRadius: 0,
               blurRadius: 1,
               shadowColor: isDarkMode ? AppTheme.fdarkBlue : Colors.grey,
-              height: 80,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              height: 100,
+              padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -296,11 +296,11 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                     ],
                   ),
                   CustomElevatedButton(
-                    width: 200,
-                    height: 40,
+                    width: 150,
+                    height: 50,
                     backgroundColor: AppTheme.fMainColor,
                     foregroundColor: Colors.white,
-                    text: "Book Order Now!",
+                    text: "Book Now!",
                     onPressed: () {
                       Navigator.push(
                         context,

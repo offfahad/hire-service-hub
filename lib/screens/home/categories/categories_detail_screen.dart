@@ -39,7 +39,7 @@ class _CategoriesDetailScreenState extends State<CategoriesDetailScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Column(
               children: [
                 Consumer<CategoryProvider>(
@@ -83,7 +83,7 @@ class _CategoriesDetailScreenState extends State<CategoriesDetailScreen> {
                                 child: CardyContainer(
                                   borderRadius: BorderRadius.circular(5),
                                   padding: const EdgeInsets.all(12),
-                                  width: MediaQuery.of(context).size.width * 0.9,
+                                  width: MediaQuery.of(context).size.width,
                                   color: isDarkMode
                                       ? AppTheme.fdarkBlue
                                       : Colors.white,

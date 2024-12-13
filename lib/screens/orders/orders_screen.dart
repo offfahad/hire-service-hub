@@ -167,7 +167,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   ),
                                   const SizedBox(height: 8),
                                   InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      print(order.serviceProvider?.firstName);
+                                    },
                                     child: const Align(
                                       alignment: Alignment.bottomRight,
                                       child: Text(

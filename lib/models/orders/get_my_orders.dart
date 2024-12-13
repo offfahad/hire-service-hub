@@ -93,8 +93,8 @@ class Datum {
       service: Service.fromJson(json["service"]),
       customer:
           json["customer"] != null ? Customer.fromJson(json["customer"]) : null,
-      serviceProvider: json["service_provider"] != null
-          ? Customer.fromJson(json["service_provider"])
+      serviceProvider: json["serviceProvider"] != null
+          ? Customer.fromJson(json["serviceProvider"])
           : null,
     );
   }

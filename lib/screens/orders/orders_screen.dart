@@ -216,7 +216,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
       selected: selectedFilter == label,
       onSelected: (isSelected) {
         setState(() {
-          selectedFilter = label;
+          if (selectedFilter == label) {
+            // Deselect the chip and reset to "All"
+            selectedFilter = "All";
+          } else {
+            // Select the new chip
+            selectedFilter = label;
+          }
         });
       },
     );

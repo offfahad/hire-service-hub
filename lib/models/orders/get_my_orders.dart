@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 class GetMyOrders {
-  bool success;
-  int statusCode;
-  String message;
-  List<Datum> data;
+  final bool success;
+  final int statusCode;
+  final String message;
+  final List<Datum> data;
 
   GetMyOrders({
     required this.success,
@@ -29,27 +29,28 @@ class GetMyOrders {
         "success": success,
         "statusCode": statusCode,
         "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": data.map((x) => x.toJson()).toList(),
       };
 }
 
 class Datum {
-  String id;
-  String customerId;
-  String serviceId;
-  String serviceProviderId;
-  DateTime placedAt;
-  DateTime orderDate;
-  String orderStatus;
-  String orderPrice;
-  String paymentStatus;
-  String paymentMethod;
-  Address customerAddress;
-  String? additionalNotes;
-  dynamic orderCompletionDate;
-  dynamic cancellationReason;
-  Service service;
-  Customer customer;
+  final String id;
+  final String customerId;
+  final String serviceId;
+  final String serviceProviderId;
+  final DateTime placedAt;
+  final DateTime orderDate;
+  final String orderStatus;
+  final String orderPrice;
+  final String paymentStatus;
+  final String paymentMethod;
+  final Address customerAddress;
+  final String? additionalNotes;
+  final DateTime? orderCompletionDate;
+  final String? cancellationReason;
+  final Service service;
+  final Customer? customer;
+  final Customer? serviceProvider;
 
   Datum({
     required this.id,
@@ -63,35 +64,40 @@ class Datum {
     required this.paymentStatus,
     required this.paymentMethod,
     required this.customerAddress,
-    required this.additionalNotes,
-    required this.orderCompletionDate,
-    required this.cancellationReason,
+    this.additionalNotes,
+    this.orderCompletionDate,
+    this.cancellationReason,
     required this.service,
-    required this.customer,
+    this.customer,
+    this.serviceProvider,
   });
 
-  factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["id"],
-        customerId: json["customer_id"],
-        serviceId: json["service_id"],
-        serviceProviderId: json["service_provider_id"],
-        placedAt: DateTime.parse(json["placed_at"]),
-        orderDate: DateTime.parse(json["order_date"]),
-        orderStatus: json["order_status"],
-        orderPrice: json["order_price"],
-        paymentStatus: json["payment_status"],
-        paymentMethod: json["payment_method"],
-        customerAddress: Address.fromJson(json["customer_address"]),
-        additionalNotes: json["additional_notes"],
-        orderCompletionDate: json["order_completion_date"],
-        cancellationReason: json["cancellation_reason"],
-        service: Service.fromJson(json["service"]),
-        customer: Customer.fromJson(json["customer"]),
-      );
+  factory Datum.fromJson(Map<String, dynamic> json) {
+    return Datum(
+      id: json["id"],
+      customerId: json["customer_id"],
+      serviceId: json["service_id"],
+      serviceProviderId: json["service_provider_id"],
+      placedAt: DateTime.parse(json["placed_at"]),
+      orderDate: DateTime.parse(json["order_date"]),
+      orderStatus: json["order_status"],
+      orderPrice: json["order_price"],
+      paymentStatus: json["payment_status"],
+      paymentMethod: json["payment_method"],
+      customerAddress: Address.fromJson(json["customer_address"]),
+      additionalNotes: json["additional_notes"],
+      orderCompletionDate: json["order_completion_date"] != null
+          ? DateTime.tryParse(json["order_completion_date"])
+          : null,
+      cancellationReason: json["cancellation_reason"],
+      service: Service.fromJson(json["service"]),
+      customer:
+          json["customer"] != null ? Customer.fromJson(json["customer"]) : null,
+      serviceProvider: json["service_provider"] != null
+          ? Customer.fromJson(json["service_provider"])
+          : null,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -106,41 +112,38 @@ class Datum {
         "payment_method": paymentMethod,
         "customer_address": customerAddress.toJson(),
         "additional_notes": additionalNotes,
-        "order_completion_date": orderCompletionDate,
+        "order_completion_date": orderCompletionDate?.toIso8601String(),
         "cancellation_reason": cancellationReason,
         "service": service.toJson(),
-        "customer": customer.toJson(),
+        "customer": customer?.toJson(),
+        "service_provider": serviceProvider?.toJson(),
       };
 }
 
 class Customer {
-  String id;
-  String email;
-  String password;
-  String firstName;
-  String lastName;
-  String phone;
-  String gender;
-  dynamic profilePicture;
-  dynamic otp;
-  String cnic;
-  String roleId;
-  bool isVerified;
-  bool isAdmin;
-  Address address;
-  String bio;
-  bool isComplete;
+  final String id;
+  final String email;
+  final String firstName;
+  final String lastName;
+  final String phone;
+  final String gender;
+  final String? profilePicture;
+  final String cnic;
+  final String roleId;
+  final bool isVerified;
+  final bool isAdmin;
+  final Address address;
+  final String bio;
+  final bool isComplete;
 
   Customer({
     required this.id,
     required this.email,
-    required this.password,
     required this.firstName,
     required this.lastName,
     required this.phone,
     required this.gender,
-    required this.profilePicture,
-    required this.otp,
+    this.profilePicture,
     required this.cnic,
     required this.roleId,
     required this.isVerified,
@@ -150,21 +153,14 @@ class Customer {
     required this.isComplete,
   });
 
-  factory Customer.fromRawJson(String str) =>
-      Customer.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
         id: json["id"],
         email: json["email"],
-        password: json["password"],
         firstName: json["first_name"],
         lastName: json["last_name"],
         phone: json["phone"],
         gender: json["gender"],
         profilePicture: json["profile_picture"],
-        otp: json["otp"],
         cnic: json["cnic"],
         roleId: json["role_id"],
         isVerified: json["is_verified"],
@@ -177,13 +173,11 @@ class Customer {
   Map<String, dynamic> toJson() => {
         "id": id,
         "email": email,
-        "password": password,
         "first_name": firstName,
         "last_name": lastName,
         "phone": phone,
         "gender": gender,
         "profile_picture": profilePicture,
-        "otp": otp,
         "cnic": cnic,
         "role_id": roleId,
         "is_verified": isVerified,
@@ -195,12 +189,12 @@ class Customer {
 }
 
 class Address {
-  int streetNo;
-  String city;
-  String state;
-  String postalCode;
-  String country;
-  String location;
+  final int streetNo;
+  final String city;
+  final String state;
+  final String postalCode;
+  final String country;
+  final String location;
 
   Address({
     required this.streetNo,
@@ -210,10 +204,6 @@ class Address {
     required this.country,
     required this.location,
   });
-
-  factory Address.fromRawJson(String str) => Address.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
 
   factory Address.fromJson(Map<String, dynamic> json) => Address(
         streetNo: json["street_no"],

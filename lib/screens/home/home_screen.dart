@@ -161,6 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: CardyContainer(
+                  borderRadius: BorderRadius.circular(5),
                   color: isDarkMode ? AppTheme.fdarkBlue : Colors.white,
                   spreadRadius: 0,
                   blurRadius: 1,

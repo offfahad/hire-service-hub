@@ -31,24 +31,32 @@ class SmallServiceCard extends StatelessWidget {
         color: isDarkMode ? AppTheme.fdarkBlue : Colors.white,
         spreadRadius: 0,
         blurRadius: 1,
+        borderRadius: BorderRadius.circular(5),
         shadowColor: isDarkMode ? AppTheme.fdarkBlue : Colors.grey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Cover Image (Smaller height)
             service.coverPhoto != null && service.coverPhoto!.isNotEmpty
-                ? Image.network(
-                    '${Constants.baseUrl}${service.coverPhoto}',
-                    width: double.infinity,
-                    height: 100, // Reduced height
-                    fit: BoxFit.cover,
-                  )
-                : Image.asset(
-                    'assets/images/content-writer.webp', // Placeholder cover image from assets
-                    width: double.infinity,
-                    height: 100, // Reduced height
-                    fit: BoxFit.cover,
-                  ),
+                ? ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Image.network(
+                      '${Constants.baseUrl}${service.coverPhoto}',
+                      width: double.infinity,
+                      height: 100, // Reduced height
+                      fit: BoxFit.cover,
+                    ),
+                )
+                : ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Image.asset(
+                      'assets/images/content-writer.webp', // Placeholder cover image from assets
+                      width: double.infinity,
+                      height: 100, // Reduced height
+                      fit: BoxFit.cover,
+                      
+                    ),
+                ),
             // Service Details (Smaller fonts)
             Padding(
               padding: const EdgeInsets.all(8),

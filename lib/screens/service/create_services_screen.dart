@@ -101,9 +101,12 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                                 Text('Select a photo'),
                               ],
                             ))
-                          : Image.file(
-                              File(serviceProvider.coverPhoto!.path),
-                              fit: BoxFit.cover,
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.file(
+                                File(serviceProvider.coverPhoto!.path),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                     ),
                   ),

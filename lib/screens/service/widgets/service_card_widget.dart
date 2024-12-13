@@ -26,23 +26,30 @@ class ServiceCard extends StatelessWidget {
         spreadRadius: 0,
         blurRadius: 1,
         shadowColor: isDarkMode ? AppTheme.fdarkBlue : Colors.grey,
+        borderRadius: BorderRadius.circular(5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Cover Image
             service.coverPhoto != null && service.coverPhoto!.isNotEmpty
-                ? Image.network(
-                    '${Constants.baseUrl}${service.coverPhoto}',
-                    width: double.infinity,
-                    height: 180,
-                    fit: BoxFit.cover,
-                  )
-                : Image.asset(
-                    'assets/images/content-writer.webp', // Placeholder cover image from assets
-                    width: double.infinity,
-                    height: 180,
-                    fit: BoxFit.cover,
-                  ),
+                ? ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Image.network(
+                      '${Constants.baseUrl}${service.coverPhoto}',
+                      width: double.infinity,
+                      height: 180,
+                      fit: BoxFit.cover,
+                    ),
+                )
+                : ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Image.asset(
+                      'assets/images/content-writer.webp', // Placeholder cover image from assets
+                      width: double.infinity,
+                      height: 180,
+                      fit: BoxFit.cover,
+                    ),
+                ),
 
             // Service Details
             ListTile(

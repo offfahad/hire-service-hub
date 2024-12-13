@@ -169,6 +169,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   InkWell(
                                     onTap: () {
                                       print(order.serviceProvider?.firstName);
+                                      print(order.customer?.firstName);
                                     },
                                     child: const Align(
                                       alignment: Alignment.bottomRight,

@@ -73,7 +73,7 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
               fontSize: 10, // Set the font size for the unselected label
             ),
             onTap: onBottomNavTapped,
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 // icon: SvgPicture.asset(
                 //   'assets/icons/house.svg',
@@ -87,19 +87,20 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                  // icon: SvgPicture.asset(
-                  //   'assets/icons/favorite.svg',
-                  //   color: (currentPageIndex == 1)
-                  //       ? AppTheme.fMainColor
-                  //       : Colors.grey,
-                  //   height: MediaQuery.of(context).size.height * 0.035,
-                  //   width: MediaQuery.of(context).size.height * 0.035,
-                  // ),
-                  icon: Icon(IconlyLight.category),
-                  // label: authProvider.user!.role!.title == "service_provider"
-                  //     ? "My Service"
-                  //     : "Service",
-                  label: "Services"),
+                // icon: SvgPicture.asset(
+                //   'assets/icons/favorite.svg',
+                //   color: (currentPageIndex == 1)
+                //       ? AppTheme.fMainColor
+                //       : Colors.grey,
+                //   height: MediaQuery.of(context).size.height * 0.035,
+                //   width: MediaQuery.of(context).size.height * 0.035,
+                // ),
+                icon: Icon(IconlyLight.category),
+                label: authProvider.user!.role!.title == "service_provider"
+                    ? "My Service"
+                    : "Service",
+                //label: "Services"
+              ),
               BottomNavigationBarItem(
                 // icon: SvgPicture.asset(
                 //   'assets/icons/cart.svg',
@@ -110,7 +111,9 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
                 //   width: MediaQuery.of(context).size.height * 0.035,
                 // ),
                 icon: Icon(IconlyLight.bag),
-                label: 'Orders',
+                label: authProvider.user!.role!.title == "service_provider"
+                    ? "My Orders"
+                    : "Placed Orders",
               ),
               BottomNavigationBarItem(
                 // icon: SvgPicture.asset(

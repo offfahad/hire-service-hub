@@ -51,7 +51,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ProfileUpdationProvider()),
         ChangeNotifierProvider(create: (_) => ServiceProvider()),
         ChangeNotifierProvider(create: (_) => FilterProvider()),
-        ChangeNotifierProvider(create: (_) => OrderProvider(),),
+        ChangeNotifierProvider(
+          create: (_) => OrderProvider(),
+        ),
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,

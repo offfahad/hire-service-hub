@@ -274,7 +274,7 @@ TextFormField customPhoneNumberTextFormField(
       counterText: '',
       hintText: 'Phone Number',
       hintStyle: TextStyle(
-        color: isDarkMode ? Colors.white : Colors.grey.shade900,
+        color: isDarkMode ? Colors.white : Colors.grey.shade500,
         fontSize: 14,
       ),
       enabledBorder: OutlineInputBorder(
@@ -302,7 +302,7 @@ TextFormField customPhoneNumberTextFormField(
             ' +${registrationProvider.selectedCountry.phoneCode}',
             style: TextStyle(
                 fontSize: 14,
-                color: isDarkMode ? Colors.white : Colors.grey.shade900),
+                color: isDarkMode ? Colors.white : Colors.grey.shade500),
           ),
         ),
       ),

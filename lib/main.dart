@@ -10,6 +10,7 @@ import 'package:e_commerce/providers/profile_updation/update_password_provider.d
 import 'package:e_commerce/providers/service/service_filter_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/authentication/splash_screen/splash_screen.dart';
+import 'package:e_commerce/screens/authentication/starting_screen/get_started.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';

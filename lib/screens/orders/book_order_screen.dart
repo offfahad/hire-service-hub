@@ -3,6 +3,7 @@ import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
 import 'package:e_commerce/models/orders/order_model.dart';
 import 'package:e_commerce/models/service/fetch_signle_service_model.dart';
 import 'package:e_commerce/providers/orders/orders_provider.dart';
+import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -193,62 +194,73 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  if (!checkIsServiceDateValid()) {
-                    showCustomSnackBar(
-                      context,
-                      "Service availability date is expired!",
-                      Colors.red,
-                    );
-                    return;
-                  }
-
-                  if (selectedOrderDate == null) {
-                    showCustomSnackBar(
-                      context,
-                      "Please select a valid order date!",
-                      Colors.red,
-                    );
-                    return;
-                  }
-
-                  if (selectedPaymentMethod == null) {
-                    showCustomSnackBar(
-                      context,
-                      "Please select a payment method!",
-                      Colors.red,
-                    );
-                    return;
-                  }
-
-                  final order = Order(
-                    orderDate: selectedOrderDate.toString(),
-                    serviceId: widget.service!.id!,
-                    additionalNotes: additionalNotesController.text,
-                    paymentMethod: selectedPaymentMethod.toString(),
-                    orderPrice: widget.service?.price.toString(),
-                  );
-
-                  await orderProvider.bookOrder(order);
-
-                  if (orderProvider.errorMessage != null) {
-                    showCustomSnackBar(
-                      context,
-                      orderProvider.errorMessage!,
-                      Colors.red,
-                    );
-                  } else {
-                    showCustomSnackBar(
-                      context,
-                      "Order booked successfully!",
-                      Colors.green,
-                    );
-                  }
-                },
-                child: orderProvider.isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text('Book Order'),
+              Align(
+                alignment: Alignment.centerRight,
+                child: SizedBox(
+                  height: 40,
+                  width: 150,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.fMainColor,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () async {
+                      if (!checkIsServiceDateValid()) {
+                        showCustomSnackBar(
+                          context,
+                          "Service availability date is expired!",
+                          Colors.red,
+                        );
+                        return;
+                      }
+                  
+                      if (selectedOrderDate == null) {
+                        showCustomSnackBar(
+                          context,
+                          "Please select a valid order date!",
+                          Colors.red,
+                        );
+                        return;
+                      }
+                  
+                      if (selectedPaymentMethod == null) {
+                        showCustomSnackBar(
+                          context,
+                          "Please select a payment method!",
+                          Colors.red,
+                        );
+                        return;
+                      }
+                  
+                      final order = Order(
+                        orderDate: selectedOrderDate.toString(),
+                        serviceId: widget.service!.id!,
+                        additionalNotes: additionalNotesController.text,
+                        paymentMethod: selectedPaymentMethod.toString(),
+                        orderPrice: widget.service?.price.toString(),
+                      );
+                  
+                      await orderProvider.bookOrder(order);
+                  
+                      if (orderProvider.errorMessage != null) {
+                        showCustomSnackBar(
+                          context,
+                          orderProvider.errorMessage!,
+                          Colors.red,
+                        );
+                      } else {
+                        showCustomSnackBar(
+                          context,
+                          "Order booked successfully!",
+                          Colors.green,
+                        );
+                      }
+                    },
+                    child: orderProvider.isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text('Confirm'),
+                  ),
+                ),
               ),
             ],
           ),

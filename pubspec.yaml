@@ -52,6 +52,7 @@ dependencies:
   cached_network_image: ^3.4.1
   font_awesome_flutter: ^10.8.0
   flutter_svg: ^2.0.16
+  socket_io_client: ^3.0.2
 
 dev_dependencies:
   flutter_test:

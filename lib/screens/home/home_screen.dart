@@ -3,9 +3,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
+import 'package:e_commerce/screens/chatting/message_screen.dart';
 import 'package:e_commerce/screens/home/categories/categories_detail_screen.dart';
 import 'package:e_commerce/screens/home/categories/category_widget.dart';
 import 'package:e_commerce/screens/home/services/small_service_card_widget.dart';
+import 'package:e_commerce/screens/notifications/notifications.dart';
 import 'package:e_commerce/screens/service/service_screen.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +59,14 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      SlidePageRoute(
+                        page: const MessagesScreen(),
+                      ),
+                    );
+                  },
                   child: const Badge(
                     smallSize: 8,
                     child: Icon(IconlyLight.message),
@@ -65,7 +74,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(width: 20),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      SlidePageRoute(
+                        page: const NotificationsScreen(),
+                      ),
+                    );
+                  },
                   child: const Badge(
                     smallSize: 8,
                     child: Icon(IconlyLight.notification),

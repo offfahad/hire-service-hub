@@ -1,6 +1,6 @@
+import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:ajar/utils/theme_constants.dart';
 
 class MessageItemShimmer extends StatelessWidget {
   const MessageItemShimmer({super.key});
@@ -10,9 +10,9 @@ class MessageItemShimmer extends StatelessWidget {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     // Define shimmer colors for dark mode
-    final darkBaseColor = fdarkBlue.withOpacity(0.7);
-    final darkHighlightColor = fMainColor.withOpacity(0.5);
-    final darkBackgroundColor = fdarkBlue.withOpacity(0.9);
+    final darkBaseColor = AppTheme.fdarkBlue.withOpacity(0.7);
+    final darkHighlightColor = AppTheme.fMainColor.withOpacity(0.5);
+    final darkBackgroundColor = AppTheme.fdarkBlue.withOpacity(0.9);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
@@ -30,9 +30,11 @@ class MessageItemShimmer extends StatelessWidget {
               // Shimmer effect for the avatar
               Shimmer.fromColors(
                 baseColor: isDarkMode ? darkBaseColor : Colors.grey[300]!,
-                highlightColor: isDarkMode ? darkHighlightColor : Colors.grey[100]!,
+                highlightColor:
+                    isDarkMode ? darkHighlightColor : Colors.grey[100]!,
                 child: CircleAvatar(
-                  backgroundColor: isDarkMode ? darkBaseColor : Colors.grey[300]!,
+                  backgroundColor:
+                      isDarkMode ? darkBaseColor : Colors.grey[300]!,
                   radius: 24,
                 ),
               ),
@@ -44,7 +46,8 @@ class MessageItemShimmer extends StatelessWidget {
                   children: [
                     Shimmer.fromColors(
                       baseColor: isDarkMode ? darkBaseColor : Colors.grey[300]!,
-                      highlightColor: isDarkMode ? darkHighlightColor : Colors.grey[100]!,
+                      highlightColor:
+                          isDarkMode ? darkHighlightColor : Colors.grey[100]!,
                       child: Container(
                         height: 16,
                         color: isDarkMode ? darkBaseColor : Colors.grey[300],
@@ -53,7 +56,8 @@ class MessageItemShimmer extends StatelessWidget {
                     const SizedBox(height: 4),
                     Shimmer.fromColors(
                       baseColor: isDarkMode ? darkBaseColor : Colors.grey[300]!,
-                      highlightColor: isDarkMode ? darkHighlightColor : Colors.grey[100]!,
+                      highlightColor:
+                          isDarkMode ? darkHighlightColor : Colors.grey[100]!,
                       child: Container(
                         height: 14,
                         color: isDarkMode ? darkBaseColor : Colors.grey[300],
@@ -69,7 +73,8 @@ class MessageItemShimmer extends StatelessWidget {
                   children: [
                     Shimmer.fromColors(
                       baseColor: isDarkMode ? darkBaseColor : Colors.grey[300]!,
-                      highlightColor: isDarkMode ? darkHighlightColor : Colors.grey[100]!,
+                      highlightColor:
+                          isDarkMode ? darkHighlightColor : Colors.grey[100]!,
                       child: Container(
                         height: 12,
                         width: 40,
@@ -79,7 +84,8 @@ class MessageItemShimmer extends StatelessWidget {
                     const SizedBox(height: 4),
                     Shimmer.fromColors(
                       baseColor: isDarkMode ? darkBaseColor : Colors.grey[300]!,
-                      highlightColor: isDarkMode ? darkHighlightColor : Colors.grey[100]!,
+                      highlightColor:
+                          isDarkMode ? darkHighlightColor : Colors.grey[100]!,
                       child: Container(
                         height: 12,
                         width: 30,

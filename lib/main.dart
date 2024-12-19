@@ -4,6 +4,7 @@ import 'package:e_commerce/providers/authentication/forget_password_provider.dar
 import 'package:e_commerce/providers/authentication/login_provider.dart';
 import 'package:e_commerce/providers/authentication/registration_provider.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
+import 'package:e_commerce/providers/chatting/chatting_provider.dart';
 import 'package:e_commerce/providers/orders/orders_provider.dart';
 import 'package:e_commerce/providers/profile_updation/profile_updation_provider.dart';
 import 'package:e_commerce/providers/profile_updation/update_password_provider.dart';
@@ -55,6 +56,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (_) => OrderProvider(),
         ),
+        ChangeNotifierProvider(create: (_) => ChattingProvider())
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,

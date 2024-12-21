@@ -1,5 +1,8 @@
 import 'package:carded/carded.dart';
+import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
+import 'package:e_commerce/providers/authentication/authentication_provider.dart';
 import 'package:e_commerce/providers/orders/orders_provider.dart';
+import 'package:e_commerce/screens/orders/order_detail_screen.dart';
 import 'package:e_commerce/utils/api_constnsts.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:e_commerce/utils/date_and_time_formatting.dart';
@@ -34,8 +37,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
       appBar: AppBar(
         title: const Text('Orders'),
       ),
-      body: Consumer<OrderProvider>(
-        builder: (context, orderProvider, child) {
+      body: Consumer2<OrderProvider, AuthenticationProvider>(
+        builder: (context, orderProvider, authProvider, child) {
           if (orderProvider.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -168,8 +171,17 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   const SizedBox(height: 8),
                                   InkWell(
                                     onTap: () {
-                                      print(order.serviceProvider?.firstName);
-                                      print(order.customer?.firstName);
+                                      Navigator.push(
+                                          context,
+                                          SlidePageRoute(
+                                              page: OrderDetailsScreen(
+                                            order: order,
+                                            isServiceProvider: authProvider
+                                                        .user!.role!.title ==
+                                                    "service_provider"
+                                                ? true
+                                                : false,
+                                          )));
                                     },
                                     child: const Align(
                                       alignment: Alignment.bottomRight,

@@ -1,10 +1,13 @@
 import 'package:carded/carded.dart';
+import 'package:e_commerce/common/snakbar/custom_snakbar.dart';
+import 'package:e_commerce/providers/orders/orders_provider.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For Clipboard
 import 'package:e_commerce/models/orders/get_my_orders.dart';
 import 'package:e_commerce/utils/api_constnsts.dart';
 import 'package:e_commerce/utils/date_and_time_formatting.dart';
+import 'package:provider/provider.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
   final Datum order;
@@ -71,6 +74,7 @@ class OrderCard extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
                 child: Text(
@@ -82,13 +86,11 @@ class OrderCard extends StatelessWidget {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.copy, color: Colors.blue),
+                icon: Icon(Icons.copy, color: AppTheme.fMainColor),
                 onPressed: () {
                   Clipboard.setData(ClipboardData(text: order.id));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Order ID copied to clipboard!')),
-                  );
+                  showCustomSnackBar(
+                      context, "Order ID copied to clipboard!", Colors.green);
                 },
               ),
             ],
@@ -106,11 +108,24 @@ class OrderCard extends StatelessWidget {
           ] else
             ...[],
           _DetailRow(label: 'Status:', value: order.orderStatus.toUpperCase()),
+          if (order.orderStatus == "cancelled") ...[
+            _DetailRow(
+                label: 'Cancelled Reason:',
+                value: '${order.cancellationReason ?? "Empty"}'),
+          ] else
+            ...[],
           _DetailRow(label: 'Price:', value: 'Rs. ${order.orderPrice}'),
           _DetailRow(
               label: 'Payment:', value: order.paymentStatus.toUpperCase()),
           _DetailRow(
-              label: 'Date:', value: formatTime(order.orderDate.toString())),
+              label: 'Selected Payment Method:',
+              value: order.paymentMethod.toUpperCase()),
+          _DetailRow(
+              label: 'Order Placed On:',
+              value: formatTime(order.placedAt.toString())),
+          _DetailRow(
+              label: 'Order Date:',
+              value: formatTime(order.orderDate.toString())),
           if (order.customer != null) ...[
             _DetailRow(
                 label: 'Customer Name:',
@@ -125,13 +140,13 @@ class OrderCard extends StatelessWidget {
               order.additionalNotes!.isNotEmpty)
             _DetailRow(label: 'Notes:', value: order.additionalNotes!),
           const SizedBox(height: 16),
-          _buildActionButtons(context),
+          _buildActionButtons(context, order),
         ],
       ),
     );
   }
 
-  Widget _buildActionButtons(BuildContext context) {
+  Widget _buildActionButtons(BuildContext context, Datum order) {
     return GridView.count(
       crossAxisCount: 2, // Two buttons per row
       mainAxisSpacing: 10, // Space between rows
@@ -153,7 +168,7 @@ class OrderCard extends StatelessWidget {
             label: 'Cancel Order',
             color: Colors.red,
             onPressed: () {
-              _showCancelOrderDialog(context);
+              _showCancelOrderDialog(context, order);
             },
           ),
         if (isServiceProvider)
@@ -242,7 +257,7 @@ class _DetailRow extends StatelessWidget {
   }
 }
 
-void _showCancelOrderDialog(BuildContext context) {
+void _showCancelOrderDialog(BuildContext context, Datum order) {
   final TextEditingController reasonController = TextEditingController();
 
   void _cancelOrderWithReason(String reason) {
@@ -280,16 +295,13 @@ void _showCancelOrderDialog(BuildContext context) {
         ),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog without action
-            },
+            onPressed: () => Navigator.of(context).pop(),
             child: const Text('Cancel'),
           ),
           ElevatedButton(
             onPressed: () {
               final reason = reasonController.text.trim();
               if (reason.isEmpty) {
-                // Show a snackbar or error if no reason is provided
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Reason cannot be empty!'),
@@ -297,9 +309,30 @@ void _showCancelOrderDialog(BuildContext context) {
                   ),
                 );
               } else {
-                Navigator.of(context).pop(); // Close the dialog
-                // Handle cancel order logic with the reason
-                _cancelOrderWithReason(reason);
+                // Call the cancel order API
+                final provider =
+                    Provider.of<OrderProvider>(context, listen: false);
+                provider
+                    .cancelOrder(orderId: order.id, cancellationReason: reason)
+                    .then((_) {
+                  if (provider.errorMessage == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Order canceled successfully!'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(provider.errorMessage!),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                  }
+                });
               }
             },
             child: const Text('OK'),

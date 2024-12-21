@@ -21,6 +21,7 @@ class OrderRepository {
       throw Exception("An error occurred while booking the order: $e");
     }
   }
+
   Future<GetMyOrders?> fetchOrders() async {
     final response = await _orderService.getMyOrders();
     if (response.statusCode == 200) {
@@ -28,5 +29,15 @@ class OrderRepository {
     } else {
       throw Exception("Failed to fetch orders: ${response.body}");
     }
+  }
+
+  Future<Map<String, dynamic>> cancelOrder({
+    required String orderId,
+    required String cancellationReason,
+  }) {
+    return _orderService.cancelOrder(
+      orderId: orderId,
+      cancellationReason: cancellationReason,
+    );
   }
 }

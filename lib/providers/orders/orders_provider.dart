@@ -44,4 +44,27 @@ class OrderProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Map<String, dynamic>? _cancelOrderResponse;
+
+  Future<void> cancelOrder({
+    required String orderId,
+    required String cancellationReason,
+  }) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      _cancelOrderResponse = await _orderRepository.cancelOrder(
+        orderId: orderId,
+        cancellationReason: cancellationReason,
+      );
+    } catch (e) {
+      _errorMessage = e.toString().replaceAll('Exception: ', '');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:e_commerce/utils/api_constnsts.dart';
 
 class ServiceModel {
   final String id;
@@ -32,7 +33,9 @@ class ServiceModel {
       price: json['price'],
       isAvailable: json['is_available'],
       city: json['city'],
-      coverPhoto: json["cover_photo"],
+      coverPhoto: json["cover_photo"] != null
+          ? "${Constants.baseUrl}/${json["cover_photo"]}"
+          : null,
       startTime: json['start_time'],
       endTime: json['end_time'],
       user: User.fromJson(json['user']),

@@ -263,13 +263,11 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
                             description: serviceProvider
                                 .descriptionController.text
                                 .trim(),
-                            price: double.tryParse(
-                                    serviceProvider.priceController.text.trim())
-                                .toString(),
-                            startTime: DateTime.parse(
-                                serviceProvider.startTimeController.text),
-                            endTime: DateTime.parse(
-                                serviceProvider.endTimeController.text.trim()),
+                            price: int.tryParse(
+                                serviceProvider.priceController.text.trim())!,
+                            startTime: serviceProvider.startTimeController.text,
+                            endTime:
+                                serviceProvider.endTimeController.text.trim(),
                             categoryId: categoryProvider.getCategoryIdByName(
                                 serviceProvider.selectedCategory),
                             isAvailable: serviceProvider.isAvailable,

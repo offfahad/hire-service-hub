@@ -24,6 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final size = MediaQuery.of(context).size;
     return Consumer<AuthenticationProvider>(
         builder: (context, authProvider, child) {
+          print(authProvider.user?.profilePicture);
       return Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(

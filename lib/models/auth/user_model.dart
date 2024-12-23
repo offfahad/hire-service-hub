@@ -64,8 +64,7 @@ class UserModel {
               state: '',
               postalCode: '',
               country: '',
-              location: ''
-            ),
+              location: ''),
       isAdmin: json['is_admin'],
       isVerified: json['is_verified'],
       roleId: json['role_id'],
@@ -107,8 +106,7 @@ class UserModel {
               state: '',
               postalCode: '',
               country: '',
-              location: ''
-            ),
+              location: ''),
       bio: userJson['bio'],
       isAdmin: userJson['is_admin'] ?? false,
       isVerified: userJson['is_verified'] ?? false,
@@ -144,8 +142,9 @@ class UserModel {
       gender: userJson['gender'] ?? '',
       otp: '', // Not part of the response
       profilePicture: userJson['profile_picture'] != null
-          ? "${Constants.baseUrl}\$${userJson['profile_picture']}"
+          ? "${Constants.baseUrl}/${userJson['profile_picture']}"
           : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg',
+
       cnic: userJson['cnic'] ?? '',
       address: userJson['address'] != null
           ? AddressModel.fromJson(userJson['address'])
@@ -155,8 +154,7 @@ class UserModel {
               state: '',
               postalCode: '',
               country: '',
-              location: ''
-            ),
+              location: ''),
       bio: userJson['bio'] ?? '',
       isAdmin: userJson['is_admin'] ?? false,
       isVerified: userJson['is_verified'] ?? false,

@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:e_commerce/utils/api_constnsts.dart';
+
 FetchSingleService fetchSingleServiceFromJson(String str) =>
     FetchSingleService.fromJson(json.decode(str));
 
@@ -158,7 +160,9 @@ class SpecificService {
         categoryId: json["category_id"],
         price: json["price"],
         isAvailable: json["is_available"],
-        coverPhoto: json["cover_photo"],
+        coverPhoto: json["cover_photo"] != null
+            ? "${Constants.baseUrl}/${json["cover_photo"]}"
+            : null,
         startTime: json["start_time"] == null
             ? null
             : DateTime.parse(json["start_time"]),
@@ -316,7 +320,9 @@ class User {
         lastName: json["last_name"],
         phone: json["phone"],
         gender: json["gender"],
-        profilePicture: json["profile_picture"],
+        profilePicture: json['profile_picture'] != null
+            ? "${Constants.baseUrl}/${json['profile_picture']}"
+            : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg',
         otp: json["otp"],
         cnic: json["cnic"],
         roleId: json["role_id"],

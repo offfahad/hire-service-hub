@@ -65,38 +65,6 @@ class ServiceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  final List<FetchSingleService> _cartList = [];
-  List<FetchSingleService> get cartList => _cartList;
-// Add to Cart
-  bool addToCart(String serviceId) {
-    // Ensure service is not null and the specific service ID matches
-    if (service?.data?.specificService?.id == serviceId) {
-      // Check if the service is already in the cart
-      if (_cartList
-          .any((item) => item.data?.specificService?.id == serviceId)) {
-        return false; // Service already in the cart
-      } else {
-        _cartList.add(service!);
-        notifyListeners();
-        return true; // Successfully added to the cart
-      }
-    }
-    return false; // Service ID does not match
-  }
-
-// Remove from Cart
-  void removeFromCart(String serviceId) {
-    // Remove the service from the cart by matching the ID
-    _cartList
-        .removeWhere((item) => item.data?.specificService?.id == serviceId);
-    notifyListeners();
-  }
-
-  void clearCart() {
-    _cartList.clear();
-    notifyListeners();
-  }
-
   List<ServiceModel> _filterServices = [];
 
   List<ServiceModel> get filterServices => _filterServices;
@@ -178,22 +146,45 @@ class ServiceProvider with ChangeNotifier {
 
   CreateService? _createService;
   CreateService get createService => _createService!;
-
-  Future<void> createServiceWithCoverPhoto(
+// Service management
+  Future<bool> createServiceWithCoverPhoto(
       CreateService serviceData, String imagePath) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      bool success = await serviceRepository.createServiceWithCoverPhoto(
-          serviceData, imagePath);
+      CreateService? result = await serviceRepository
+          .createServiceWithCoverPhoto(serviceData, imagePath);
 
-      if (success) {
-        // Update state if needed
-        _createService = serviceData;
+      if (result != null) {
+        return true;
       } else {
-        _errorMessage = "Failed to create service with cover photo.";
+        _errorMessage = "Failed to create service.";
+        return false;
+      }
+    } catch (e) {
+      _errorMessage = e.toString();
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteService(String serviceId) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      bool isDeleted = await serviceRepository.deleteService(serviceId);
+      if (isDeleted) {
+        _services.removeWhere((service) => service.id == serviceId);
+        _filterServices.removeWhere((service) => service.id == serviceId);
+        notifyListeners();
+      } else {
+        _errorMessage = "Failed to delete service.";
       }
     } catch (e) {
       _errorMessage = e.toString();

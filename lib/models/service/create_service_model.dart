@@ -1,14 +1,16 @@
+import 'package:e_commerce/utils/api_constnsts.dart';
+
 class CreateService {
   final String? id;
   final String serviceName;
   final String description;
   final String? userId;
   final String? categoryId;
-  final String price;
+  final int price;
   final bool isAvailable;
   final String? coverPhoto;
-  final DateTime startTime;
-  final DateTime endTime;
+  final String startTime;
+  final String endTime;
   final String? city;
 
   CreateService({
@@ -29,15 +31,17 @@ class CreateService {
   factory CreateService.fromJson(Map<String, dynamic> json) {
     return CreateService(
       id: json['id'],
-      serviceName: json['CreateService_name'],
+      serviceName: json['service_name'],
       description: json['description'],
       userId: json['user_id'],
       categoryId: json['category_id'],
-      price: json['price'],
+      price: int.parse(json['price']),
       isAvailable: json['is_available'],
-      coverPhoto: json['cover_photo'],
-      startTime: DateTime.parse(json['start_time']),
-      endTime: DateTime.parse(json['end_time']),
+      coverPhoto: json["cover_photo"] != null
+          ? "${Constants.baseUrl}/${json["cover_photo"]}"
+          : null,
+      startTime: json['start_time'],
+      endTime: json['end_time'],
       city: json['city'],
     );
   }
@@ -51,8 +55,8 @@ class CreateService {
       'price': price,
       'is_available': isAvailable,
       'cover_photo': coverPhoto,
-      'start_time': startTime.toIso8601String(),
-      'end_time': endTime.toIso8601String(),
+      'start_time': startTime,
+      'end_time': endTime,
     };
   }
 }

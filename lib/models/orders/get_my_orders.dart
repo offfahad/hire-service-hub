@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:e_commerce/utils/api_constnsts.dart';
+
 class GetMyOrders {
   final bool success;
   final int statusCode;
@@ -160,7 +162,9 @@ class Customer {
         lastName: json["last_name"],
         phone: json["phone"],
         gender: json["gender"],
-        profilePicture: json["profile_picture"],
+        profilePicture: json['profile_picture'] != null
+            ? "${Constants.baseUrl}/${json['profile_picture']}"
+            : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg',
         cnic: json["cnic"],
         roleId: json["role_id"],
         isVerified: json["is_verified"],

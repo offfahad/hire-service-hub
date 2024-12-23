@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/snakbar/custom_snakbar.dart';
+
 class ServiceDetailsScreen extends StatefulWidget {
   final ServiceModel service;
 
@@ -60,8 +62,52 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                   ),
                   IconButton(
                     icon: const Icon(IconlyLight.delete),
-                    onPressed: () {
-                      // Handle delete logic
+                    onPressed: () async {
+                      final shouldDelete = await showDialog<bool>(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text("Delete Service"),
+                            content: const Text(
+                                "Are you sure you want to delete this service?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.of(context).pop(false), // Cancel
+                                child: const Text("Cancel"),
+                              ),
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.of(context).pop(true), // Confirm
+                                child: const Text(
+                                  "Delete",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
+                      if (shouldDelete == true) {
+                        // Call the provider method to delete the service
+                        await Provider.of<ServiceProvider>(context,
+                                listen: false)
+                            .deleteService(widget.service.id);
+
+                        final provider = Provider.of<ServiceProvider>(context,
+                            listen: false);
+                        if (provider.errorMessage == null) {
+                          // Show success message
+                          showCustomSnackBar(context,
+                              "Service deleted successfully!", Colors.green);
+                          Navigator.pop(context); // Navigate back
+                        } else {
+                          // Show error message
+                          showCustomSnackBar(
+                              context, provider.errorMessage!, Colors.red);
+                        }
+                      }
                     },
                   ),
                 ]
@@ -88,9 +134,8 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                 children: [
                   service.coverPhoto != null
                       ? Image.network(
-                          '${Constants.baseUrl}${service.coverPhoto}',
+                          '${service.coverPhoto}',
                           width: double.infinity,
-                          height: 180,
                           fit: BoxFit.cover,
                         )
                       : Image.asset(
@@ -159,11 +204,11 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        const Icon(IconlyLight.calendar),
+                        const Icon(IconlyLight.time_circle),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            "FROM ${formatTime(service.startTime.toString())} VALID TILL ${formatTime(service.endTime.toString())}",
+                            "${getFormattedTime12Hour(service.startTime.toString())} - ${getFormattedTime12Hour(service.endTime.toString())}",
                             style: const TextStyle(fontSize: 14),
                           ),
                         ),
@@ -233,11 +278,9 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                     child: Row(
                       children: [
                         CircleAvatar(
-                          backgroundImage: NetworkImage(
-                            service.user?.profilePicture ??
-                                "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg",
-                          ),
-                          radius: 30,
+                          backgroundImage:
+                              NetworkImage(service.user?.profilePicture),
+                          radius: 20,
                         ),
                         const SizedBox(width: 16),
                         Column(

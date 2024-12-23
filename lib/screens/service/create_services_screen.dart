@@ -21,6 +21,9 @@ class CreateServiceScreen extends StatefulWidget {
 }
 
 class _CreateServiceScreenState extends State<CreateServiceScreen> {
+  DateTime? _startTime;
+  DateTime? _endTime;
+
   @override
   void initState() {
     super.initState();
@@ -34,17 +37,24 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
     });
   }
 
-  Future<void> _selectDate(BuildContext context,
-      {required TextEditingController controller}) async {
-    DateTime? selectedDate = await showDatePicker(
+  Future<void> _selectTime(BuildContext context,
+      {required TextEditingController controller,
+      required ValueChanged<DateTime> onTimeSelected}) async {
+    TimeOfDay? selectedTime = await showTimePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000), // Earliest date allowed
-      lastDate: DateTime(2100), // Latest date allowed
+      initialTime: TimeOfDay.now(),
     );
-    if (selectedDate != null) {
-      // Update the controller with the selected date
-      controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+
+    if (selectedTime != null) {
+      final now = DateTime.now();
+      final dateTime = DateTime(
+          now.year, now.month, now.day, selectedTime.hour, selectedTime.minute);
+
+      // Format the selected time to 12-hour format with AM/PM
+      controller.text = DateFormat('h:mm a').format(dateTime);
+
+      // Notify the parent to update the internal DateTime
+      onTimeSelected(dateTime);
     }
   }
 
@@ -181,9 +191,15 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             InkWell(
-                              onTap: () => _selectDate(
+                              onTap: () => _selectTime(
                                 context,
                                 controller: serviceProvider.startTimeController,
+                                onTimeSelected: (selectedTime) {
+                                  setState(() {
+                                    _startTime =
+                                        selectedTime; // Store the time internally
+                                  });
+                                },
                               ),
                               child: CustomTextFormField(
                                 controller: serviceProvider.startTimeController,
@@ -200,9 +216,15 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             InkWell(
-                              onTap: () => _selectDate(
+                              onTap: () => _selectTime(
                                 context,
                                 controller: serviceProvider.endTimeController,
+                                onTimeSelected: (selectedTime) {
+                                  setState(() {
+                                    _endTime =
+                                        selectedTime; // Store the time internally
+                                  });
+                                },
                               ),
                               child: CustomTextFormField(
                                 controller: serviceProvider.endTimeController,
@@ -242,7 +264,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: CustomGradientButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_validateInputs(serviceProvider)) {
                           final serviceData = CreateService(
                             serviceName:
@@ -250,25 +272,34 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                             description: serviceProvider
                                 .descriptionController.text
                                 .trim(),
-                            price: double.tryParse(
-                                    serviceProvider.priceController.text.trim())
-                                .toString(),
-                            startTime: DateTime.parse(
-                                serviceProvider.startTimeController.text),
-                            endTime: DateTime.parse(
-                                serviceProvider.endTimeController.text.trim()),
+                            price: int.parse(serviceProvider
+                                .priceController.text
+                                .trim()
+                                .toString()),
+                            startTime: _startTime.toString(),
+                            endTime: _endTime.toString(),
                             categoryId: categoryProvider.getCategoryIdByName(
                                 serviceProvider.selectedCategory),
                             isAvailable: serviceProvider.isAvailable,
                           );
-                          serviceProvider.createServiceWithCoverPhoto(
+
+                          bool result =
+                              await serviceProvider.createServiceWithCoverPhoto(
                             serviceData,
-                            serviceProvider
-                                .coverPhoto!.path, // Cover photo path
+                            serviceProvider.coverPhoto!.path,
                           );
-                          showCustomSnackBar(context,
-                              "Services Created Successfully!", Colors.green);
-                          Navigator.pop(context);
+
+                          if (result) {
+                            showCustomSnackBar(context,
+                                "Service Created Successfully!", Colors.green);
+                            Navigator.pop(context);
+                          } else {
+                            showCustomSnackBar(
+                                context,
+                                serviceProvider.errorMessage ??
+                                    "Unknown error occurred.",
+                                Colors.red);
+                          }
                         } else {
                           showCustomSnackBar(
                               context,

@@ -30,17 +30,27 @@ class ServiceRepository {
     return await serviceService.createService(serviceData);
   }
 
-  Future<bool> uploadServiceCoverPhoto(
+  Future<CreateService?> uploadServiceCoverPhoto(
       String imagePath, String serviceId) async {
     return await serviceService.uploadServiceCoverPhoto(imagePath, serviceId);
   }
 
-  Future<bool> createServiceWithCoverPhoto(
+  Future<CreateService?> createServiceWithCoverPhoto(
       CreateService serviceData, String imagePath) async {
-    final service = await createService(serviceData);
-    if (service != null && service.id != null) {
-      return await uploadServiceCoverPhoto(imagePath, service.id!);
+    try {
+      final service = await createService(serviceData);
+      if (service?.id != null) {
+        return await uploadServiceCoverPhoto(imagePath, service!.id!);
+      } else {
+        throw Exception('Service creation failed.');
+      }
+    } catch (e) {
+      throw Exception(
+          'Failed to create service with cover photo: ${e.toString()}');
     }
-    return false;
+  }
+
+  Future<bool> deleteService(String serviceId) async {
+    return await serviceService.deleteService(serviceId);
   }
 }

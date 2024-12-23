@@ -85,7 +85,7 @@ class ServiceService {
     }
   }
 
-  // Create a service
+// Create a service
   Future<CreateService?> createService(CreateService serviceData) async {
     String? accessToken = await AuthService.getAccessToken();
     if (accessToken == null) throw Exception("Access token is missing.");
@@ -102,20 +102,20 @@ class ServiceService {
         body: jsonEncode(serviceData.toJson()),
       );
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        if (data['success']) {
-          return CreateService.fromJson(data['data']['data'][0]);
-        }
+      final responseBody = json.decode(response.body);
+      if (response.statusCode == 200 && responseBody['success'] == true) {
+        return CreateService.fromJson(responseBody['data']['data'][0]);
+      } else {
+        // Handle server error messages
+        throw Exception(responseBody['message'] ?? 'Failed to create service.');
       }
-      return null;
     } catch (e) {
-      throw Exception('Failed to create service: $e');
+      throw Exception('Failed to create service: ${e.toString()}');
     }
   }
 
-  // Upload service cover photo
-  Future<bool> uploadServiceCoverPhoto(
+// Upload service cover photo
+  Future<CreateService?> uploadServiceCoverPhoto(
       String imagePath, String serviceId) async {
     String? accessToken = await AuthService.getAccessToken();
     if (accessToken == null) throw Exception("Access token is missing.");
@@ -130,14 +130,48 @@ class ServiceService {
             .add(await http.MultipartFile.fromPath('cover_photo', imagePath));
 
       final response = await request.send();
-      if (response.statusCode == 200) {
-        final responseData = await http.Response.fromStream(response);
-        final data = json.decode(responseData.body);
-        return data['success'] ?? false;
+      final responseData = await http.Response.fromStream(response);
+      final responseBody = json.decode(responseData.body);
+      print("Response from uploading a image ${responseBody}");
+      if (response.statusCode == 200 && responseBody['success'] == true) {
+        return CreateService.fromJson(responseBody['data'][0]);
+      } else {
+        // Handle server error messages
+        throw Exception(
+            responseBody['message'] ?? 'Failed to upload cover photo.');
       }
-      return false;
     } catch (e) {
-      throw Exception('Failed to upload service cover photo: $e');
+      throw Exception('Failed to upload cover photo: ${e.toString()}');
+    }
+  }
+
+  Future<bool> deleteService(String serviceId) async {
+    String? accessToken = await AuthService.getAccessToken();
+    if (accessToken == null) throw Exception("Access token is missing.");
+
+    final url =
+        Uri.parse('${Constants.baseUrl}${Constants.userApiService}/$serviceId');
+
+    try {
+      final response = await http.delete(
+        url,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['success']) {
+          return true;
+        } else {
+          throw Exception('Failed to delete service: ${data['message']}');
+        }
+      } else {
+        throw Exception('Failed to delete service: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete service: $e');
     }
   }
 }

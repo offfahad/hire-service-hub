@@ -1,9 +1,11 @@
 import 'package:e_commerce/common/buttons/custom_gradient_button.dart';
 import 'package:e_commerce/common/snakbar/custom_snakbar.dart';
 import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
+import 'package:e_commerce/models/orders/get_my_orders.dart';
 import 'package:e_commerce/models/service/create_service_model.dart';
 import 'package:e_commerce/models/service/fetch_signle_service_model.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
+import 'package:e_commerce/providers/service/service_filter_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:e_commerce/utils/bottom_sheet_helpers.dart';
@@ -24,6 +26,9 @@ class UpdateServiceScreen extends StatefulWidget {
 }
 
 class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
+  DateTime? _startTime;
+  DateTime? _endTime;
+
   @override
   void initState() {
     super.initState();
@@ -42,25 +47,81 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
       serivceProvider.setCategory(
         service.category!.title.toString(),
       );
+      _startTime = service.startTime!;
+      _endTime = service.endTime!;
       serivceProvider.startTimeController.text =
-          DateFormat('yyyy-MM-dd').format(service.startTime!);
+          DateFormat('h:mm a').format(service.startTime!);
       serivceProvider.endTimeController.text =
-          DateFormat('yyyy-MM-dd').format(service.endTime!);
+          DateFormat('h:mm a').format(service.endTime!);
       serivceProvider.toggleAvailability(service.isAvailable!);
     });
   }
 
-  Future<void> _selectDate(BuildContext context,
-      {required TextEditingController controller}) async {
-    DateTime? selectedDate = await showDatePicker(
+  Future<void> _selectTime(BuildContext context,
+      {required TextEditingController controller,
+      required ValueChanged<DateTime> onTimeSelected}) async {
+    TimeOfDay? selectedTime = await showTimePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000), // Earliest date allowed
-      lastDate: DateTime(2100), // Latest date allowed
+      initialTime: TimeOfDay.now(),
     );
-    if (selectedDate != null) {
-      // Update the controller with the selected date
-      controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+
+    if (selectedTime != null) {
+      final now = DateTime.now();
+      final dateTime = DateTime(
+          now.year, now.month, now.day, selectedTime.hour, selectedTime.minute);
+
+      // Format the selected time to 12-hour format with AM/PM
+      controller.text = DateFormat('h:mm a').format(dateTime);
+
+      // Notify the parent to update the internal DateTime
+      onTimeSelected(dateTime);
+    }
+  }
+
+  XFile? _newCoverPhoto; // To store the new image selected by the user.
+
+  Future<void> _selectImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _newCoverPhoto = pickedFile;
+      });
+
+      // Now that a new image is selected, call the uploadServiceCoverPhoto API
+      final serviceProvider =
+          Provider.of<ServiceProvider>(context, listen: false);
+      final serviceFilterProvider =
+          Provider.of<FilterProvider>(context, listen: false);
+
+      // Assuming serviceProvider has a serviceId that you want to upload the image for
+      String serviceId = widget.serviceDetail.data!.specificService!.id!;
+
+      try {
+        await serviceProvider.uploadServiceCoverPhoto(
+          _newCoverPhoto!.path, // Pass the image path
+          serviceId, // Pass the serviceId
+        );
+
+        if (serviceProvider.errorMessage != null) {
+          showCustomSnackBar(
+              context, serviceProvider.errorMessage!, Colors.red);
+        } else {
+          serviceProvider.fetchSingleServiceDetail(
+              widget.serviceDetail.data!.specificService!.id!);
+          serviceProvider.fetchFilterServices();
+          serviceProvider.clearFilters;
+          serviceFilterProvider.resetFilter("Category");
+          serviceFilterProvider.resetCategoryID();
+
+          showCustomSnackBar(
+              context, "Cover photo updated successfully!", Colors.green);
+        }
+      } catch (e) {
+        showCustomSnackBar(
+            context, "An error occurred: ${e.toString()}", Colors.red);
+      }
     }
   }
 
@@ -68,7 +129,7 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
   Widget build(BuildContext context) {
     Brightness brightness = Theme.of(context).brightness;
     bool isDarkMode = brightness == Brightness.dark;
-    final ImagePicker picker = ImagePicker();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -86,42 +147,66 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Cover Photo
-                  InkWell(
-                    onTap: () async {
-                      final pickedPhoto =
-                          await picker.pickImage(source: ImageSource.gallery);
-                      if (pickedPhoto != null) {
-                        serviceProvider.setCoverPhoto(pickedPhoto);
-                      }
-                    },
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.25,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color:
-                            isDarkMode ? AppTheme.fdarkBlue : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8.0),
+                  Stack(
+                    children: [
+                      InkWell(
+                        onTap: _selectImage, // Open Gallery on tap
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.25,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: isDarkMode
+                                ? AppTheme.fdarkBlue
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: _newCoverPhoto == null
+                              ? (widget.serviceDetail.data?.specificService
+                                          ?.coverPhoto ==
+                                      null
+                                  ? const Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            IconlyLight.image,
+                                            size: 40,
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text('Select a photo'),
+                                        ],
+                                      ),
+                                    )
+                                  : Image.network(
+                                      widget.serviceDetail.data?.specificService
+                                          ?.coverPhoto,
+                                      fit: BoxFit.cover,
+                                    ))
+                              : Image.file(
+                                  File(_newCoverPhoto!.path),
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
                       ),
-                      child: serviceProvider.coverPhoto == null
-                          ? const Center(
-                              child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  IconlyLight.image,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text('Select a photo'),
-                              ],
-                            ))
-                          : Image.file(
-                              File(serviceProvider.coverPhoto!.path),
-                              fit: BoxFit.cover,
-                            ),
-                    ),
+                      // If there is a cover photo, show the Edit button
+                      if (widget.serviceDetail.data?.specificService
+                              ?.coverPhoto !=
+                          null)
+                        Positioned(
+                            top: 8,
+                            right: 8,
+                            child: CircleAvatar(
+                              backgroundColor: AppTheme.fMainColor,
+                              child: IconButton(
+                                icon:
+                                    const Icon(Icons.edit, color: Colors.white),
+                                onPressed: _selectImage,
+                              ),
+                            )),
+                    ],
                   ),
                   const SizedBox(
                     height: 16,
@@ -194,9 +279,15 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             InkWell(
-                              onTap: () => _selectDate(
+                              onTap: () => _selectTime(
                                 context,
                                 controller: serviceProvider.startTimeController,
+                                onTimeSelected: (selectedTime) {
+                                  setState(() {
+                                    _startTime =
+                                        selectedTime; // Store the time internally
+                                  });
+                                },
                               ),
                               child: CustomTextFormField(
                                 controller: serviceProvider.startTimeController,
@@ -213,9 +304,15 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             InkWell(
-                              onTap: () => _selectDate(
+                              onTap: () => _selectTime(
                                 context,
                                 controller: serviceProvider.endTimeController,
+                                onTimeSelected: (selectedTime) {
+                                  setState(() {
+                                    _startTime =
+                                        selectedTime; // Store the time internally
+                                  });
+                                },
                               ),
                               child: CustomTextFormField(
                                 controller: serviceProvider.endTimeController,
@@ -263,11 +360,12 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
                             description: serviceProvider
                                 .descriptionController.text
                                 .trim(),
-                            price: int.tryParse(
-                                serviceProvider.priceController.text.trim())!,
-                            startTime: serviceProvider.startTimeController.text,
-                            endTime:
-                                serviceProvider.endTimeController.text.trim(),
+                            price: int.tryParse(serviceProvider
+                                .priceController.text
+                                .trim()
+                                .toString())!,
+                            startTime: _startTime.toString(),
+                            endTime: _endTime.toString(),
                             categoryId: categoryProvider.getCategoryIdByName(
                                 serviceProvider.selectedCategory),
                             isAvailable: serviceProvider.isAvailable,

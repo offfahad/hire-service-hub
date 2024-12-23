@@ -59,4 +59,28 @@ class CreateService {
       'end_time': endTime,
     };
   }
+
+  CreateService copyWith({
+    String? id,
+    String? serviceName,
+    String? description,
+    String? coverPhoto,
+    String? startTime,
+    String? endTime,
+    int? price,
+    bool? isAvailable,
+    String? categoryId,
+  }) {
+    return CreateService(
+      id: id ?? this.id,
+      serviceName: serviceName ?? this.serviceName,
+      description: description ?? this.description,
+      coverPhoto: coverPhoto ?? this.coverPhoto,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      price: price ?? this.price,
+      isAvailable: isAvailable ?? this.isAvailable,
+      categoryId: categoryId ?? this.categoryId,
+    );
+  }
 }

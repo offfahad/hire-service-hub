@@ -39,24 +39,23 @@ class SmallServiceCard extends StatelessWidget {
             // Cover Image (Smaller height)
             service.coverPhoto != null && service.coverPhoto!.isNotEmpty
                 ? ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Image.network(
-                      '${Constants.baseUrl}${service.coverPhoto}',
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image.network(
+                      '${service.coverPhoto}',
                       width: double.infinity,
                       height: 100, // Reduced height
                       fit: BoxFit.cover,
                     ),
-                )
+                  )
                 : ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Image.asset(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image.asset(
                       'assets/images/content-writer.webp', // Placeholder cover image from assets
                       width: double.infinity,
                       height: 100, // Reduced height
                       fit: BoxFit.cover,
-                      
                     ),
-                ),
+                  ),
             // Service Details (Smaller fonts)
             Padding(
               padding: const EdgeInsets.all(8),

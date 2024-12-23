@@ -152,11 +152,9 @@ class ServiceProvider with ChangeNotifier {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
-
     try {
       CreateService? result = await serviceRepository
           .createServiceWithCoverPhoto(serviceData, imagePath);
-
       if (result != null) {
         return true;
       } else {
@@ -166,6 +164,27 @@ class ServiceProvider with ChangeNotifier {
     } catch (e) {
       _errorMessage = e.toString();
       return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> uploadServiceCoverPhoto(
+      String imagePath, String serviceId) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+    try {
+      CreateService? result =
+          await serviceRepository.uploadServiceCoverPhoto(imagePath, serviceId);
+      if (result != null) {
+        _createService = result;
+      } else {
+        _errorMessage = "Failed to upload cover photo.";
+      }
+    } catch (e) {
+      _errorMessage = e.toString();
     } finally {
       _isLoading = false;
       notifyListeners();

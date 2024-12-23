@@ -174,4 +174,30 @@ class ServiceService {
       throw Exception('Failed to delete service: $e');
     }
   }
+
+  Future<Map<String, dynamic>> updateService(
+      String serviceId, Map<String, dynamic> serviceData) async {
+    String? accessToken = await AuthService.getAccessToken();
+    if (accessToken == null) throw Exception("Access token is missing.");
+    try {
+      final url = Uri.parse(
+          '${Constants.baseUrl}${Constants.userApiService}/$serviceId'); // Backend API endpoint
+      final response = await http.patch(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+        body: jsonEncode(serviceData),
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body); // Successful response
+      } else {
+        throw Exception(jsonDecode(response.body)['message']);
+      }
+    } catch (e) {
+      throw Exception("Failed to update service: $e");
+    }
+  }
 }

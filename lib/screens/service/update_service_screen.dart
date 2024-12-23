@@ -370,13 +370,13 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
                                 serviceProvider.selectedCategory),
                             isAvailable: serviceProvider.isAvailable,
                           );
-                          serviceProvider.createServiceWithCoverPhoto(
-                            serviceData,
-                            serviceProvider
-                                .coverPhoto!.path, // Cover photo path
-                          );
+                          serviceProvider.updateService(
+                              widget.serviceDetail.data!.specificService!.id!,
+                              serviceData);
+                          serviceProvider.fetchSingleServiceDetail(
+                              widget.serviceDetail.data!.specificService!.id!);
                           showCustomSnackBar(context,
-                              "Services Created Successfully!", Colors.green);
+                              "Services Updated Successfully!", Colors.green);
                           Navigator.pop(context);
                         } else {
                           showCustomSnackBar(
@@ -385,7 +385,7 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
                               Colors.red);
                         }
                       },
-                      text: "Save Service",
+                      text: "Update Service",
                     ),
                   ),
                 ],
@@ -399,8 +399,7 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
 
 // Validation Method
   bool _validateInputs(ServiceProvider serviceProvider) {
-    return serviceProvider.coverPhoto != null &&
-        serviceProvider.nameController.text.trim().isNotEmpty &&
+    return serviceProvider.nameController.text.trim().isNotEmpty &&
         serviceProvider.descriptionController.text.trim().isNotEmpty &&
         serviceProvider.priceController.text.trim().isNotEmpty &&
         serviceProvider.startTimeController.text.trim().isNotEmpty &&

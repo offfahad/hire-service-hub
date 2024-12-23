@@ -1,6 +1,7 @@
 import 'package:e_commerce/models/service/create_service_model.dart';
 import 'package:e_commerce/models/service/fetch_signle_service_model.dart';
 import 'package:e_commerce/models/service/service_model.dart';
+import 'package:e_commerce/providers/service/service_filter_provider.dart';
 import 'package:e_commerce/repository/service/service_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -223,5 +224,43 @@ class ServiceProvider with ChangeNotifier {
     _selectedCategory = '';
     _isAvailable = false;
     notifyListeners();
+  }
+
+  Future<void> updateService(
+      String serviceId, CreateService updatedService) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      // Convert the ServiceModel to a Map
+      final serviceData = {
+        "service_name": updatedService.serviceName,
+        "description": updatedService.description,
+        "category_id": updatedService.categoryId,
+        "cover_photo": updatedService.coverPhoto,
+        "price": updatedService.price,
+        "is_available": updatedService.isAvailable,
+        "start_time": updatedService.startTime,
+        "end_time": updatedService.endTime,
+      };
+
+      // Call the repository to update the service
+      final response =
+          await serviceRepository.updateService(serviceId, serviceData);
+
+      if (response['success'] == true) {
+        await fetchSingleServiceDetail(serviceId);
+        await fetchFilterServices();
+        notifyListeners();
+      } else {
+        _errorMessage = "Failed to update service.";
+      }
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }

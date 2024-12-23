@@ -53,4 +53,9 @@ class ServiceRepository {
   Future<bool> deleteService(String serviceId) async {
     return await serviceService.deleteService(serviceId);
   }
+
+  Future<Map<String, dynamic>> updateService(
+      String serviceId, Map<String, dynamic> serviceData) async {
+    return await serviceService.updateService(serviceId, serviceData);
+  }
 }

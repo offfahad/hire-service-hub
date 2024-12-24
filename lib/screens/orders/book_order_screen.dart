@@ -1,8 +1,11 @@
+import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/common/snakbar/custom_snakbar.dart';
 import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
+import 'package:e_commerce/models/orders/create_order_model.dart';
 import 'package:e_commerce/models/orders/order_model.dart';
 import 'package:e_commerce/models/service/fetch_signle_service_model.dart';
 import 'package:e_commerce/providers/orders/orders_provider.dart';
+import 'package:e_commerce/screens/orders/order_success_screen.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -213,7 +216,8 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
                         orderPrice: widget.service?.price.toString(),
                       );
 
-                      await orderProvider.bookOrder(order);
+                      final CreateOrderResponse? orderDetails =
+                          await orderProvider.bookOrder(order);
 
                       if (orderProvider.errorMessage != null) {
                         showCustomSnackBar(
@@ -222,6 +226,14 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
                           Colors.red,
                         );
                       } else {
+                        Navigator.pushReplacement(
+                          context,
+                          SlidePageRoute(
+                            page: OrderConfirmationScreen(
+                              orderDetails: orderDetails,
+                            ),
+                          ),
+                        );
                         showCustomSnackBar(
                           context,
                           "Order booked successfully!",

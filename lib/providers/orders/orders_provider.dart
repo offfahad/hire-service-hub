@@ -15,19 +15,21 @@ class OrderProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  Future<void> bookOrder(Order order) async {
+  Future<CreateOrderResponse?> bookOrder(Order order) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      _createOrderResponse =  await _orderRepository.bookOrder(order);
+      _createOrderResponse = await _orderRepository.bookOrder(order);
       _isLoading = false;
       notifyListeners();
+      return _createOrderResponse;
     } catch (e) {
       _isLoading = false;
       _errorMessage = e.toString();
       notifyListeners();
+      return null;
     }
   }
 

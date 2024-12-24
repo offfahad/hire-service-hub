@@ -2,7 +2,7 @@ class CreateOrderResponse {
   final bool success;
   final int statusCode;
   final String message;
-  final OrderData? data;
+  final OrderDetails? data;
 
   CreateOrderResponse({
     required this.success,
@@ -16,23 +16,10 @@ class CreateOrderResponse {
       success: map['success'],
       statusCode: map['statusCode'],
       message: map['message'],
-      data: map['data'] != null ? OrderData.fromMap(map['data']) : null,
-    );
-  }
-}
-
-class OrderData {
-  final List<OrderDetails> orders;
-
-  OrderData({
-    required this.orders,
-  });
-
-  factory OrderData.fromMap(Map<String, dynamic> map) {
-    return OrderData(
-      orders: List<OrderDetails>.from(
-        map['data']?.map((x) => OrderDetails.fromMap(x)) ?? [],
-      ),
+      data: map['data'] != null && map['data']['data'] != null
+          ? OrderDetails.fromMap(
+              map['data']['data'][0]) // Access the first item in the list
+          : null,
     );
   }
 }

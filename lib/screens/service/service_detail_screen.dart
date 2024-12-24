@@ -6,7 +6,6 @@ import 'package:e_commerce/providers/authentication/authentication_provider.dart
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/orders/book_order_screen.dart';
 import 'package:e_commerce/screens/service/update_service_screen.dart';
-import 'package:e_commerce/utils/api_constnsts.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:e_commerce/utils/date_and_time_formatting.dart';
 import 'package:flutter/material.dart';

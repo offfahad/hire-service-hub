@@ -200,4 +200,34 @@ class ServiceService {
       throw Exception("Failed to update service: $e");
     }
   }
+
+  Future<List<ServiceModel>> fetchMyServices() async {
+    String? accessToken = await AuthService.getAccessToken();
+    if (accessToken == null) throw Exception("Access token is missing.");
+    try {
+      // Create headers with the access token
+      final headers = {
+        'Authorization': 'Bearer $accessToken',
+        'Content-Type': 'application/json',
+      };
+
+      // Send the GET request with headers
+      final response = await http.get(
+        Uri.parse("${Constants.baseUrl}${Constants.userApiService}/myServices"),
+        headers: headers,
+      );
+
+      // Check response status code
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body)['data'] as List;
+        return data
+            .map((service) => ServiceModel.fromJsonGetMyServices(service))
+            .toList();
+      } else {
+        throw Exception('Failed to load services');
+      }
+    } catch (e) {
+      throw Exception('Failed to load services: $e');
+    }
+  }
 }

@@ -30,6 +30,9 @@ class ServiceProvider with ChangeNotifier {
 
   bool get isFilterApplied => _isFilterApplied;
 
+  List<ServiceModel> _myServices = [];
+  List<ServiceModel> get myServices => _myServices;
+
   Future<void> fetchServices() async {
     _isLoading = true;
     notifyListeners();
@@ -37,6 +40,20 @@ class ServiceProvider with ChangeNotifier {
       _services = await serviceRepository.getServices();
       _cityNames = _services.map((service) => service.city).toSet().toList();
       _isFilterApplied = false;
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _errorMessage = e.toString();
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchMyServices() async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      _myServices = await serviceRepository.getMyServices();
       _isLoading = false;
       notifyListeners();
     } catch (e) {

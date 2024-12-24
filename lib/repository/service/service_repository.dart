@@ -58,4 +58,8 @@ class ServiceRepository {
       String serviceId, Map<String, dynamic> serviceData) async {
     return await serviceService.updateService(serviceId, serviceData);
   }
+
+  Future<List<ServiceModel>> getMyServices() async {
+    return await serviceService.fetchMyServices();
+  }
 }

@@ -5,6 +5,7 @@ import 'package:e_commerce/providers/authentication/authentication_provider.dart
 import 'package:e_commerce/screens/profile/more_screens/account_screens/account_screen.dart';
 import 'package:e_commerce/screens/profile/profile_updation_screens/profile_details_screen.dart';
 import 'package:e_commerce/screens/service/create_services_screen.dart';
+import 'package:e_commerce/screens/service/my_services_screen.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -24,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final size = MediaQuery.of(context).size;
     return Consumer<AuthenticationProvider>(
         builder: (context, authProvider, child) {
-          print(authProvider.user?.profilePicture);
+      print(authProvider.user?.profilePicture);
       return Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
@@ -180,11 +181,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontWeight: FontWeight.w500, fontSize: 14),
                       ),
                       onTap: () {
-                        // Navigator.of(context).push(
-                        //   SlidePageRoute(
-                        //     page: const MyHostedVehiclesScreen(),
-                        //   ),
-                        // );
+                        Navigator.of(context).push(
+                          SlidePageRoute(
+                            page: const MyServicesScreen(),
+                          ),
+                        );
                       },
                     ),
                     const Divider(),

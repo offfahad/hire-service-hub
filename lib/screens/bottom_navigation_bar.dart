@@ -97,8 +97,8 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
                 // ),
                 icon: Icon(IconlyLight.category),
                 label: authProvider.user!.role!.title == "service_provider"
-                    ? "My Service"
-                    : "Service",
+                    ? "My Services"
+                    : "Services",
                 //label: "Services"
               ),
               BottomNavigationBarItem(

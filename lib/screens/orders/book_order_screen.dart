@@ -24,33 +24,15 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
   String? selectedPaymentMethod;
   DateTime? selectedOrderDate;
 
-  bool checkIsServiceDateValid() {
-    final DateTime currentDate = DateTime.now();
-    final DateTime startDate = widget.service!.startTime!;
-    final DateTime endDate = widget.service!.endTime!;
-
-    // Ensure service start and end dates are valid and not expired
-    return currentDate.isBefore(endDate) && startDate.isBefore(endDate);
-  }
-
   Future<void> selectDate(BuildContext context) async {
     final DateTime currentDate = DateTime.now();
-    final DateTime startDate = widget.service!.startTime!;
-    final DateTime endDate = widget.service!.endTime!;
-
-    // Set the firstDate to either the start date or current date, whichever is later
-    final DateTime firstDate =
-        currentDate.isAfter(startDate) ? currentDate : startDate;
-
-    // Ensure initialDate is within the range
-    final DateTime initialDate =
-        currentDate.isBefore(endDate) ? currentDate : endDate;
 
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: initialDate,
-      firstDate: firstDate,
-      lastDate: endDate,
+      initialDate:
+          currentDate.add(const Duration(days: 1)), // Start with tomorrow
+      firstDate: currentDate.add(const Duration(days: 1)), // Exclude today
+      lastDate: DateTime(2100), // Arbitrary future date
     );
 
     if (pickedDate != null) {
@@ -205,15 +187,6 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () async {
-                      if (!checkIsServiceDateValid()) {
-                        showCustomSnackBar(
-                          context,
-                          "Service availability date is expired!",
-                          Colors.red,
-                        );
-                        return;
-                      }
-
                       if (selectedOrderDate == null) {
                         showCustomSnackBar(
                           context,

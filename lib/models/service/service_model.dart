@@ -4,6 +4,8 @@ class ServiceModel {
   final String id;
   final String serviceName;
   final String description;
+  final String? userId;
+  final String? categoryId;
   final String price;
   final bool isAvailable;
   final String city;
@@ -16,6 +18,8 @@ class ServiceModel {
     required this.id,
     required this.serviceName,
     required this.description,
+    this.categoryId,
+    this.userId,
     required this.price,
     required this.isAvailable,
     required this.city,
@@ -30,6 +34,25 @@ class ServiceModel {
       id: json['id'],
       serviceName: json['service_name'],
       description: json['description'],
+      price: json['price'],
+      isAvailable: json['is_available'],
+      city: json['city'],
+      coverPhoto: json["cover_photo"] != null
+          ? "${Constants.baseUrl}/${json["cover_photo"]}"
+          : null,
+      startTime: json['start_time'],
+      endTime: json['end_time'],
+      user: User.fromJson(json['user']),
+    );
+  }
+
+  factory ServiceModel.fromJsonGetMyServices(Map<String, dynamic> json) {
+    return ServiceModel(
+      id: json['id'],
+      serviceName: json['service_name'],
+      description: json['description'],
+      userId: json['user_id'],
+      categoryId: json['category_id'],
       price: json['price'],
       isAvailable: json['is_available'],
       city: json['city'],

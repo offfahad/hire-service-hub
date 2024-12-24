@@ -213,7 +213,7 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
                         );
                         return;
                       }
-                  
+
                       if (selectedOrderDate == null) {
                         showCustomSnackBar(
                           context,
@@ -222,7 +222,7 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
                         );
                         return;
                       }
-                  
+
                       if (selectedPaymentMethod == null) {
                         showCustomSnackBar(
                           context,
@@ -231,7 +231,7 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
                         );
                         return;
                       }
-                  
+
                       final order = Order(
                         orderDate: selectedOrderDate.toString(),
                         serviceId: widget.service!.id!,
@@ -239,9 +239,9 @@ class _BookOrderScreenState extends State<BookOrderScreen> {
                         paymentMethod: selectedPaymentMethod.toString(),
                         orderPrice: widget.service?.price.toString(),
                       );
-                  
+
                       await orderProvider.bookOrder(order);
-                  
+
                       if (orderProvider.errorMessage != null) {
                         showCustomSnackBar(
                           context,

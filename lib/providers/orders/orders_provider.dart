@@ -1,3 +1,4 @@
+import 'package:e_commerce/models/orders/create_order_model.dart';
 import 'package:e_commerce/models/orders/get_my_orders.dart';
 import 'package:e_commerce/models/orders/order_model.dart';
 import 'package:e_commerce/repository/orders/orders_repository.dart';
@@ -8,6 +9,9 @@ class OrderProvider with ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
 
+  CreateOrderResponse? _createOrderResponse;
+  CreateOrderResponse? get createOrderResponse => _createOrderResponse;
+
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
@@ -17,7 +21,7 @@ class OrderProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await _orderRepository.bookOrder(order);
+      _createOrderResponse =  await _orderRepository.bookOrder(order);
       _isLoading = false;
       notifyListeners();
     } catch (e) {

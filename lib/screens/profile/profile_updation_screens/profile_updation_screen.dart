@@ -81,8 +81,11 @@ class ProfileCompleteScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
+                                  errorWidget: (context, url, error) {
+                                    debugPrint('Image load error: $error');
+                                    return Image.asset(
+                                        'assets/images/default_avatar.png');
+                                  },
                                 ),
                               ),
                             ),

@@ -25,7 +25,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final size = MediaQuery.of(context).size;
     return Consumer<AuthenticationProvider>(
         builder: (context, authProvider, child) {
-      print(authProvider.user?.profilePicture);
       return Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
@@ -57,8 +56,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+                        errorWidget: (context, url, error) {
+                          // Print the error to debug
+                          debugPrint('Image load error: $error');
+                          return Image.asset(
+                              'assets/images/default-user.jpg');
+                        },
                       ),
                     ),
                   ),

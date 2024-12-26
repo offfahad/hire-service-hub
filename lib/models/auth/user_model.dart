@@ -43,15 +43,15 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'],
-      email: json['email'],
-      phone: json['phone'],
-      password: json['password'],
-      firstName: json['first_name'],
-      lastName: json['last_name'],
-      gender: json['gender'],
-      bio: json['bio'],
-      otp: json['otp'],
+      id: json['id'] ?? '',
+      email: json['email'] ?? '',
+      phone: json['phone'] ?? '',
+      password: json['password'] ?? '',
+      firstName: json['first_name'] ?? '',
+      lastName: json['last_name'] ?? '',
+      gender: json['gender'] ?? '',
+      bio: json['bio'] ?? '',
+      otp: json['otp'] ?? '',
       profilePicture: json['profile_picture'] != null
           ? "${Constants.baseUrl}${json['profile_picture']}"
           : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg',
@@ -65,10 +65,10 @@ class UserModel {
               postalCode: '',
               country: '',
               location: ''),
-      isAdmin: json['is_admin'],
-      isVerified: json['is_verified'],
-      roleId: json['role_id'],
-      isComplete: json['is_complete'],
+      isAdmin: json['is_admin'] ?? '',
+      isVerified: json['is_verified'] ?? '',
+      roleId: json['role_id'] ?? '',
+      isComplete: json['is_complete'] ?? '',
     );
   }
   // Unified parsing for dynamic responses
@@ -107,7 +107,7 @@ class UserModel {
               postalCode: '',
               country: '',
               location: ''),
-      bio: userJson['bio'],
+      bio: userJson['bio'] ?? '',
       isAdmin: userJson['is_admin'] ?? false,
       isVerified: userJson['is_verified'] ?? false,
       roleId: userJson['role_id'] ?? '',
@@ -142,7 +142,7 @@ class UserModel {
       gender: userJson['gender'] ?? '',
       otp: '', // Not part of the response
       profilePicture: userJson['profile_picture'] != null
-          ? "${Constants.baseUrl}/${userJson['profile_picture']}"
+          ? "${Constants.baseUrl}${userJson['profile_picture']}"
           : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg',
 
       cnic: userJson['cnic'] ?? '',

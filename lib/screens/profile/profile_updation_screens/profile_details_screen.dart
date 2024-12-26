@@ -66,8 +66,10 @@ class ProfileDetailsScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
+                                    errorWidget: (context, url, error) {
+                                      return Image.asset(
+                                          'assets/images/default_avatar.png');
+                                    },
                                   ),
                                 ),
                               ),

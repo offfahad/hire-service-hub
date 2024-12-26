@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:e_commerce/models/orders/create_order_model.dart';
 import 'package:e_commerce/models/orders/get_my_orders.dart';
 import 'package:e_commerce/models/orders/order_model.dart';
@@ -15,23 +17,42 @@ class OrderProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  Future<CreateOrderResponse?> bookOrder(Order order) async {
-    _isLoading = true;
-    _errorMessage = null;
+
+Future<CreateOrderResponse?> bookOrder(Order order) async {
+  _isLoading = true;
+  _errorMessage = null;
+  notifyListeners();
+
+  try {
+    _createOrderResponse = await _orderRepository.bookOrder(order);
+    _isLoading = false;
     notifyListeners();
+    return _createOrderResponse;
+  } catch (e) {
+    _isLoading = false;
 
     try {
-      _createOrderResponse = await _orderRepository.bookOrder(order);
-      _isLoading = false;
-      notifyListeners();
-      return _createOrderResponse;
-    } catch (e) {
-      _isLoading = false;
-      _errorMessage = e.toString();
-      notifyListeners();
-      return null;
+      // Attempt to extract the JSON message
+      final errorJson = RegExp(r'\{.*\}').stringMatch(e.toString());
+      if (errorJson != null) {
+        final Map<String, dynamic> errorMap = json.decode(errorJson);
+        _errorMessage = errorMap['message'] ?? 'An unknown error occurred';
+      } else {
+        _errorMessage = 'An unknown error occurred';
+      }
+    } catch (parseError) {
+      // If JSON parsing fails, fallback to a default message
+      _errorMessage = 'An error occurred: ${e.toString()}';
     }
+
+    // Debug log for further inspection
+    print('Error: $_errorMessage');
+
+    notifyListeners();
+    return null;
   }
+}
+
 
   GetMyOrders? _orders;
   GetMyOrders? get orders => _orders;

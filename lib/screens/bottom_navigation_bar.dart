@@ -96,9 +96,7 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
                 //   width: MediaQuery.of(context).size.height * 0.035,
                 // ),
                 icon: Icon(IconlyLight.category),
-                label: authProvider.user!.role!.title == "service_provider"
-                    ? "My Services"
-                    : "Services",
+                label: "Services",
                 //label: "Services"
               ),
               BottomNavigationBarItem(

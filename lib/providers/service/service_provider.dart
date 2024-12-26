@@ -170,9 +170,11 @@ class ServiceProvider with ChangeNotifier {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
+
     try {
       CreateService? result = await serviceRepository
           .createServiceWithCoverPhoto(serviceData, imagePath);
+
       if (result != null) {
         return true;
       } else {
@@ -180,7 +182,22 @@ class ServiceProvider with ChangeNotifier {
         return false;
       }
     } catch (e) {
-      _errorMessage = e.toString();
+      print(e);
+
+      // Extract the actual error message from the nested exception
+      try {
+        final message = e.toString();
+        // Extract the last part of the message after the last "Exception:"
+        final extractedMessage = message
+            .split('Exception:')
+            .last
+            .trim(); // Trim to remove extra spaces
+        _errorMessage = extractedMessage;
+      } catch (parseError) {
+        // Fallback in case parsing fails
+        _errorMessage = "An error occurred: ${e.toString()}";
+      }
+
       return false;
     } finally {
       _isLoading = false;

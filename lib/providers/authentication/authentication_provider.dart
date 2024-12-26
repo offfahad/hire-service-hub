@@ -384,27 +384,36 @@ class AuthenticationProvider extends ChangeNotifier {
             country: country,
           )
           .timeout(const Duration(seconds: 10));
+
       _isLoading = false;
       notifyListeners();
 
-      print(response.statusCode);
-      print(response.body);
+      print('Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
 
       if (response.statusCode == 200) {
-        final responseData =
-            json.decode(response.body)['data']; // Access data directly
-        _user = UserModel.fromJson(responseData); // No need for [0]
-        notifyListeners();
-        return 200; // Return 200 for successful update
+        final responseData = json.decode(response.body);
+
+        if (responseData['success'] == true) {
+          // Access the first object in the 'data' list
+          final userData = responseData['data'];
+          _user = UserModel.fromJson(userData);
+
+          notifyListeners();
+          return 200; // Success
+        } else {
+          print('Error Message: ${responseData['message']}');
+          return 400; // Handle failure response gracefully
+        }
       }
 
-      return response
-          .statusCode; // Return the original status code if it's not handled
+      // Return status code if not 200
+      return response.statusCode;
     } catch (e) {
       _isLoading = false;
       notifyListeners();
       print('Error: $e');
-      return -1; // Return -1 for any network error or exceptions
+      return -1; // Return -1 for network or unexpected errors
     }
   }
 

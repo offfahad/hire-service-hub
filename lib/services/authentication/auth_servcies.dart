@@ -370,23 +370,31 @@ class AuthService {
       final request = http.MultipartRequest('PATCH', url)
         ..headers['Authorization'] = 'Bearer $accessToken'
         ..files.add(
-            await http.MultipartFile.fromPath('profile_picture', imagePath));
+          await http.MultipartFile.fromPath('profile_picture', imagePath),
+        );
 
       final response = await request.send();
       final responseData = await http.Response.fromStream(response);
+
       if (response.statusCode == 200) {
         final data = json.decode(responseData.body);
-        if (data['success']) {
-          // Return the profile picture URL
-          return data['data'][0][
-              'profile_picture']; // Ensure this matches your API response structure
-        }
-      }
 
-      return null; // Return null for errors
+        if (data['success'] == true) {
+          // Ensure correct access of the profile picture URL
+          return data['data']['profile_picture'];
+        } else {
+          throw Exception(
+              data['message'] ?? "Failed to update profile picture.");
+        }
+      } else {
+        // Handle non-200 responses
+        throw Exception(
+            "Failed to update profile picture. Status code: ${response.statusCode}");
+      }
     } catch (e) {
+      // Log the error for debugging
       print("Error updating profile picture: $e");
-      return null; // Return null for an internal server error
+      rethrow; // Rethrow to allow higher-level handling
     }
   }
 }

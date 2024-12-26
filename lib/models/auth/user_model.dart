@@ -65,10 +65,13 @@ class UserModel {
               postalCode: '',
               country: '',
               location: ''),
-      isAdmin: json['is_admin'] ?? '',
-      isVerified: json['is_verified'] ?? '',
+      isAdmin: json['is_admin'] ?? false,
+      isVerified: json['is_verified'] ?? false,
       roleId: json['role_id'] ?? '',
-      isComplete: json['is_complete'] ?? '',
+      isComplete: json['is_complete'] ?? false,
+      role: json['role'] != null
+          ? Roles.fromJson(json['role'])
+          : Roles(id: '', title: '', permissions: []),
     );
   }
   // Unified parsing for dynamic responses

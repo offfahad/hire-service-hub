@@ -204,15 +204,16 @@ class ProfileCompleteScreen extends StatelessWidget {
                         height: 5,
                       ),
                       CustomTextFormField(
-                        label: 'Cnic',
+                        label: 'CNIC (XXXXX-XXXXXXX-X)',
                         controller: profileUpdationProvider.idnumberController,
                         validator: (value) {
-                          // Modify the regex to accept only digits with no specific limit
-                          final cnicRegex = RegExp(r'^[0-9]+$');
+                          // Regex to validate the Pakistani CNIC format: #####-#######-#
+                          final cnicRegex = RegExp(r'^\d{5}-\d{7}-\d{1}$');
+
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your CNIC number';
+                            return 'CNIC';
                           } else if (!cnicRegex.hasMatch(value)) {
-                            return 'CNIC must contain only digits';
+                            return 'CNIC must be in the format XXXXX-XXXXXXX-X';
                           }
                           return null;
                         },

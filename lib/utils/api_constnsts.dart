@@ -4,6 +4,6 @@ class Constants {
   static const String userCategory = '/api/category';
   static const String userApiService = '/api/service';
   static const String userApiBookingOrder = '/api/order';
-  static const String conversation = '/api/client/conversation';
-  static const String messages = '/api/client/message';
+  static const String conversation = '/api/conversation';
+  static const String messages = '/api/message';
 }

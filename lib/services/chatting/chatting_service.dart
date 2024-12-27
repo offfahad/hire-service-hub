@@ -48,13 +48,13 @@ class ChatService {
     final response = await http.get(
         Uri.parse('${Constants.baseUrl}${Constants.conversation}'),
         headers: _generateHeaders(accessToken: accessToken));
-
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       if (data['success'] == true) {
         List conversations = data['data'];
+        
         return conversations
-            .map((conv) => Conversation.fromJsonGetConversations(conv))
+            .map((conv) => Conversation.fromJson(conv))
             .toList();
       } else {
         throw Exception('Failed to load conversations');

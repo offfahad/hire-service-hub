@@ -118,7 +118,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             ),
             forceMaterialTransparency: true,
             title: Text(
-              "${widget.conversation.otherUser!.firstName} ${widget.conversation.otherUser!.lastName}",
+              "${widget.conversation.otherUser?.firstName} ${widget.conversation.otherUser?.lastName}",
               style: const TextStyle(fontSize: 20),
             ),
           ),

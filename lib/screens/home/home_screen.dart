@@ -15,6 +15,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:iconly/iconly.dart';
 
+import '../../providers/chatting/chatting_provider.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -39,6 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<CategoryProvider>(context, listen: false).resetCategories();
       Provider.of<CategoryProvider>(context, listen: false).fetchCategories();
       Provider.of<ServiceProvider>(context, listen: false).fetchServices();
+      Provider.of<ChattingProvider>(context, listen: false)
+          .fetchConversations();
+          
     });
   }
 

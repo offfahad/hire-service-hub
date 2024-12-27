@@ -85,6 +85,7 @@ class ChattingProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
+        print(responseData);
 
         if (responseData['success'] == true) {
           _conversation = Conversation.fromJson(responseData['data'][0]);
@@ -149,6 +150,7 @@ class ChattingProvider with ChangeNotifier {
 
     try {
       _conversations = await _chatService.getAllConversations();
+      print(_conversations.length);
       notifyListeners();
     } catch (e) {
       errorMessage = 'Failed to load conversations: $e';

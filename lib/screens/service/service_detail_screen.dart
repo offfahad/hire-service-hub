@@ -1,9 +1,12 @@
 import 'package:carded/carded.dart';
 import 'package:e_commerce/common/buttons/custom_elevated_button.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
+import 'package:e_commerce/models/chat/conversation.dart';
 import 'package:e_commerce/models/service/service_model.dart';
 import 'package:e_commerce/providers/authentication/authentication_provider.dart';
+import 'package:e_commerce/providers/chatting/chatting_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
+import 'package:e_commerce/screens/chatting/chat_screen.dart';
 import 'package:e_commerce/screens/orders/book_order_screen.dart';
 import 'package:e_commerce/screens/service/update_service_screen.dart';
 import 'package:e_commerce/utils/app_theme.dart';
@@ -37,6 +40,77 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
   Widget build(BuildContext context) {
     return Consumer2<AuthenticationProvider, ServiceProvider>(
         builder: (context, authProvider, serviceProvider, child) {
+      Future<void> handleConversation(
+          BuildContext context,
+          ChattingProvider chatProvider,
+          String hostId,
+          String currentUserId) async {
+        // First, check if a conversation already exists with the host
+        Conversation? existingConversation;
+
+        try {
+          existingConversation = chatProvider.conversations.firstWhere(
+            (conversation) =>
+                conversation.members.contains(currentUserId) &&
+                conversation.members.contains(hostId),
+          );
+          print("This is existing user result ${existingConversation}");
+        } catch (e) {
+          if (e is StateError) {
+            existingConversation = null;
+          } else {
+            rethrow; // Unexpected error, rethrow it
+          }
+        }
+
+        if (existingConversation != null) {
+          // Navigate to the existing conversation
+          Navigator.of(context).push(
+            SlidePageRoute(
+              page: ChatScreen(conversation: existingConversation),
+            ),
+          );
+        } else {
+          // No existing conversation, so create a new one
+          int statusCode = await chatProvider.startConversation(
+              hostId, authProvider.user!.id!);
+
+          if (statusCode == 200) {
+            // Fetch updated conversations
+            await chatProvider.fetchConversations();
+
+            try {
+              // Check again for the newly created conversation
+              existingConversation = chatProvider.conversations.firstWhere(
+                (conversation) =>
+                    conversation.members.contains(currentUserId) &&
+                    conversation.members.contains(hostId),
+              );
+
+              // Navigate to the newly created conversation
+              Navigator.of(context).push(
+                SlidePageRoute(
+                  page: ChatScreen(conversation: existingConversation),
+                ),
+              );
+            } catch (e) {
+              if (e is StateError) {
+                showCustomSnackBar(
+                    context,
+                    "Conversation created, but couldn't be found in the list.",
+                    Colors.red);
+              } else {
+                rethrow; // Unexpected error, rethrow it
+              }
+            }
+          } else {
+            // Handle error if conversation creation failed
+            showCustomSnackBar(context,
+                chatProvider.errorMessage ?? "Error occurred", Colors.red);
+          }
+        }
+      }
+
       final isServiceProvider =
           authProvider.user?.role?.title == "service_provider" &&
               authProvider.user?.id ==
@@ -344,13 +418,24 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                       CircleAvatar(
                         backgroundColor: AppTheme.fMainColor,
                         radius: 26,
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            IconlyLight.chat,
-                            color: Colors.white,
-                          ),
-                        ),
+                        child: Consumer<ChattingProvider>(
+                            builder: (context, chatProvider, child) {
+                          return IconButton(
+                            onPressed: () async {
+                              await handleConversation(
+                                context,
+                                chatProvider,
+                                serviceProvider
+                                    .service!.data!.specificService!.userId!,
+                                authProvider.user!.id!,
+                              );
+                            },
+                            icon: const Icon(
+                              IconlyLight.chat,
+                              color: Colors.white,
+                            ),
+                          );
+                        }),
                       ),
                       const SizedBox(
                         width: 5,

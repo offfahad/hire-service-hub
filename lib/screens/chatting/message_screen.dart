@@ -55,7 +55,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     return _buildMessageItem(
                       conversation: conversation,
                       name:
-                          "${conversation.otherUser!.firstName} ${conversation.otherUser!.lastName}",
+                          "${conversation.otherUser?.firstName} ${conversation.otherUser?.lastName}",
                       message: conversation.messages!.isEmpty
                           ? " "
                           : conversation.messages!.last.text,

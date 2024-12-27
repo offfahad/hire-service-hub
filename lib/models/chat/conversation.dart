@@ -20,7 +20,7 @@ class Conversation {
   factory Conversation.fromJson(Map<String, dynamic> json) => Conversation(
         id: json["id"],
         members: List<String>.from(json["members"].map((x) => x)),
-        createdAt: DateTime.parse(json["created_at"]),
+        createdAt: DateTime.parse(json["timestamp"]),
       );
 
   factory Conversation.fromJsonGetConversations(Map<String, dynamic> json) =>

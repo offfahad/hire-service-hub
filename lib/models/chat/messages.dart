@@ -18,7 +18,7 @@ class Messages {
         conversationId: json["conversation_id"] ?? '',
         senderId: json["sender_id"] ?? '',
         text: json["text"] ?? '',
-        createdAt: DateTime.parse(json["created_at"] ?? ''),
+        createdAt: DateTime.parse(json["timestamp"] ?? ''),
       );
 
   Map<String, dynamic> toJson() => {

@@ -52,7 +52,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
-        title: const Text("Services"),
+        title: const Text("Services", style: TextStyle(fontWeight: FontWeight.bold),),
       ),
       body: Column(
         children: [

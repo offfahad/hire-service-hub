@@ -51,7 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home"),
+        title: const Text(
+          "Home",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         forceMaterialTransparency: true,
         actions: [
           Padding(

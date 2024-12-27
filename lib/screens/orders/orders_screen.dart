@@ -35,7 +35,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Orders'),
+        title: const Text('Orders', style: TextStyle(fontWeight: FontWeight.bold),),
       ),
       body: Consumer2<OrderProvider, AuthenticationProvider>(
         builder: (context, orderProvider, authProvider, child) {

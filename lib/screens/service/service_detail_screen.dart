@@ -44,74 +44,76 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          forceMaterialTransparency: true,
-          title: const Text("Service Details"),
-          actions: isServiceProvider
-              ? [
-                  IconButton(
-                    icon: const Icon(IconlyLight.edit),
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => UpdateServiceScreen(
-                          serviceDetail: serviceProvider.service!,
+            forceMaterialTransparency: true,
+            title: const Text(
+              "Service Details",
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            actions: isServiceProvider
+                ? [
+                    IconButton(
+                      icon: const Icon(IconlyLight.edit),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => UpdateServiceScreen(
+                            serviceDetail: serviceProvider.service!,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(IconlyLight.delete),
-                    onPressed: () async {
-                      final shouldDelete = await showDialog<bool>(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text("Delete Service"),
-                            content: const Text(
-                                "Are you sure you want to delete this service?"),
-                            actions: [
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false), // Cancel
-                                child: const Text("Cancel"),
-                              ),
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(true), // Confirm
-                                child: const Text(
-                                  "Delete",
-                                  style: TextStyle(color: Colors.red),
+                    IconButton(
+                      icon: const Icon(IconlyLight.delete),
+                      onPressed: () async {
+                        final shouldDelete = await showDialog<bool>(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("Delete Service"),
+                              content: const Text(
+                                  "Are you sure you want to delete this service?"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context)
+                                      .pop(false), // Cancel
+                                  child: const Text("Cancel"),
                                 ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                                TextButton(
+                                  onPressed: () => Navigator.of(context)
+                                      .pop(true), // Confirm
+                                  child: const Text(
+                                    "Delete",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
 
-                      if (shouldDelete == true) {
-                        // Call the provider method to delete the service
-                        await Provider.of<ServiceProvider>(context,
-                                listen: false)
-                            .deleteService(widget.service.id);
+                        if (shouldDelete == true) {
+                          // Call the provider method to delete the service
+                          await Provider.of<ServiceProvider>(context,
+                                  listen: false)
+                              .deleteService(widget.service.id);
 
-                        final provider = Provider.of<ServiceProvider>(context,
-                            listen: false);
-                        if (provider.errorMessage == null) {
-                          // Show success message
-                          showCustomSnackBar(context,
-                              "Service deleted successfully!", Colors.green);
-                          Navigator.pop(context); // Navigate back
-                        } else {
-                          // Show error message
-                          showCustomSnackBar(
-                              context, provider.errorMessage!, Colors.red);
+                          final provider = Provider.of<ServiceProvider>(context,
+                              listen: false);
+                          if (provider.errorMessage == null) {
+                            // Show success message
+                            showCustomSnackBar(context,
+                                "Service deleted successfully!", Colors.green);
+                            Navigator.pop(context); // Navigate back
+                          } else {
+                            // Show error message
+                            showCustomSnackBar(
+                                context, provider.errorMessage!, Colors.red);
+                          }
                         }
-                      }
-                    },
-                  ),
-                ]
-              : null,
-        ),
+                      },
+                    ),
+                  ]
+                : null),
         body: Consumer<ServiceProvider>(
           builder: (context, serviceProvider, child) {
             if (serviceProvider.isLoading) {
@@ -291,7 +293,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              service.user?.address?.location ?? "",
+                              service.user?.address?.city ?? "",
                               style: const TextStyle(fontSize: 12),
                             ),
                           ],
@@ -337,24 +339,42 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                       ),
                     ],
                   ),
-                  CustomElevatedButton(
-                    width: 150,
-                    height: 50,
-                    backgroundColor: AppTheme.fMainColor,
-                    foregroundColor: Colors.white,
-                    text: "Book Now!",
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        SlidePageRoute(
-                          page: BookOrderScreen(
-                            service:
-                                serviceProvider.service?.data?.specificService,
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: AppTheme.fMainColor,
+                        radius: 26,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            IconlyLight.chat,
+                            color: Colors.white,
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      CustomElevatedButton(
+                        width: 150,
+                        height: 50,
+                        backgroundColor: AppTheme.fMainColor,
+                        foregroundColor: Colors.white,
+                        text: "Book Now!",
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            SlidePageRoute(
+                              page: BookOrderScreen(
+                                service: serviceProvider
+                                    .service?.data?.specificService,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  )
                 ],
               ),
             );

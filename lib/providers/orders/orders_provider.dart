@@ -110,4 +110,31 @@ class OrderProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<http.Response?> updateOrder({
+    required String orderId,
+    required String orderDate,
+    required String additionalNotes,
+  }) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final response = await _orderRepository.updateOrder(
+        orderId: orderId,
+        orderDate: orderDate,
+        additionalNotes: additionalNotes,
+      );
+
+      _isLoading = false;
+      notifyListeners();
+      return response; // Return the raw response
+    } catch (e) {
+      _isLoading = false;
+      _errorMessage = e.toString();
+      notifyListeners();
+      return null;
+    }
+  }
 }

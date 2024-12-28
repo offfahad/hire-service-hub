@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:carded/carded.dart';
+import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/common/snakbar/custom_snakbar.dart';
 import 'package:e_commerce/providers/orders/orders_provider.dart';
+import 'package:e_commerce/screens/orders/order_update_screen.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For Clipboard
@@ -164,7 +166,14 @@ class OrderCard extends StatelessWidget {
             label: 'Update Order',
             color: Colors.orange,
             onPressed: () {
-              // Add logic to update the order
+              Navigator.push(
+                context,
+                SlidePageRoute(
+                  page: OrderUpdateScreen(
+                    order: order,
+                  ),
+                ),
+              );
             },
           ),
         if (!isServiceProvider)

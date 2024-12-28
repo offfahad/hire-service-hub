@@ -72,4 +72,28 @@ class OrderService {
       throw Exception("Failed to cancel order: $e");
     }
   }
+
+  Future<http.Response> updateOrder({
+    required String orderId,
+    required String orderDate,
+    required String additionalNotes,
+  }) async {
+    String? accessToken = await AuthService.getAccessToken();
+    if (accessToken == null) throw Exception("Access token is missing.");
+    final url = Uri.parse(
+        "${Constants.baseUrl}${Constants.userApiBookingOrder}/update/$orderId");
+    try {
+      final response = await http.patch(
+        url,
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer $accessToken"},
+        body: jsonEncode({
+          "order_date": orderDate,
+          "additional_notes": additionalNotes,
+        }),
+      );
+      return response; // Return the raw response
+    } catch (e) {
+      throw Exception("Failed to update order: $e");
+    }
+  }
 }

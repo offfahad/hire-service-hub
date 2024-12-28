@@ -41,4 +41,17 @@ class OrderRepository {
       cancellationReason: cancellationReason,
     );
   }
+
+  Future<http.Response> updateOrder({
+    required String orderId,
+    required String orderDate,
+    required String additionalNotes,
+  }) {
+    return _orderService.updateOrder(
+      orderId: orderId,
+      orderDate: orderDate,
+      additionalNotes: additionalNotes,
+    );
+  }
+  
 }

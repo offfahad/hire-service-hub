@@ -1,4 +1,5 @@
 import 'package:e_commerce/common/no_internet_connection/no_internet_connection_screen.dart';
+import 'package:e_commerce/jazzcash_screen.dart';
 import 'package:e_commerce/providers/authentication/authentication_provider.dart';
 import 'package:e_commerce/providers/authentication/forget_password_provider.dart';
 import 'package:e_commerce/providers/authentication/login_provider.dart';
@@ -66,7 +67,7 @@ class _MyAppState extends State<MyApp> {
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: ThemeMode.light,
-        home: const SplashScreen(),
+        home: const SplashScreen()
       ),
     );
   }

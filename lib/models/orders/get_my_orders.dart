@@ -194,11 +194,11 @@ class Customer {
 
 class Address {
   final int streetNo;
-  final String city;
-  final String state;
-  final String postalCode;
-  final String country;
-  final String location;
+  final String? city;
+  final String? state;
+  final String? postalCode;
+  final String? country;
+  final String? location;
 
   Address({
     required this.streetNo,

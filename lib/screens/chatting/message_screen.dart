@@ -1,7 +1,9 @@
+import 'package:carded/carded.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/models/chat/conversation.dart';
 import 'package:e_commerce/screens/chatting/chat_screen.dart';
 import 'package:e_commerce/screens/chatting/message_item_shimmer.dart';
+import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:e_commerce/providers/chatting/chatting_provider.dart';
@@ -56,21 +58,25 @@ class _MessagesScreenState extends State<MessagesScreen> {
                       conversation: conversation,
                       name:
                           "${conversation.otherUser?.firstName} ${conversation.otherUser?.lastName}",
-                      message: conversation.messages!.isEmpty
-                          ? " "
-                          : conversation.messages!.last.text,
-                      date: conversation.messages!.isEmpty
-                          ? " "
-                          : formatDateWithTime(
-                              conversation.messages!.last.createdAt.toString(),
-                            ),
-                      time: conversation.messages!.isEmpty
-                          ? " "
-                          : getFormattedTime12Hour(
-                              conversation.messages!.last.createdAt.toString(),
-                            ),
+                      message: "Hi There",
+                      // conversation.messages!.isEmpty
+                      //     ? " "
+                      //     : conversation.messages!.last.text,
+                      date: "25-10-2015",
+                      //conversation.messages!.isEmpty
+                      //  ? " "
+                      // : formatDateWithTime(
+                      //     conversation.messages!.last.createdAt.toString(),
+                      //   ),
+                      time: "10:00 AM",
+                      // conversation.messages!.isEmpty
+                      //     ? " "
+                      //     : getFormattedTime12Hour(
+                      //         conversation.messages!.last.createdAt.toString(),
+                      //       ),
                       avatarColor: Theme.of(context).primaryColor,
-                      avatarUrl: conversation.otherUser!.profilePicture ??
+                      avatarUrl:
+                          //conversation.otherUser!.profilePicture ??
                           'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg',
                     );
                   },
@@ -92,6 +98,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
     required Color avatarColor,
     String? avatarUrl,
   }) {
+    Brightness brightness = Theme.of(context).brightness;
+    bool isDarkMode = brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
@@ -100,19 +108,27 @@ class _MessagesScreenState extends State<MessagesScreen> {
           ),
         );
       },
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundImage: avatarUrl != null ? NetworkImage(avatarUrl) : null,
-          backgroundColor: avatarColor,
-        ),
-        title: Text(name),
-        subtitle: Text(message),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(date, style: const TextStyle(fontSize: 12)),
-            Text(time, style: const TextStyle(fontSize: 12)),
-          ],
+      child: CardyContainer(
+        borderRadius: BorderRadius.circular(10),
+        width: MediaQuery.of(context).size.width,
+        color: isDarkMode ? AppTheme.fdarkBlue : Colors.white,
+        spreadRadius: 0,
+        blurRadius: 1,
+        shadowColor: isDarkMode ? AppTheme.fdarkBlue : Colors.grey,
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundImage: avatarUrl != null ? NetworkImage(avatarUrl) : null,
+            backgroundColor: avatarColor,
+          ),
+          title: Text(name),
+          subtitle: Text(message),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(date, style: const TextStyle(fontSize: 12)),
+              Text(time, style: const TextStyle(fontSize: 12)),
+            ],
+          ),
         ),
       ),
     );

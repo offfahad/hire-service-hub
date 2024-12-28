@@ -41,6 +41,7 @@ class OrderService {
           'Content-Type': 'application/json',
         },
       );
+      print(response.body);
       return response;
     } catch (e) {
       throw Exception('Failed to fetch orders: $e');

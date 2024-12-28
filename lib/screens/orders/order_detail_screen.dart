@@ -103,15 +103,16 @@ class OrderCard extends StatelessWidget {
                 value:
                     '${order.serviceProvider!.firstName} ${order.serviceProvider!.lastName}'),
             _DetailRow(
-                label: 'Address:',
-                value: order.serviceProvider!.address.location),
+              label: 'Address:',
+              value: order.serviceProvider!.address.location ?? "Unknown",
+            ),
           ] else
             ...[],
           _DetailRow(label: 'Status:', value: order.orderStatus.toUpperCase()),
           if (order.orderStatus == "cancelled") ...[
             _DetailRow(
                 label: 'Cancelled Reason:',
-                value: '${order.cancellationReason ?? "Empty"}'),
+                value: order.cancellationReason ?? "Empty"),
           ] else
             ...[],
           _DetailRow(label: 'Price:', value: 'Rs. ${order.orderPrice}'),
@@ -133,7 +134,7 @@ class OrderCard extends StatelessWidget {
                     ? '${order.customer!.firstName} ${order.customer!.lastName}'
                     : 'N/A'),
             _DetailRow(
-                label: 'Address:', value: order.customerAddress.location),
+                label: 'Address:', value: order.customerAddress.location ?? "Unknown"),
           ] else
             ...[],
           if (order.additionalNotes != null &&

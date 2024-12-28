@@ -295,6 +295,7 @@ class AuthService {
         'state': state,
         'postal_code': postalCode,
         'country': country,
+        'location': '$city, $state, $country',
       }
     });
 

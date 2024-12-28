@@ -359,6 +359,15 @@ class ProfileCompleteScreen extends StatelessWidget {
                       CustomGradientButton(
                         text: "Update",
                         onPressed: () async {
+                          // Check if the gender is selected
+                          if (profileUpdationProvider.selectedGender == null) {
+                            // Show a snackbar if gender is not selected
+                            showCustomSnackBar(
+                                context, "Please select a gender.", Colors.red);
+                            return; // Exit the method to prevent further execution
+                          }
+
+                          // Proceed to validate the rest of the form
                           if (profileUpdationProvider
                               .validateProfileUpdationForm()) {
                             final statusCode =
@@ -388,13 +397,17 @@ class ProfileCompleteScreen extends StatelessWidget {
                             // Handle navigation based on status code
                             if (statusCode == 200) {
                               showCustomSnackBar(
-                                  context, "Profile is Updated!", Colors.green);
+                                context,
+                                "Profile is Updated!",
+                                Colors.green,
+                              );
                               Navigator.pop(context);
                             } else {
                               showCustomSnackBar(
-                                  context,
-                                  "Updation failed. Please try again.",
-                                  Colors.red);
+                                context,
+                                "Updation failed. Please try again.",
+                                Colors.red,
+                              );
                             }
                           }
                         },

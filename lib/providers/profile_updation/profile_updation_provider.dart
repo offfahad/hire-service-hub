@@ -11,14 +11,6 @@ class ProfileUpdationProvider extends ChangeNotifier {
   final _profileCompleteFormKey = GlobalKey<FormState>();
   XFile? _profilePhoto;
 
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController countryController = TextEditingController();
-  final TextEditingController stateController = TextEditingController();
-  final TextEditingController licenseNumberController = TextEditingController();
-  final TextEditingController dateofbirthController = TextEditingController();
-  final TextEditingController epirationDateController = TextEditingController();
-
   final TextEditingController idnumberController = TextEditingController();
   final TextEditingController addressCountryController =
       TextEditingController();
@@ -29,8 +21,8 @@ class ProfileUpdationProvider extends ChangeNotifier {
   final TextEditingController addressStreetNumberController =
       TextEditingController();
 
-  String?
-      selectedGender; // Replace TextEditingController with a String variable
+  String? selectedGender;
+  // Replace TextEditingController with a String variable
   final TextEditingController bioController = TextEditingController();
   // Getter and setter for gender
   String? get gender => selectedGender;
@@ -43,10 +35,6 @@ class ProfileUpdationProvider extends ChangeNotifier {
   GlobalKey<FormState> get formKey => _formKey;
   GlobalKey<FormState> get profileCompleteFormKey => _profileCompleteFormKey;
   XFile? get profilePhoto => _profilePhoto;
-
-  bool validateDrivingLicenseForm() {
-    return _formKey.currentState!.validate();
-  }
 
   bool validateProfileUpdationForm() {
     // Ensure the form state is valid

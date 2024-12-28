@@ -48,35 +48,28 @@ class OrderService {
     }
   }
 
-  Future<Map<String, dynamic>> cancelOrder({
+  Future<http.Response> cancelOrder({
     required String orderId,
     required String cancellationReason,
   }) async {
     String? accessToken = await AuthService.getAccessToken();
     if (accessToken == null) throw Exception("Access token is missing.");
     final url = Uri.parse(
-        '${Constants.baseUrl}${Constants.userApiBookingOrder}/cancel/$orderId');
+        "${Constants.baseUrl}${Constants.userApiBookingOrder}/cancel/$orderId");
+    final headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $accessToken", // Replace with actual token
+    };
+
+    final body = jsonEncode({
+      "cancellation_reason": cancellationReason,
+    });
 
     try {
-      final response = await http.patch(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken'
-        },
-        body: jsonEncode({'cancellation_reason': cancellationReason}),
-      );
-
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body); // Success response
-      } else {
-        // Parse and throw error message
-        final Map<String, dynamic> errorResponse = jsonDecode(response.body);
-        throw Exception(errorResponse['message'] ?? 'Unknown error occurred');
-      }
+      final response = await http.patch(url, headers: headers, body: body);
+      return response; // Response can be handled in the Provider
     } catch (e) {
-      // Re-throw error to the provider
-      throw Exception(e.toString());
+      throw Exception("Failed to cancel order: $e");
     }
   }
 }

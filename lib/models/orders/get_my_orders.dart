@@ -128,7 +128,7 @@ class Customer {
   final String firstName;
   final String lastName;
   final String phone;
-  final String gender;
+  final String? gender;
   final String? profilePicture;
   final String cnic;
   final String roleId;

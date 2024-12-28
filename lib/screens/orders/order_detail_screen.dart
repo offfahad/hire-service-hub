@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:carded/carded.dart';
 import 'package:e_commerce/common/snakbar/custom_snakbar.dart';
 import 'package:e_commerce/providers/orders/orders_provider.dart';
@@ -134,7 +136,8 @@ class OrderCard extends StatelessWidget {
                     ? '${order.customer!.firstName} ${order.customer!.lastName}'
                     : 'N/A'),
             _DetailRow(
-                label: 'Address:', value: order.customerAddress.location ?? "Unknown"),
+                label: 'Address:',
+                value: order.customerAddress.location ?? "Unknown"),
           ] else
             ...[],
           if (order.additionalNotes != null &&
@@ -261,85 +264,119 @@ class _DetailRow extends StatelessWidget {
 void _showCancelOrderDialog(BuildContext context, Datum order) {
   final TextEditingController reasonController = TextEditingController();
 
-  void _cancelOrderWithReason(String reason) {
-    // Replace this with your cancellation logic, e.g., API call
-    print('Order canceled with reason: $reason');
-
-    // Optionally, show confirmation
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Order has been canceled successfully!'),
-        backgroundColor: Colors.green,
-      ),
-    );
-  }
-
   showDialog(
     context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Cancel Order'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('Please provide a reason for canceling the order:'),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: reasonController,
-              maxLines: 3,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Write your reason here...',
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final reason = reasonController.text.trim();
-              if (reason.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Reason cannot be empty!'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              } else {
-                // Call the cancel order API
-                final provider =
-                    Provider.of<OrderProvider>(context, listen: false);
-                provider
-                    .cancelOrder(orderId: order.id, cancellationReason: reason)
-                    .then((_) {
-                  if (provider.errorMessage == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Order canceled successfully!'),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                    Navigator.of(context).pop();
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(provider.errorMessage!),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                    Navigator.of(context).pop();
-                  }
-                });
-              }
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      );
+    builder: (context) {
+      return _CancelOrderDialog(
+          reasonController: reasonController, order: order);
     },
   );
+}
+
+class _CancelOrderDialog extends StatefulWidget {
+  final TextEditingController reasonController;
+  final Datum order;
+
+  const _CancelOrderDialog({
+    required this.reasonController,
+    required this.order,
+  });
+
+  @override
+  State<_CancelOrderDialog> createState() => _CancelOrderDialogState();
+}
+
+class _CancelOrderDialogState extends State<_CancelOrderDialog> {
+  bool _isLoading = false;
+
+  Future<void> _cancelOrderWithReason() async {
+    final provider = Provider.of<OrderProvider>(context, listen: false);
+    final reason = widget.reasonController.text.trim();
+
+    if (reason.isEmpty) {
+      showCustomSnackBar(
+          context, "Please provide a cancellation reason.", Colors.red);
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await provider.cancelOrder(
+        orderId: widget.order.id,
+        cancellationReason: reason,
+      );
+
+      if (response.statusCode == 200) {
+        provider.fetchMyOrders();
+        final responseData = jsonDecode(response.body);
+        showCustomSnackBar(context, responseData['message'], Colors.green);
+        Navigator.pop(context); // Close the dialog
+        Navigator.pop(context);
+      } else {
+        final responseData = jsonDecode(response.body);
+        showCustomSnackBar(context,
+            responseData['message'] ?? "An error occurred.", Colors.red);
+        Navigator.pop(context); // Close the dialog
+      }
+    } catch (e) {
+      showCustomSnackBar(context, "An error occurred: $e", Colors.red);
+      Navigator.pop(context); // Close the dialog
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text("Cancel Order"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text("Please provide a reason for canceling this order."),
+          const SizedBox(height: 10),
+          TextField(
+            controller: widget.reasonController,
+            decoration: const InputDecoration(
+              labelText: "Cancellation Reason",
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(12))),
+            ),
+            maxLines: 2,
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text("Close"),
+        ),
+        ElevatedButton(
+          onPressed: _isLoading ? null : _cancelOrderWithReason,
+          style: ElevatedButton.styleFrom(
+            backgroundColor:
+                _isLoading ? Colors.grey : Theme.of(context).primaryColor,
+          ),
+          child: _isLoading
+              ? const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
+                )
+              : const Text(
+                  "Cancel",
+                  style: TextStyle(color: Colors.white),
+                ),
+        ),
+      ],
+    );
+  }
 }

@@ -3,6 +3,7 @@ import 'package:e_commerce/models/orders/create_order_model.dart';
 import 'package:e_commerce/models/orders/get_my_orders.dart';
 import 'package:e_commerce/models/orders/order_model.dart';
 import 'package:e_commerce/services/orders/orders_service.dart';
+import 'package:http/http.dart' as http;
 
 class OrderRepository {
   final OrderService _orderService = OrderService();
@@ -31,7 +32,7 @@ class OrderRepository {
     }
   }
 
-  Future<Map<String, dynamic>> cancelOrder({
+  Future<http.Response> cancelOrder({
     required String orderId,
     required String cancellationReason,
   }) {

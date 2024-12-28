@@ -5,6 +5,7 @@ import 'package:e_commerce/models/orders/get_my_orders.dart';
 import 'package:e_commerce/models/orders/order_model.dart';
 import 'package:e_commerce/repository/orders/orders_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class OrderProvider with ChangeNotifier {
   final OrderRepository _orderRepository = OrderRepository();
@@ -17,42 +18,40 @@ class OrderProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-
-Future<CreateOrderResponse?> bookOrder(Order order) async {
-  _isLoading = true;
-  _errorMessage = null;
-  notifyListeners();
-
-  try {
-    _createOrderResponse = await _orderRepository.bookOrder(order);
-    _isLoading = false;
+  Future<CreateOrderResponse?> bookOrder(Order order) async {
+    _isLoading = true;
+    _errorMessage = null;
     notifyListeners();
-    return _createOrderResponse;
-  } catch (e) {
-    _isLoading = false;
 
     try {
-      // Attempt to extract the JSON message
-      final errorJson = RegExp(r'\{.*\}').stringMatch(e.toString());
-      if (errorJson != null) {
-        final Map<String, dynamic> errorMap = json.decode(errorJson);
-        _errorMessage = errorMap['message'] ?? 'An unknown error occurred';
-      } else {
-        _errorMessage = 'An unknown error occurred';
+      _createOrderResponse = await _orderRepository.bookOrder(order);
+      _isLoading = false;
+      notifyListeners();
+      return _createOrderResponse;
+    } catch (e) {
+      _isLoading = false;
+
+      try {
+        // Attempt to extract the JSON message
+        final errorJson = RegExp(r'\{.*\}').stringMatch(e.toString());
+        if (errorJson != null) {
+          final Map<String, dynamic> errorMap = json.decode(errorJson);
+          _errorMessage = errorMap['message'] ?? 'An unknown error occurred';
+        } else {
+          _errorMessage = 'An unknown error occurred';
+        }
+      } catch (parseError) {
+        // If JSON parsing fails, fallback to a default message
+        _errorMessage = 'An error occurred: ${e.toString()}';
       }
-    } catch (parseError) {
-      // If JSON parsing fails, fallback to a default message
-      _errorMessage = 'An error occurred: ${e.toString()}';
+
+      // Debug log for further inspection
+      print('Error: $_errorMessage');
+
+      notifyListeners();
+      return null;
     }
-
-    // Debug log for further inspection
-    print('Error: $_errorMessage');
-
-    notifyListeners();
-    return null;
   }
-}
-
 
   GetMyOrders? _orders;
   GetMyOrders? get orders => _orders;
@@ -72,9 +71,7 @@ Future<CreateOrderResponse?> bookOrder(Order order) async {
     }
   }
 
-  Map<String, dynamic>? _cancelOrderResponse;
-
-  Future<void> cancelOrder({
+  Future<http.Response> cancelOrder({
     required String orderId,
     required String cancellationReason,
   }) async {
@@ -83,13 +80,32 @@ Future<CreateOrderResponse?> bookOrder(Order order) async {
     notifyListeners();
 
     try {
-      _cancelOrderResponse = await _orderRepository.cancelOrder(
+      // Call the repository method to cancel the order
+      final results = await _orderRepository.cancelOrder(
         orderId: orderId,
         cancellationReason: cancellationReason,
       );
+
+      // Decode the response to check for errors
+      final responseData = jsonDecode(results.body);
+
+      if (results.statusCode == 200) {
+        // Success: Handle the decoded response if needed
+        print("Order canceled successfully: ${responseData['message']}");
+      } else {
+        // Error: Handle server errors
+        _errorMessage = responseData['message'] ?? 'An error occurred';
+        print("Error: $_errorMessage");
+      }
+
+      return results; // Return the response for further handling
     } catch (e) {
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      // Catch network or other unexpected errors
+      _errorMessage = "An error occurred: $e";
+      print("Exception: $_errorMessage");
+      rethrow; // Optionally rethrow the error to let the caller handle it
     } finally {
+      // Reset loading state
       _isLoading = false;
       notifyListeners();
     }

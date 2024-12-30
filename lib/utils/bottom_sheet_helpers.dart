@@ -22,7 +22,6 @@ void openFilterBottomSheet({
     ),
     builder: (BuildContext context) {
       return DraggableScrollableSheet(
-        
         initialChildSize: 0.5,
         minChildSize: 0.2,
         maxChildSize: 0.9,

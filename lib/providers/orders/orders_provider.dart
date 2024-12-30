@@ -142,4 +142,54 @@ class OrderProvider with ChangeNotifier {
       return null;
     }
   }
+
+  String? orderMessageResponse;
+
+  Future<http.Response?> acceptOrder(String orderId) async {
+    _isLoading = true;
+    orderMessageResponse = null;
+    try {
+      final response = await _orderRepository.acceptOrder(orderId);
+      _isLoading = false;
+      notifyListeners();
+      return response;
+    } catch (e) {
+      orderMessageResponse = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return null;
+    }
+  }
+
+  Future<http.Response?> rejectOrder(String orderId) async {
+    _isLoading = true;
+    orderMessageResponse = null;
+    try {
+      final response = await _orderRepository.rejectOrder(orderId);
+      _isLoading = false;
+      notifyListeners();
+      return response;
+    } catch (e) {
+      orderMessageResponse = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return null;
+    }
+  }
+
+  Future<http.Response?> completeOrder(String orderId) async {
+    _isLoading = true;
+    orderMessageResponse = null;
+    try {
+      final response = await _orderRepository.completeOrder(orderId);
+      _isLoading = false;
+      notifyListeners();
+      return response;
+    } catch (e) {
+      orderMessageResponse = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return null;
+    }
+  }
 }

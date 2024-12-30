@@ -41,7 +41,6 @@ class OrderService {
           'Content-Type': 'application/json',
         },
       );
-      print(response.body);
       return response;
     } catch (e) {
       throw Exception('Failed to fetch orders: $e');
@@ -85,7 +84,10 @@ class OrderService {
     try {
       final response = await http.patch(
         url,
-        headers: {"Content-Type": "application/json", "Authorization": "Bearer $accessToken"},
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $accessToken"
+        },
         body: jsonEncode({
           "order_date": orderDate,
           "additional_notes": additionalNotes,
@@ -94,6 +96,28 @@ class OrderService {
       return response; // Return the raw response
     } catch (e) {
       throw Exception("Failed to update order: $e");
+    }
+  }
+
+  Future<http.Response> updateOrderStatus({
+    required String orderId,
+    required String orderStatus,
+  }) async {
+    String? accessToken = await AuthService.getAccessToken();
+    if (accessToken == null) throw Exception("Access token is missing.");
+    final url = Uri.parse(
+        '${Constants.baseUrl}${Constants.userApiBookingOrder}/service-provider/$orderId');
+    final headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $accessToken",
+    };
+    final body = jsonEncode({"order_status": orderStatus});
+
+    try {
+      final response = await http.patch(url, headers: headers, body: body);
+      return response;
+    } catch (e) {
+      throw Exception("Error updating order: $e");
     }
   }
 }

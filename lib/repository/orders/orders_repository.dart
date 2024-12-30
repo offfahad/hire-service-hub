@@ -53,5 +53,25 @@ class OrderRepository {
       additionalNotes: additionalNotes,
     );
   }
-  
+
+  Future<http.Response> acceptOrder(String orderId) {
+    return _orderService.updateOrderStatus(
+      orderId: orderId,
+      orderStatus: "processing",
+    );
+  }
+
+  Future<http.Response> rejectOrder(String orderId) {
+    return _orderService.updateOrderStatus(
+      orderId: orderId,
+      orderStatus: "cancelled",
+    );
+  }
+
+  Future<http.Response> completeOrder(String orderId) {
+    return _orderService.updateOrderStatus(
+      orderId: orderId,
+      orderStatus: "completed",
+    );
+  }
 }

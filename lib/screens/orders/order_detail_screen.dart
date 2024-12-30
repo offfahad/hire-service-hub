@@ -155,7 +155,7 @@ class OrderCard extends StatelessWidget {
           if (order.additionalNotes != null &&
               order.additionalNotes!.isNotEmpty)
             _DetailRow(label: 'Notes', value: order.additionalNotes!),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           _buildActionButtons(context, order),
         ],
       ),
@@ -163,63 +163,122 @@ class OrderCard extends StatelessWidget {
   }
 
   Widget _buildActionButtons(BuildContext context, Datum order) {
-    return GridView.count(
-      crossAxisCount: 2, // Two buttons per row
-      mainAxisSpacing: 10, // Space between rows
-      crossAxisSpacing: 10, // Space between columns
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(), // Prevent scrolling
-      childAspectRatio: 4, // Adjust the button's width-to-height ratio
-      children: [
-        if (!isServiceProvider)
-          _ActionButton(
-            label: 'Update Order',
-            color: Colors.orange,
-            onPressed: () {
-              Navigator.push(
-                context,
-                SlidePageRoute(
-                  page: OrderUpdateScreen(
-                    order: order,
+    return Consumer<OrderProvider>(builder: (context, orderProvider, child) {
+      return GridView.count(
+        crossAxisCount: 2, // Two buttons per row
+        mainAxisSpacing: 10, // Space between rows
+        crossAxisSpacing: 10, // Space between columns
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(), // Prevent scrolling
+        childAspectRatio: 4, // Adjust the button's width-to-height ratio
+        children: [
+          if (!isServiceProvider)
+            _ActionButton(
+              label: 'Update Order',
+              color: Colors.orange,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  SlidePageRoute(
+                    page: OrderUpdateScreen(
+                      order: order,
+                    ),
                   ),
-                ),
-              );
-            },
-          ),
-        if (!isServiceProvider)
-          _ActionButton(
-            label: 'Cancel Order',
-            color: Colors.red,
-            onPressed: () {
-              _showCancelOrderDialog(context, order);
-            },
-          ),
-        if (isServiceProvider)
-          _ActionButton(
-            label: 'Accept Order',
-            color: Colors.green,
-            onPressed: () {
-              // Add logic to accept the order
-            },
-          ),
-        if (isServiceProvider)
-          _ActionButton(
-            label: 'Reject Order',
-            color: Colors.redAccent,
-            onPressed: () {
-              // Add logic to reject the order
-            },
-          ),
-        if (isServiceProvider)
-          _ActionButton(
-            label: 'Complete Order',
-            color: Colors.blue,
-            onPressed: () {
-              // Add logic to mark the order as complete
-            },
-          ),
-      ],
-    );
+                );
+              },
+            ),
+          if (!isServiceProvider)
+            _ActionButton(
+              label: 'Cancel Order',
+              color: Colors.red,
+              onPressed: () {
+                _showCancelOrderDialog(context, order);
+              },
+            ),
+          if (isServiceProvider)
+            _ActionButton(
+              label: 'Accept Order',
+              color: Colors.green,
+              onPressed: () async {
+                try {
+                  final response = await orderProvider.acceptOrder(order.id);
+
+                  if (response!.statusCode == 200) {
+                    orderProvider.fetchMyOrders();
+                    final responseData = jsonDecode(response.body);
+                    showCustomSnackBar(
+                        context, responseData['message'], Colors.green);
+                    Navigator.pop(context); // Close the dialog
+                  } else {
+                    final responseData = jsonDecode(response.body);
+                    showCustomSnackBar(
+                        context,
+                        responseData['message'] ?? "An error occurred.",
+                        Colors.red);
+                  }
+                } catch (e) {
+                  showCustomSnackBar(
+                      context, "An error occurred: $e", Colors.red);
+                }
+              },
+            ),
+          if (isServiceProvider)
+            _ActionButton(
+              label: 'Reject Order',
+              color: Colors.redAccent,
+              onPressed: () async {
+                try {
+                  final response = await orderProvider.rejectOrder(order.id);
+
+                  if (response!.statusCode == 200) {
+                    orderProvider.fetchMyOrders();
+                    final responseData = jsonDecode(response.body);
+                    showCustomSnackBar(
+                        context, responseData['message'], Colors.green);
+                    Navigator.pop(context); // Close the dialog
+                  } else {
+                    final responseData = jsonDecode(response.body);
+                    showCustomSnackBar(
+                        context,
+                        responseData['message'] ?? "An error occurred.",
+                        Colors.red);
+                  }
+                } catch (e) {
+                  showCustomSnackBar(
+                      context, "An error occurred: $e", Colors.red);
+                }
+              },
+            ),
+          if (isServiceProvider)
+            _ActionButton(
+              label: 'Complete Order',
+              color: Colors.blue,
+              onPressed: () async {
+                try {
+                  final response = await orderProvider.completeOrder(order.id);
+
+                  if (response!.statusCode == 200) {
+                    orderProvider.fetchMyOrders();
+                    final responseData = jsonDecode(response.body);
+                    showCustomSnackBar(
+                        context, responseData['message'], Colors.green);
+                    Navigator.pop(context); // Close the dialog
+                  } else {
+                    final responseData = jsonDecode(response.body);
+                    showCustomSnackBar(
+                        context,
+                        responseData['message'] ?? "An error occurred.",
+                        Colors.red);
+                  }
+                } catch (e) {
+                  showCustomSnackBar(
+                      context, "An error occurred: $e", Colors.red);
+                }
+              },
+            ),
+        ],
+      );
+    });
   }
 }
 

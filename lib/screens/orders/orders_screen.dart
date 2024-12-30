@@ -24,6 +24,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<OrderProvider>(context, listen: false).clearOrders();
       Provider.of<OrderProvider>(context, listen: false).fetchMyOrders();
     });
   }

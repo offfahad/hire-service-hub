@@ -11,6 +11,16 @@ String formatTime(String time) {
   }
 }
 
+String formatDate(String time) {
+  try {
+    DateTime parserdTime = DateTime.parse(time);
+    String formattedTime = DateFormat('MMMM d, yyyy').format(parserdTime);
+    return formattedTime;
+  } catch (e) {
+    return "Invalid Date";
+  }
+}
+
 String calculateTimeForChatMessage(String createdAt) {
   final DateTime createdDate = DateTime.parse(createdAt);
   final DateTime now = DateTime.now();

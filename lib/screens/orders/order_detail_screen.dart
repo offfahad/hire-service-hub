@@ -60,91 +60,101 @@ class OrderCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: order.service.coverPhoto != null
-                ? Image.network(
-                    '${Constants.baseUrl}${order.service.coverPhoto}',
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.cover,
-                  )
-                : Image.asset(
-                    'assets/images/content-writer.webp',
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.cover,
-                  ),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          // ClipRRect(
+          //   borderRadius: BorderRadius.circular(8),
+          //   child: order.service.coverPhoto != null
+          //       ? Image.network(
+          //           '${Constants.baseUrl}${order.service.coverPhoto}',
+          //           width: 80,
+          //           height: 80,
+          //           fit: BoxFit.cover,
+          //         )
+          //       : Image.asset(
+          //           'assets/images/content-writer.webp',
+          //           width: 80,
+          //           height: 80,
+          //           fit: BoxFit.cover,
+          //         ),
+          // ),
+          // const SizedBox(height: 20),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Text(
-                  'Order ID: ${order.id}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+              const Text(
+                "Order ID",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              IconButton(
-                icon: Icon(Icons.copy, color: AppTheme.fMainColor),
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: order.id));
-                  showCustomSnackBar(
-                      context, "Order ID copied to clipboard!", Colors.green);
-                },
-              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      order.id,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.copy, color: AppTheme.fMainColor),
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: order.id));
+                      showCustomSnackBar(context,
+                          "Order ID copied to clipboard!", Colors.green);
+                    },
+                  ),
+                ],
+              )
             ],
           ),
-          const SizedBox(height: 8),
-          _DetailRow(label: 'Service:', value: order.service.serviceName),
+          _DetailRow(label: 'Service', value: order.service.serviceName),
           if (order.serviceProvider != null) ...[
             _DetailRow(
-                label: 'Service Provider Name: ',
+                label: 'Service Provider Name',
                 value:
                     '${order.serviceProvider!.firstName} ${order.serviceProvider!.lastName}'),
             _DetailRow(
-              label: 'Address:',
+              label: 'Address',
               value: order.serviceProvider!.address.location ?? "Unknown",
             ),
           ] else
             ...[],
-          _DetailRow(label: 'Status:', value: order.orderStatus.toUpperCase()),
+          _DetailRow(label: 'Status', value: order.orderStatus.toUpperCase()),
           if (order.orderStatus == "cancelled") ...[
             _DetailRow(
-                label: 'Cancelled Reason:',
+                label: 'Cancelled Reason',
                 value: order.cancellationReason ?? "Empty"),
           ] else
             ...[],
-          _DetailRow(label: 'Price:', value: 'Rs. ${order.orderPrice}'),
+          _DetailRow(label: 'Price', value: 'Rs. ${order.orderPrice}'),
           _DetailRow(
-              label: 'Payment:', value: order.paymentStatus.toUpperCase()),
+              label: 'Payment', value: order.paymentStatus.toUpperCase()),
           _DetailRow(
-              label: 'Selected Payment Method:',
+              label: 'Selected Payment Method',
               value: order.paymentMethod.toUpperCase()),
           _DetailRow(
-              label: 'Order Placed On:',
+              label: 'Order Placed Date',
               value: formatTime(order.placedAt.toString())),
           _DetailRow(
-              label: 'Order Date:',
-              value: formatTime(order.orderDate.toString())),
+              label: 'Order Date',
+              value: formatDate(order.orderDate.toString())),
           if (order.customer != null) ...[
             _DetailRow(
-                label: 'Customer Name:',
+                label: 'Customer Name',
                 value: order.customer != null
                     ? '${order.customer!.firstName} ${order.customer!.lastName}'
                     : 'N/A'),
             _DetailRow(
-                label: 'Address:',
+                label: 'Address',
                 value: order.customerAddress.location ?? "Unknown"),
           ] else
             ...[],
           if (order.additionalNotes != null &&
               order.additionalNotes!.isNotEmpty)
-            _DetailRow(label: 'Notes:', value: order.additionalNotes!),
+            _DetailRow(label: 'Notes', value: order.additionalNotes!),
           const SizedBox(height: 16),
           _buildActionButtons(context, order),
         ],
@@ -249,19 +259,22 @@ class _DetailRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              value,
-              style: TextStyle(color: Colors.grey[600]),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[600],
             ),
           ),
         ],
@@ -354,7 +367,8 @@ class _CancelOrderDialogState extends State<_CancelOrderDialog> {
             decoration: const InputDecoration(
               labelText: "Cancellation Reason",
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12))),
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+              ),
             ),
             maxLines: 2,
           ),

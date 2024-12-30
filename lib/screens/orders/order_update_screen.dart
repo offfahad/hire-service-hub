@@ -166,7 +166,6 @@ class _OrderUpdateScreenState extends State<OrderUpdateScreen> {
                                     Navigator.pop(
                                         context); // Close dialog/screen
                                     Navigator.pop(context);
-                                    
                                   } else {
                                     // On failure
                                     final responseData =

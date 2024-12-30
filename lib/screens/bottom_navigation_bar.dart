@@ -74,7 +74,7 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
             ),
             onTap: onBottomNavTapped,
             items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 // icon: SvgPicture.asset(
                 //   'assets/icons/house.svg',
                 //   color: (currentPageIndex == 0)
@@ -86,7 +86,7 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
                 icon: Icon(IconlyLight.home),
                 label: 'Home',
               ),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 // icon: SvgPicture.asset(
                 //   'assets/icons/favorite.svg',
                 //   color: (currentPageIndex == 1)
@@ -108,12 +108,12 @@ class _BottomNavigationBarScreenState extends State<BottomNavigationBarScreen> {
                 //   height: MediaQuery.of(context).size.height * 0.035,
                 //   width: MediaQuery.of(context).size.height * 0.035,
                 // ),
-                icon: Icon(IconlyLight.bag),
+                icon: const Icon(IconlyLight.bag),
                 label: authProvider.user!.role!.title == "service_provider"
                     ? "My Orders"
                     : "Placed Orders",
               ),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 // icon: SvgPicture.asset(
                 //   'assets/icons/profile.svg',
                 //   color: (currentPageIndex == 3)

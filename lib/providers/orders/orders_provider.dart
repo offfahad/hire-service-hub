@@ -71,6 +71,11 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
+  void clearOrders() {
+    _orders = null;
+    notifyListeners();
+  }
+
   Future<http.Response> cancelOrder({
     required String orderId,
     required String cancellationReason,

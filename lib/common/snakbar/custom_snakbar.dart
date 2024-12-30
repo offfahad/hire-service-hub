@@ -11,14 +11,15 @@ void showCustomSnackBar(
       ),
       maxLines: null,
     ),
+
     backgroundColor: backgroundColor,
-    behavior: SnackBarBehavior.fixed, // Change to floating if preferred
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(12),
-        topRight: Radius.circular(12),
-      ),
-    ),
+    behavior: SnackBarBehavior.floating, // Change to floating if preferred
+    // shape: const RoundedRectangleBorder(
+    //   borderRadius: BorderRadius.only(
+    //     topLeft: Radius.circular(12),
+    //     topRight: Radius.circular(12),
+    //   ),
+    // ),
     duration: const Duration(seconds: 3),
   );
 

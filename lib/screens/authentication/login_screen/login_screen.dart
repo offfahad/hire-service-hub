@@ -35,7 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
       return Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
             // Wrap the content in a scrollable view
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: size.width * 0.07),
@@ -45,11 +44,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     MainAxisSize.min, // Important for shrinking the Column
                 children: [
                   SizedBox(height: size.height * 0.08),
-                  // Image.asset(
-                  //   "assets/logo.png",
-                  //   width: MediaQuery.of(context).size.width * 0.60,
-                  //   height: MediaQuery.of(context).size.height * 0.15,
-                  // ),
                   Text(
                     "Hire Service",
                     style: TextStyle(
@@ -58,7 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: AppTheme.fMainColor,
                     ),
                   ),
-                  SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   const Text(
                     "Welcome to Hire-Service Hub",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
@@ -77,6 +73,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           label: 'Email',
                           controller: loginProvider.emailController,
                           keyboardType: TextInputType.emailAddress,
+                          onChanged: (value) {
+                            loginProvider.markEmailTouched();
+                          },
+                          autovalidateMode: loginProvider.emailTouched
+                              ? AutovalidateMode.onUserInteraction
+                              : AutovalidateMode.disabled,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
@@ -93,6 +95,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           label: 'Password',
                           controller: loginProvider.passwordController,
                           obscureText: loginProvider.obscurePassword,
+                          onChanged: (value) {
+                            loginProvider.markPasswordTouched();
+                          },
+                          autovalidateMode: loginProvider.passwordTouched
+                              ? AutovalidateMode.onUserInteraction
+                              : AutovalidateMode.disabled,
                           isPasswordField: true,
                           toggleVisibility:
                               loginProvider.togglePasswordVisibility,
@@ -100,16 +108,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your password';
                             } else if (value.length < 8) {
-                              return 'Password must be at least\n8 characters long';
+                              return 'Password must be at least 8 characters long';
                             } else if (!RegExp(r'[a-z]').hasMatch(value)) {
-                              return 'Password must contain at least\none lowercase letter';
+                              return 'Password must contain at least one lowercase\nletter';
                             } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
-                              return 'Password must contain at least\none uppercase letter';
+                              return 'Password must contain at least one uppercase\nletter';
                             } else if (!RegExp(r'[0-9]').hasMatch(value)) {
-                              return 'Password must contain at\nleastone number';
+                              return 'Password must contain at least one number';
                             } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]')
                                 .hasMatch(value)) {
-                              return 'Password must contain at least\none special character';
+                              return 'Password must contain at least one special\ncharacter';
                             }
                             return null;
                           },
@@ -230,60 +238,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
-                  // const SizedBox(height: 30),
-                  // Row(
-                  //   children: [
-                  //     Expanded(child: Divider(color: Colors.grey.shade400)),
-                  //     const Padding(
-                  //       padding: EdgeInsets.symmetric(horizontal: 10),
-                  //       child: Text(
-                  //         "Or sign in with",
-                  //         style: TextStyle(
-                  //           fontSize: 12,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     Expanded(child: Divider(color: Colors.grey.shade400)),
-                  //   ],
-                  // ),
-                  // const SizedBox(height: 30),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  //   children: [
-                  //     CustomSocialButton(
-                  //       onPressed: () {},
-                  //       size: size,
-                  //       label: "Google",
-                  //       asset: "assets/icons/Google.jpg",
-                  //     ),
-                  //     CustomSocialButton(
-                  //       onPressed: () {},
-                  //       size: size,
-                  //       label: "Facebook",
-                  //       asset: "assets/icons/Facebook.png",
-                  //     ),
-                  //   ],
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: 30),
-                  //   child: RichText(
-                  //     textAlign: TextAlign.center,
-                  //     text: TextSpan(
-                  //       text: "By logging in, you agree to Ajar's ",
-                  //       style: TextStyle(
-                  //           fontSize: size.width * 0.035, color: Colors.black87),
-                  //       children: [
-                  //         TextSpan(
-                  //           text: "term of service and privacy policy.",
-                  //           style: TextStyle(
-                  //             fontSize: size.width * 0.035,
-                  //             color: fMainColor,
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),

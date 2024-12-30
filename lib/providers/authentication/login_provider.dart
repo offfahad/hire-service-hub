@@ -9,6 +9,13 @@ class LoginProvider extends ChangeNotifier {
   bool get obscurePassword => _obscurePassword;
   GlobalKey<FormState> get loginFormKey => _loginFormKey;
   // Add FocusNodes for both fields
+  // Flags to track user interaction
+
+  bool _emailTouched = false;
+  bool _passwordTouched = false;
+
+  bool get emailTouched => _emailTouched;
+  bool get passwordTouched => _passwordTouched;
 
   // Toggle password visibility
   void togglePasswordVisibility() {
@@ -17,7 +24,23 @@ class LoginProvider extends ChangeNotifier {
   }
 
   bool validateForm() {
-    return _loginFormKey.currentState!.validate();
+    return _loginFormKey.currentState?.validate() ?? false;
+  }
+
+  // Mark email as touched and notify listeners
+  void markEmailTouched() {
+    if (!_emailTouched) {
+      _emailTouched = true;
+      notifyListeners();
+    }
+  }
+
+  // Mark password as touched and notify listeners
+  void markPasswordTouched() {
+    if (!_passwordTouched) {
+      _passwordTouched = true;
+      notifyListeners();
+    }
   }
 
   // Dispose the controllers

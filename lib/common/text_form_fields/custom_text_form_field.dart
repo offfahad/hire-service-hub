@@ -12,6 +12,7 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final FocusNode? focusNode;
   final bool? isEditable;
+  final AutovalidateMode? autovalidateMode;
   final bool? showIcon; // New field to determine if icon should be shown
   final IconData? iconData; // New field for custom icon
   final VoidCallback? onIconPress; // New field for icon press action
@@ -22,25 +23,25 @@ class CustomTextFormField extends StatelessWidget {
 
   final ValueChanged<String>? onChanged; // Optional onChanged callback
 
-  const CustomTextFormField({
-    super.key,
-    required this.label,
-    required this.controller,
-    this.keyboardType = TextInputType.text,
-    this.obscureText = false,
-    this.isPasswordField = false,
-    this.toggleVisibility,
-    this.validator,
-    this.focusNode,
-    this.isEditable,
-    this.showIcon, // New argument for showing optional icon
-    this.iconData, // New argument for custom icon
-    this.onIconPress, // New argument for icon press action
-    this.maxLength, // Optional maximum text length
-    this.maxLines, // Optional maximum lines of text
-    this.inputFormatters, // Optional inputFormatters
-    this.onChanged
-  });
+  const CustomTextFormField(
+      {super.key,
+      required this.label,
+      required this.controller,
+      this.keyboardType = TextInputType.text,
+      this.obscureText = false,
+      this.isPasswordField = false,
+      this.toggleVisibility,
+      this.validator,
+      this.autovalidateMode,
+      this.focusNode,
+      this.isEditable,
+      this.showIcon, // New argument for showing optional icon
+      this.iconData, // New argument for custom icon
+      this.onIconPress, // New argument for icon press action
+      this.maxLength, // Optional maximum text length
+      this.maxLines, // Optional maximum lines of text
+      this.inputFormatters, // Optional inputFormatters
+      this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +52,7 @@ class CustomTextFormField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
+        autovalidateMode: autovalidateMode,
         maxLines: maxLines ?? 1,
         maxLength: maxLength,
         controller: controller,
@@ -60,7 +62,6 @@ class CustomTextFormField extends StatelessWidget {
         validator: validator,
         inputFormatters: inputFormatters,
         cursorColor: AppTheme.fMainColor,
-        
         onChanged: onChanged,
         style: TextStyle(
           color: isDarkMode ? Colors.white : Colors.grey.shade900,

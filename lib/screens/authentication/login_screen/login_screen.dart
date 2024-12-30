@@ -90,7 +90,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 10),
                         CustomTextFormField(
                           label: 'Password',
                           controller: loginProvider.passwordController,
@@ -125,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(

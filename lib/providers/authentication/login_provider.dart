@@ -34,7 +34,7 @@ class LoginProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
+  
   // Mark password as touched and notify listeners
   void markPasswordTouched() {
     if (!_passwordTouched) {

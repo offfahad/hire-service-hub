@@ -54,44 +54,51 @@ class RegisterScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomTextFormField(
-                              label: 'First Name',
-                              controller:
-                                  registrationProvider.firstNameController,
-                              keyboardType: TextInputType.name,
-                              validator: (value) {
-                                if (value!.isEmpty || value.length < 3) {
-                                  return 'Please enter your\nfirst name';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: CustomTextFormField(
-                              label: 'Last Name',
-                              controller:
-                                  registrationProvider.lastNameController,
-                              keyboardType: TextInputType.name,
-                              validator: (value) {
-                                if (value!.isEmpty || value.length < 3) {
-                                  return 'Please enter your\nlast name';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                        ],
+                      CustomTextFormField(
+                        label: 'First Name',
+                        controller: registrationProvider.firstNameController,
+                        keyboardType: TextInputType.name,
+                        onChanged: (value) {
+                          registrationProvider.markFirstNameTouched();
+                        },
+                        autovalidateMode: registrationProvider.firstNameTouched
+                            ? AutovalidateMode.onUserInteraction
+                            : AutovalidateMode.disabled,
+                        validator: (value) {
+                          if (value!.isEmpty || value.length < 3) {
+                            return 'Please enter your first name';
+                          }
+                          return null;
+                        },
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(width: 10),
+                      CustomTextFormField(
+                        label: 'Last Name',
+                        controller: registrationProvider.lastNameController,
+                        keyboardType: TextInputType.name,
+                        onChanged: (value) {
+                          registrationProvider.markLastNameTouched();
+                        },
+                        autovalidateMode: registrationProvider.lastNameTouched
+                            ? AutovalidateMode.onUserInteraction
+                            : AutovalidateMode.disabled,
+                        validator: (value) {
+                          if (value!.isEmpty || value.length < 3) {
+                            return 'Please enter your last name';
+                          }
+                          return null;
+                        },
+                      ),
                       CustomTextFormField(
                         label: 'Email',
                         controller: registrationProvider.emailController,
                         keyboardType: TextInputType.emailAddress,
+                        onChanged: (value) {
+                          registrationProvider.markEmailTouched();
+                        },
+                        autovalidateMode: registrationProvider.emailTouched
+                            ? AutovalidateMode.onUserInteraction
+                            : AutovalidateMode.disabled,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your email';
@@ -111,22 +118,28 @@ class RegisterScreen extends StatelessWidget {
                         controller: registrationProvider.passwordController,
                         obscureText: registrationProvider.obscurePassword,
                         isPasswordField: true,
+                        onChanged: (value) {
+                          registrationProvider.markPasswordTouched();
+                        },
+                        autovalidateMode: registrationProvider.passwordTouched
+                            ? AutovalidateMode.onUserInteraction
+                            : AutovalidateMode.disabled,
                         toggleVisibility:
                             registrationProvider.togglePasswordVisibility,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your password';
                           } else if (value.length < 8) {
-                            return 'Password must be at least\n8 characters long';
+                            return 'Password must be at least 8 characters long';
                           } else if (!RegExp(r'[a-z]').hasMatch(value)) {
-                            return 'Password must contain at least\none lowercase letter';
+                            return 'Password must contain at least one lowercase \nletter';
                           } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
-                            return 'Password must contain at least\none uppercase letter';
+                            return 'Password must contain at least one uppercase \nletter';
                           } else if (!RegExp(r'[0-9]').hasMatch(value)) {
-                            return 'Password must contain at\nleastone number';
+                            return 'Password must contain at least one \nnumber';
                           } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]')
                               .hasMatch(value)) {
-                            return 'Password must contain at least\none special character';
+                            return 'Password must contain at least one special \ncharacter';
                           }
                           return null;
                         },
@@ -259,8 +272,12 @@ TextFormField customPhoneNumberTextFormField(
       color: isDarkMode ? Colors.white : Colors.grey.shade900,
     ),
     onChanged: (value) {
+      registrationProvider.markPhoneTouched();
       registrationProvider.phoneController.text = value;
     },
+    autovalidateMode: registrationProvider.phoneTouched
+        ? AutovalidateMode.onUserInteraction
+        : AutovalidateMode.disabled,
     validator: (value) {
       // Phone number validation
       if (value == null || value.isEmpty) {
@@ -278,9 +295,9 @@ TextFormField customPhoneNumberTextFormField(
         fontSize: 14,
       ),
       enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5), borderSide: BorderSide.none),
+          borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
       focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5), borderSide: BorderSide.none),
+          borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
       prefixIcon: Container(
         padding: const EdgeInsets.fromLTRB(8.0, 14.0, 8.0, 12.0),
         child: InkWell(
@@ -288,10 +305,11 @@ TextFormField customPhoneNumberTextFormField(
             showCountryPicker(
               context: context,
               countryListTheme: CountryListThemeData(
-                  backgroundColor:
-                      isDarkMode ? AppTheme.fdarkBlue : Colors.grey.shade300,
-                  borderRadius: BorderRadius.zero,
-                  bottomSheetHeight: 400),
+                backgroundColor:
+                    isDarkMode ? AppTheme.fdarkBlue : Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(20),
+                bottomSheetHeight: MediaQuery.of(context).size.height * 0.9,
+              ),
               onSelect: (Country country) {
                 registrationProvider.selectCountry(country);
               },
@@ -301,42 +319,16 @@ TextFormField customPhoneNumberTextFormField(
             //textAlign: TextAlign.center,
             ' +${registrationProvider.selectedCountry.phoneCode}',
             style: TextStyle(
-                fontSize: 14,
-                color: isDarkMode ? Colors.white : Colors.grey.shade500),
+              fontSize: 14,
+              color: isDarkMode
+                  ? Colors.white
+                  : registrationProvider.phoneController.text.isNotEmpty
+                      ? Colors.grey.shade900
+                      : Colors.grey.shade500,
+            ),
           ),
         ),
       ),
     ),
   );
 }
-
-
-  // void _registerWithGoogle(BuildContext context) async {
-  //   final googleSignInService = GoogleSignInService();
-  //   final googleUser = await googleSignInService.signInWithGoogle();
-
-  //   if (googleUser != null) {
-  //     final email = googleUser.email;
-  //     final displayName = googleUser.displayName;
-  //     final googleIdToken = await googleUser.authentication;
-
-  //     // Send this data to the backend for further processing
-  //     final registrationProvider =
-  //         Provider.of<AuthenticationController>(context, listen: false);
-  //     final response = await registrationProvider.registerWithGoogle(
-  //       email: email,
-  //       displayName: displayName!,
-  //       idToken: googleIdToken.idToken!,
-  //     );
-
-  //     if (response!['statusCode'] == 200) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text('Signed in successfully!')),
-  //       );
-  //     } else {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text(response['message'])),
-  //       );
-  //     }
-  //   }
-  // }

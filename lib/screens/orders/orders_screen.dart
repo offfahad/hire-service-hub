@@ -18,8 +18,6 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
-  String selectedFilter = "All";
-
   @override
   void initState() {
     super.initState();
@@ -36,7 +34,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Orders', style: TextStyle(fontWeight: FontWeight.bold),),
+        title: const Text(
+          'Orders',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Consumer2<OrderProvider, AuthenticationProvider>(
         builder: (context, orderProvider, authProvider, child) {
@@ -50,10 +51,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
             return const Center(child: Text('No orders available.'));
           }
 
-          final filteredOrders = selectedFilter == "All"
+          final filteredOrders = orderProvider.selectedFilter == "All"
               ? orders.data
               : orders.data
-                  .where((order) => order.orderStatus == selectedFilter)
+                  .where(
+                    (order) =>
+                        order.orderStatus == orderProvider.selectedFilter,
+                  )
                   .toList();
 
           return Column(
@@ -74,136 +78,151 @@ class _OrdersScreenState extends State<OrdersScreen> {
               ),
               // Orders List
               Expanded(
-                child: ListView.builder(
-                  itemCount: filteredOrders.length,
-                  itemBuilder: (context, index) {
-                    final order = filteredOrders[index];
-                    return CardyContainer(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      color: isDarkMode ? AppTheme.fdarkBlue : Colors.white,
-                      spreadRadius: 0,
-                      blurRadius: 1,
-                      shadowColor:
-                          isDarkMode ? AppTheme.fdarkBlue : Colors.grey,
-                      borderRadius: BorderRadius.circular(5),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
+                child: filteredOrders.isEmpty
+                    ? Center(
+                        child: Text(
+                          "No ${orderProvider.selectedFilter.toLowerCase()} order available yet.",
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
                         ),
-                        padding: const EdgeInsets.all(12),
-                        child: Row(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: order.service.coverPhoto != null
-                                  ? Image.network(
-                                      '${Constants.baseUrl}${order.service.coverPhoto}',
-                                      width: 80,
-                                      height: 80,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.asset(
-                                      'assets/images/content-writer.webp',
-                                      width: 80,
-                                      height: 80,
-                                      fit: BoxFit.cover,
-                                    ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                      )
+                    : ListView.builder(
+                        itemCount: filteredOrders.length,
+                        itemBuilder: (context, index) {
+                          final order = filteredOrders[index];
+
+                          return CardyContainer(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            color:
+                                isDarkMode ? AppTheme.fdarkBlue : Colors.white,
+                            spreadRadius: 0,
+                            blurRadius: 1,
+                            shadowColor:
+                                isDarkMode ? AppTheme.fdarkBlue : Colors.grey,
+                            borderRadius: BorderRadius.circular(5),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.all(12),
+                              child: Row(
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        order.service.serviceName,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: order.service.coverPhoto != null
+                                        ? Image.network(
+                                            '${Constants.baseUrl}${order.service.coverPhoto}',
+                                            width: 80,
+                                            height: 80,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.asset(
+                                            'assets/images/content-writer.webp',
+                                            width: 80,
+                                            height: 80,
+                                            fit: BoxFit.cover,
+                                          ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              order.service.serviceName,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            CardyContainer(
+                                              padding: const EdgeInsets.all(3),
+                                              spreadRadius: 0,
+                                              blurRadius: 1,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              color: getStatusColor(
+                                                  order.orderStatus),
+                                              child: Text(
+                                                order.orderStatus.toUpperCase(),
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 10),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                      CardyContainer(
-                                        padding: const EdgeInsets.all(3),
-                                        spreadRadius: 0,
-                                        blurRadius: 1,
-                                        borderRadius: BorderRadius.circular(8),
-                                        color:
-                                            getStatusColor(order.orderStatus),
-                                        child: Text(
-                                          order.orderStatus.toUpperCase(),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          order.service.description,
                                           style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    order.service.description,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                    ),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        IconlyLight.time_circle,
-                                        size: 16,
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(
-                                        formatTime(
-                                          order.orderDate.toString(),
-                                        ),
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          SlidePageRoute(
-                                              page: OrderDetailsScreen(
-                                            order: order,
-                                            isServiceProvider: authProvider
-                                                        .user!.role!.title ==
-                                                    "service_provider"
-                                                ? true
-                                                : false,
-                                          )));
-                                    },
-                                    child: const Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: Text(
-                                        "See More",
-                                        style: TextStyle(
                                             fontSize: 12,
-                                            decoration:
-                                                TextDecoration.underline),
-                                      ),
+                                          ),
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              IconlyLight.time_circle,
+                                              size: 16,
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              formatDate(
+                                                order.orderDate.toString(),
+                                              ),
+                                              style:
+                                                  const TextStyle(fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                SlidePageRoute(
+                                                    page: OrderDetailsScreen(
+                                                  order: order,
+                                                  isServiceProvider:
+                                                      authProvider.user!.role!
+                                                                  .title ==
+                                                              "service_provider"
+                                                          ? true
+                                                          : false,
+                                                )));
+                                          },
+                                          child: const Align(
+                                            alignment: Alignment.bottomRight,
+                                            child: Text(
+                                              "See More",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  decoration:
+                                                      TextDecoration.underline),
+                                            ),
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ),
             ],
           );
@@ -215,6 +234,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget buildFilterChip(String label) {
     Brightness brightness = Theme.of(context).brightness;
     bool isDarkMode = brightness == Brightness.dark;
+
+    final selectedFilter = Provider.of<OrderProvider>(context).selectedFilter;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: ChoiceChip(
@@ -222,15 +244,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         label: Text(label.toUpperCase()),
         selected: selectedFilter == label,
         onSelected: (isSelected) {
-          setState(() {
-            if (selectedFilter == label) {
-              // Deselect and reset to "All"
-              selectedFilter = "All";
-            } else {
-              // Update selected chip
-              selectedFilter = label;
-            }
-          });
+          Provider.of<OrderProvider>(context, listen: false).setFilter(label);
         },
       ),
     );

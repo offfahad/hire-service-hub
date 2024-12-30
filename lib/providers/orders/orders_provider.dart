@@ -192,4 +192,13 @@ class OrderProvider with ChangeNotifier {
       return null;
     }
   }
+
+  String _selectedFilter = "All";
+
+  String get selectedFilter => _selectedFilter;
+
+  void setFilter(String filter) {
+    _selectedFilter = filter;
+    notifyListeners();
+  }
 }

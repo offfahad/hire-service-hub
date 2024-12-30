@@ -5,6 +5,7 @@ import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
 import 'package:e_commerce/models/orders/get_my_orders.dart';
 import 'package:e_commerce/providers/orders/orders_provider.dart';
 import 'package:e_commerce/utils/app_theme.dart';
+import 'package:e_commerce/utils/date_and_time_formatting.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,7 @@ class _OrderUpdateScreenState extends State<OrderUpdateScreen> {
     // TODO: implement initState
     super.initState();
     additionalNotesController.text = widget.order.additionalNotes.toString();
-    selectedDateController.text = widget.order.orderDate.toString();
+    selectedDateController.text = formatDate(widget.order.orderDate.toString()); 
     selectedOrderDate = widget.order.orderDate;
   }
 
@@ -55,7 +56,6 @@ class _OrderUpdateScreenState extends State<OrderUpdateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final orderProvider = Provider.of<OrderProvider>(context);
 
     return Scaffold(
       appBar: AppBar(

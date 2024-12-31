@@ -115,6 +115,7 @@ class RegisterScreen extends StatelessWidget {
                       const SizedBox(height: 10),
                       CustomTextFormField(
                         label: 'Password',
+                        
                         controller: registrationProvider.passwordController,
                         obscureText: registrationProvider.obscurePassword,
                         isPasswordField: true,

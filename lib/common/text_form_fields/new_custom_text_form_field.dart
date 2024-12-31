@@ -50,7 +50,7 @@ class NewCustomTextFormField extends StatelessWidget {
     bool isDarkMode = brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: TextFormField(
         autovalidateMode: autovalidateMode,
         maxLines: maxLines ?? 1,
@@ -75,16 +75,22 @@ class NewCustomTextFormField extends StatelessWidget {
               color: isDarkMode ? Colors.white : Colors.grey.shade500),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
+            borderSide: BorderSide(
+                color: isDarkMode ? Colors.white : Colors.grey.shade500,
+                width: 0.2),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
+            borderSide: BorderSide(
+                color: isDarkMode ? Colors.white : Colors.grey.shade500,
+                width: 0.2),
           ),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
           filled: true,
-          fillColor: isDarkMode ? AppTheme.fdarkBlue : Colors.grey[200],
+          fillColor: isDarkMode
+              ? ThemeData.dark().scaffoldBackgroundColor
+              : Colors.white,
           hintStyle: TextStyle(
             fontSize: 12,
             color: isDarkMode ? Colors.white : Colors.grey.shade500,

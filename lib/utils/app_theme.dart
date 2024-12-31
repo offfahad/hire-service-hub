@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static Color fMainColor = const Color.fromARGB(255, 28, 110, 30); // Dark brow;
+  static Color fMainColor = const Color.fromARGB(255, 12, 166, 81);
+// Dark brow;
   static Color fdarkBlue = const Color.fromARGB(255, 22, 37, 21);
 
   static ThemeData lightTheme = ThemeData(

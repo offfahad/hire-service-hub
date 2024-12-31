@@ -60,7 +60,6 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                           label: 'New Password',
                           controller: forgetPasswordProvider.passwordController,
                           obscureText: forgetPasswordProvider.obscurePassword,
-                          focusNode: forgetPasswordProvider.passwordFocusNode,
                           isPasswordField: true,
                           toggleVisibility:
                               forgetPasswordProvider.togglePasswordVisibility,
@@ -88,7 +87,6 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                           controller:
                               forgetPasswordProvider.passwordController2,
                           obscureText: forgetPasswordProvider.obscurePassword2,
-                          focusNode: forgetPasswordProvider.passwordFocusNode2,
                           isPasswordField: true,
                           toggleVisibility:
                               forgetPasswordProvider.togglePasswordVisibility2,

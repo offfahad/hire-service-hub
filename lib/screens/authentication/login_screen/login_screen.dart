@@ -2,7 +2,6 @@ import 'package:e_commerce/common/buttons/custom_gradient_button.dart';
 import 'package:e_commerce/common/buttons/iconbox_with_title.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
-import 'package:e_commerce/common/text_form_fields/new_custom_text_form_field.dart';
 import 'package:e_commerce/providers/authentication/authentication_provider.dart';
 import 'package:e_commerce/providers/authentication/login_provider.dart';
 import 'package:e_commerce/screens/authentication/forget_password_screens/forget_password_screen.dart';
@@ -89,7 +88,7 @@ class LoginScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            NewCustomTextFormField(
+                            CustomTextFormField(
                               maxLines: 1,
                               label: 'E-Mail',
                               controller: loginProvider.emailController,
@@ -112,7 +111,7 @@ class LoginScreen extends StatelessWidget {
                               },
                               showIcon: true,
                             ),
-                            NewCustomTextFormField(
+                            CustomTextFormField(
                               label: 'Password',
                               controller: loginProvider.passwordController,
                               obscureText: loginProvider.obscurePassword,

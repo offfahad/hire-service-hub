@@ -235,7 +235,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       // Sign Up
-                      SizedBox(height: height * 0.02),
+                      SizedBox(height: height * 0.2),
                       Center(
                         child: TextButton(
                           onPressed: () {

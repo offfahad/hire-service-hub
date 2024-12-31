@@ -1,5 +1,8 @@
 import 'package:e_commerce/common/buttons/custom_elevated_button.dart';
 import 'package:e_commerce/common/buttons/iconbox_with_title.dart';
+import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
+import 'package:e_commerce/screens/authentication/login_screen/login_screen.dart';
+import 'package:e_commerce/screens/authentication/register_screen/register_screen.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -14,10 +17,13 @@ class GetStarted extends StatelessWidget {
         children: [
           // Background Image
           Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/background_image.jpg'),
-                opacity: 0.4,
+                image: const AssetImage('assets/background_image.jpg'),
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.6), // Darken the image
+                  BlendMode.darken, // Blend mode
+                ),
                 fit: BoxFit.cover,
               ),
             ),
@@ -51,7 +57,14 @@ class GetStarted extends StatelessWidget {
                               borderRadius: 12,
                               height: 58,
                               text: "Login",
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  SlidePageRoute(
+                                    page: const LoginScreen(),
+                                  ),
+                                );
+                              },
                               backgroundColor: AppTheme.fMainColor,
                               foregroundColor: Colors.white),
                         ),
@@ -61,7 +74,14 @@ class GetStarted extends StatelessWidget {
                             borderRadius: 12,
                             height: 58,
                             text: "Sign Up",
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                SlidePageRoute(
+                                  page: const RegisterScreen(),
+                                ),
+                              );
+                            },
                             backgroundColor:
                                 const Color.fromARGB(255, 51, 49, 51),
                             foregroundColor: Colors.white,

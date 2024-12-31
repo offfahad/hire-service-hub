@@ -9,6 +9,7 @@ class CustomElevatedButton extends StatelessWidget {
   final Color foregroundColor;
   final double borderRadius;
   final TextStyle? textStyle;
+  final bool isLoading; // New parameter for loading state
 
   const CustomElevatedButton({
     super.key,
@@ -20,6 +21,7 @@ class CustomElevatedButton extends StatelessWidget {
     required this.foregroundColor,
     this.borderRadius = 25.0, // Default border radius
     this.textStyle,
+    this.isLoading = false, // Default value is false
   });
 
   @override
@@ -29,7 +31,7 @@ class CustomElevatedButton extends StatelessWidget {
           double.infinity, // Use provided width or default to full width
       height: height ?? 60.0, // Use provided height or default to 50
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
@@ -37,13 +39,19 @@ class CustomElevatedButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
-        child: Text(
-          text,
-          style: textStyle ??
-              const TextStyle(
-                fontSize: 18,
+        child: isLoading
+            ? const Center(
+                child: CircularProgressIndicator.adaptive(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              )
+            : Text(
+                text,
+                style: textStyle ??
+                    const TextStyle(
+                      fontSize: 16,
+                    ),
               ),
-        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomGradientButton extends StatelessWidget {
@@ -24,17 +25,10 @@ class CustomGradientButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width ?? double.infinity,
-      height: height ?? 60.0, // Default height
+      height: height ?? 58.0, // Default height
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFF33bf2e), // Green
-            Color.fromARGB(255, 35, 123, 69), // Darker green
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(10),
+        color: AppTheme.fMainColor,
+        borderRadius: BorderRadius.circular(12),
       ),
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed, // Disable button when loading
@@ -42,7 +36,7 @@ class CustomGradientButton extends StatelessWidget {
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(12),
           ),
           padding: const EdgeInsets.symmetric(
             horizontal: 24,
@@ -51,7 +45,7 @@ class CustomGradientButton extends StatelessWidget {
         ),
         child: isLoading // Show loading indicator or text
             ? const Center(
-                child: CircularProgressIndicator(
+                child: CircularProgressIndicator.adaptive(
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               )

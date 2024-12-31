@@ -81,13 +81,12 @@ class RegisterScreen extends StatelessWidget {
                           height: 26 / 24,
                         ),
                       ),
-                      SizedBox(height: height * 0.03),
+                      SizedBox(height: height * 0.02),
 
                       Form(
                         key: registrationProvider.registerFormKey,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
                           children: [
                             CustomTextFormField(
                               label: 'First Name',
@@ -150,10 +149,10 @@ class RegisterScreen extends StatelessWidget {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 8),
                             customPhoneNumberTextFormField(
                                 context, registrationProvider),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 8),
                             CustomTextFormField(
                               label: 'Password',
                               controller:
@@ -187,7 +186,7 @@ class RegisterScreen extends StatelessWidget {
                                 return null;
                               },
                             ),
-                            SizedBox(height: height * 0.02),
+                            SizedBox(height: height * 0.01),
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -264,7 +263,7 @@ class RegisterScreen extends StatelessWidget {
                       Center(
                         child: TextButton(
                           onPressed: () {
-                            Navigator.of(context).push(
+                            Navigator.of(context).pushReplacement(
                               SlidePageRoute(
                                 page: const LoginScreen(),
                               ),

@@ -239,7 +239,7 @@ class LoginScreen extends StatelessWidget {
                       Center(
                         child: TextButton(
                           onPressed: () {
-                            Navigator.of(context).push(
+                            Navigator.of(context).pushReplacement(
                               SlidePageRoute(
                                 page: const RegisterScreen(),
                               ),

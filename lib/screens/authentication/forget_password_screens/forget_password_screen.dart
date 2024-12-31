@@ -1,13 +1,9 @@
 import 'package:e_commerce/common/buttons/back_icon_button_with_title.dart';
 import 'package:e_commerce/common/buttons/custom_gradient_button.dart';
-import 'package:e_commerce/common/buttons/iconbox_with_title.dart';
-import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
 import 'package:e_commerce/providers/authentication/authentication_provider.dart';
 import 'package:e_commerce/providers/authentication/forget_password_provider.dart';
 import 'package:e_commerce/screens/authentication/forget_password_screens/forget_password_otp_screen.dart';
-import 'package:e_commerce/screens/authentication/register_screen/register_screen.dart';
-import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';

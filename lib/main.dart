@@ -11,6 +11,7 @@ import 'package:e_commerce/providers/profile_updation/profile_updation_provider.
 import 'package:e_commerce/providers/profile_updation/update_password_provider.dart';
 import 'package:e_commerce/providers/service/service_filter_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
+import 'package:e_commerce/screens/authentication/opt_verification_screen/opt_verification_screen.dart';
 import 'package:e_commerce/screens/authentication/splash_screen/splash_screen.dart';
 import 'package:e_commerce/screens/authentication/starting_screen/get_started.dart';
 import 'package:e_commerce/utils/app_theme.dart';
@@ -60,14 +61,15 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ChattingProvider())
       ],
       child: MaterialApp(
-          navigatorKey: navigatorKey,
-          scaffoldMessengerKey: scaffoldMessengerKey,
-          debugShowCheckedModeBanner: false,
-          title: 'Hire Service',
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: ThemeMode.light,
-          home: const SplashScreen()),
+        navigatorKey: navigatorKey,
+        scaffoldMessengerKey: scaffoldMessengerKey,
+        debugShowCheckedModeBanner: false,
+        title: 'Hire Service',
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.light,
+        home: const OptVerificationScreen(email: "mughalfahad544@gmail.com"),
+      ),
     );
   }
 }

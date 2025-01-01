@@ -163,11 +163,14 @@ class LoginScreen extends StatelessWidget {
                             if (statusCode == 200) {
                               loginProvider.clearControllers();
                               // Login successful, navigate to the BottomNavigationBarScreen
-                              Navigator.of(context).pushReplacement(
+                              Navigator.of(context).pushAndRemoveUntil(
                                 SlidePageRoute(
                                   page: const BottomNavigationBarScreen(),
                                 ),
+                                (Route<dynamic> route) =>
+                                    false, // Removes all previous routes
                               );
+
                               showCustomSnackBar(
                                   context, "Login Successfully!", Colors.green);
                             } else if (statusCode == 401 || statusCode == 400) {

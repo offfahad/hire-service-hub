@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: ThemeMode.light,
-        home: const OptVerificationScreen(email: "mughalfahad544@gmail.com"),
+        home: const SplashScreen(),
       ),
     );
   }

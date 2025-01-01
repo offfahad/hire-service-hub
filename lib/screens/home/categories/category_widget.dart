@@ -45,7 +45,7 @@ class CategoryItem extends StatelessWidget {
         color: isDarkMode ? AppTheme.fdarkBlue : Colors.white,
         spreadRadius: 0,
         blurRadius: 1,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(20),
         shadowColor: isDarkMode ? AppTheme.fdarkBlue : Colors.grey,
         child: Column(
           mainAxisSize: MainAxisSize.min,

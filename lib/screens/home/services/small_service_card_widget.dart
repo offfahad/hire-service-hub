@@ -27,11 +27,10 @@ class SmallServiceCard extends StatelessWidget {
         );
       },
       child: CardyContainer(
-        margin: const EdgeInsets.all(8),
         color: isDarkMode ? AppTheme.fdarkBlue : Colors.white,
         spreadRadius: 0,
         blurRadius: 1,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(20),
         shadowColor: isDarkMode ? AppTheme.fdarkBlue : Colors.grey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +38,9 @@ class SmallServiceCard extends StatelessWidget {
             // Cover Image (Smaller height)
             service.coverPhoto != null && service.coverPhoto!.isNotEmpty
                 ? ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
                     child: Image.network(
                       '${service.coverPhoto}',
                       width: double.infinity,
@@ -48,7 +49,9 @@ class SmallServiceCard extends StatelessWidget {
                     ),
                   )
                 : ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
                     child: Image.asset(
                       'assets/images/content-writer.webp', // Placeholder cover image from assets
                       width: double.infinity,
@@ -58,7 +61,7 @@ class SmallServiceCard extends StatelessWidget {
                   ),
             // Service Details (Smaller fonts)
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -78,26 +81,26 @@ class SmallServiceCard extends StatelessWidget {
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        service.city,
-                        style: const TextStyle(
-                          fontSize: 12, // Smaller font
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                        "Rs${service.price}",
-                        style: const TextStyle(
-                          fontSize: 12, // Smaller font
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
+                  //const SizedBox(height: 6),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Text(
+                  //       service.city,
+                  //       style: const TextStyle(
+                  //         fontSize: 12, // Smaller font
+                  //         fontWeight: FontWeight.w600,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       "Rs${service.price}",
+                  //       style: const TextStyle(
+                  //         fontSize: 12, // Smaller font
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),

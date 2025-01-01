@@ -1,6 +1,8 @@
 import 'package:carded/carded.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:e_commerce/common/buttons/custom_elevated_button.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
+import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/chatting/message_screen.dart';
@@ -43,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<ServiceProvider>(context, listen: false).fetchServices();
       Provider.of<ChattingProvider>(context, listen: false)
           .fetchConversations();
-          
     });
   }
 
@@ -51,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final TextEditingController searchController = TextEditingController();
     final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     Brightness brightness = Theme.of(context).brightness;
     bool isDarkMode = brightness == Brightness.dark;
 
@@ -106,86 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Carousel Section
-              SizedBox(
-                height: screenHeight * 0.25,
-                child: Stack(
-                  children: [
-                    CarouselSlider(
-                      options: CarouselOptions(
-                        height: screenHeight * 0.25,
-                        viewportFraction: 1.0,
-                        autoPlay: true,
-                        autoPlayInterval: const Duration(seconds: 3),
-                        autoPlayAnimationDuration:
-                            const Duration(milliseconds: 800),
-                        enlargeCenterPage: false,
-                      ),
-                      items: images.map((imagePath) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return Image.asset(
-                              imagePath,
-                              fit: BoxFit.cover,
-                              width: MediaQuery.of(context).size.width,
-                            );
-                          },
-                        );
-                      }).toList(),
-                    ),
-                    Positioned(
-                      left: 20,
-                      bottom: 120,
-                      child: Column(
-                        children: [
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "Find the perfect ",
-                                  style: GoogleFonts.poppins(
-                                    textStyle: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: "freelancers",
-                                  style: GoogleFonts.poppins(
-                                    textStyle: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontStyle: FontStyle.italic,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: "\nservices for your business",
-                                  style: GoogleFonts.poppins(
-                                    textStyle: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              // Search Section
+              SizedBox(height: screenWidth * 0.01),
+
+              //Search Section
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: CardyContainer(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(20),
                   color: isDarkMode ? AppTheme.fdarkBlue : Colors.white,
                   spreadRadius: 0,
                   blurRadius: 1,
@@ -195,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Icon(Icons.search, color: Colors.grey),
+                        child: Icon(IconlyLight.search, color: Colors.grey),
                       ),
                       Expanded(
                         child: TextField(
@@ -206,37 +135,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .searchCategories(value);
                           },
                           decoration: const InputDecoration(
-                            hintText: 'Search by passing Category title',
+                            hintText: 'Search',
                             border: InputBorder.none,
                             hintStyle:
                                 TextStyle(color: Colors.grey, fontSize: 14),
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          final query = searchController.text.trim();
-                          Provider.of<CategoryProvider>(context, listen: false)
-                              .searchCategories(query);
-                        },
-                        child: Container(
-                          height: 50,
-                          width: 100,
-                          decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 28, 110, 30),
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5),
-                            ),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'Search',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
                           ),
                         ),
                       ),
@@ -244,18 +146,174 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: screenWidth * 0.04),
+
+              // SizedBox(
+              //   height: screenHeight * 0.25,
+              //   child: Stack(
+              //     children: [
+              //       CarouselSlider(
+              //         options: CarouselOptions(
+              //           height: screenHeight * 0.25,
+              //           viewportFraction: 1.0,
+              //           autoPlay: true,
+              //           autoPlayInterval: const Duration(seconds: 3),
+              //           autoPlayAnimationDuration:
+              //               const Duration(milliseconds: 800),
+              //           enlargeCenterPage: false,
+              //         ),
+              //         items: images.map((imagePath) {
+              //           return Builder(
+              //             builder: (BuildContext context) {
+              //               return Image.asset(
+              //                 imagePath,
+              //                 fit: BoxFit.cover,
+              //                 width: MediaQuery.of(context).size.width,
+              //               );
+              //             },
+              //           );
+              //         }).toList(),
+              //       ),
+              //       Positioned(
+              //         left: 20,
+              //         bottom: 120,
+              //         child: Column(
+              //           children: [
+              //             RichText(
+              //               text: TextSpan(
+              //                 children: [
+              //                   TextSpan(
+              //                     text: "Find the perfect ",
+              //                     style: GoogleFonts.poppins(
+              //                       textStyle: const TextStyle(
+              //                         color: Colors.white,
+              //                         fontSize: 18,
+              //                       ),
+              //                     ),
+              //                   ),
+              //                   TextSpan(
+              //                     text: "freelancers",
+              //                     style: GoogleFonts.poppins(
+              //                       textStyle: const TextStyle(
+              //                         color: Colors.white,
+              //                         fontSize: 18,
+              //                         fontStyle: FontStyle.italic,
+              //                         fontWeight: FontWeight.w600,
+              //                       ),
+              //                     ),
+              //                   ),
+              //                   TextSpan(
+              //                     text: "\nservices for your business",
+              //                     style: GoogleFonts.poppins(
+              //                       textStyle: const TextStyle(
+              //                         color: Colors.white,
+              //                         fontSize: 18,
+              //                       ),
+              //                     ),
+              //                   ),
+              //                 ],
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+
+              Stack(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Container(
+                        height: screenHeight * 0.22,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          image: DecorationImage(
+                            image: const AssetImage('assets/man_image.jpg'),
+                            colorFilter: ColorFilter.mode(
+                              Colors.black.withOpacity(0.6), // Darken the image
+                              BlendMode.darken, // Blend mode
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: screenWidth * 0.13,
+                    bottom: screenHeight * 0.11,
+                    child: Column(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "Find the perfect ",
+                                style: GoogleFonts.poppins(
+                                  textStyle: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
+                              TextSpan(
+                                text: "freelancers",
+                                style: GoogleFonts.poppins(
+                                  textStyle: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              TextSpan(
+                                text: "\nservices for your business",
+                                style: GoogleFonts.poppins(
+                                  textStyle: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    left: screenWidth * 0.13,
+                    bottom: screenHeight * 0.03,
+                    child: CustomElevatedButton(
+                      text: "Find Now",
+                      onPressed: () {},
+                      backgroundColor: AppTheme.fMainColor,
+                      foregroundColor: Colors.white,
+                      width: 135,
+                      height: 49,
+                      borderRadius: 16,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: screenWidth * 0.04),
 
               // Categories Section
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
                       "Popular Categories",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          height: 26 / 18),
                     ),
                     InkWell(
                       onTap: () {
@@ -275,9 +333,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
+              SizedBox(height: screenWidth * 0.03),
+
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
                 child: Consumer<CategoryProvider>(
                   builder: (context, categoryProvider, child) {
                     if (categoryProvider.isLoading) {
@@ -310,10 +371,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
+              SizedBox(height: screenWidth * 0.04),
 
               // Services Section
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -340,9 +402,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
+              SizedBox(height: screenWidth * 0.04),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Consumer<ServiceProvider>(
                   builder: (context, serviceProvider, child) {
                     if (serviceProvider.isLoading) {
@@ -373,9 +435,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        mainAxisSpacing: 2,
-                        crossAxisSpacing: 2,
-                        childAspectRatio: 3.2 / 4,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 12,
+                        childAspectRatio: 3.4 / 4,
                       ),
                       itemCount: serviceProvider.services.length > 4
                           ? 4
@@ -389,6 +451,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
+              SizedBox(height: screenWidth * 0.04),
             ],
           ),
         ),

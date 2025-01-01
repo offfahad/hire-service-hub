@@ -24,7 +24,6 @@ class _CategoriesDetailScreenState extends State<CategoriesDetailScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     Brightness brightness = Theme.of(context).brightness;

@@ -1,4 +1,6 @@
 import 'package:carded/carded.dart';
+import 'package:e_commerce/screens/home/categories/category_list_widget.dart';
+import 'package:e_commerce/screens/home/categories/category_widget.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -103,10 +105,45 @@ class _CategorySearchDetailScreenState
                         ],
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
-            )
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Consumer<CategoryProvider>(
+                builder: (context, categoryProvider, child) {
+                  if (categoryProvider.isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (categoryProvider.errorMessage != null) {
+                    return Center(
+                      child: Text(categoryProvider.errorMessage!),
+                    );
+                  }
+                  if (categoryProvider.filteredCategories.isEmpty) {
+                    return const SizedBox(
+                      height: 120,
+                      child: Center(
+                        child: Text("No categories available"),
+                      ),
+                    );
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: categoryProvider.filteredCategories.length,
+                    itemBuilder: (context, index) {
+                      final category =
+                          categoryProvider.filteredCategories[index];
+                      return CategoryListItem(category: category);
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
       )),

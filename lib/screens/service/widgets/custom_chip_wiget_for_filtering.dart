@@ -45,6 +45,13 @@ GestureDetector customChipWidget(
       );
     },
     child: Chip(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      side: BorderSide(
+        color: isDarkMode ? AppTheme.fdarkBlue : Colors.grey,
+       
+      ),
       label: Text(
         filterProvider.getFilter(title) ?? title,
         style: TextStyle(
@@ -64,6 +71,7 @@ GestureDetector customChipWidget(
           : isDarkMode
               ? AppTheme.fdarkBlue
               : Colors.white,
+    
       labelStyle: TextStyle(
         color: filterProvider.isFilterApplied(title)
             ? isDarkMode

@@ -7,6 +7,7 @@ import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/chatting/message_screen.dart';
 import 'package:e_commerce/screens/home/categories/categories_detail_screen.dart';
+import 'package:e_commerce/screens/home/categories/category_search_detail_screen.dart';
 import 'package:e_commerce/screens/home/categories/category_widget.dart';
 import 'package:e_commerce/screens/home/services/small_service_card_widget.dart';
 import 'package:e_commerce/screens/notifications/notifications.dart';
@@ -27,6 +28,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController searchController = TextEditingController();
   final List<String> images = [
     'assets/bg/bg-hero1.webp',
     'assets/bg/bg-hero2.webp',
@@ -49,8 +51,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    searchController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController searchController = TextEditingController();
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     Brightness brightness = Theme.of(context).brightness;
@@ -114,35 +122,42 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: CardyContainer(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(16),
                   color: isDarkMode ? AppTheme.fdarkBlue : Colors.white,
                   spreadRadius: 0,
                   blurRadius: 1,
                   shadowColor: isDarkMode ? AppTheme.fdarkBlue : Colors.grey,
                   height: 50,
-                  child: Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Icon(IconlyLight.search, color: Colors.grey),
-                      ),
-                      Expanded(
-                        child: TextField(
-                          controller: searchController,
-                          onChanged: (value) {
-                            Provider.of<CategoryProvider>(context,
-                                    listen: false)
-                                .searchCategories(value);
-                          },
-                          decoration: const InputDecoration(
-                            hintText: 'Search',
-                            border: InputBorder.none,
-                            hintStyle:
-                                TextStyle(color: Colors.grey, fontSize: 14),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        SlidePageRoute(
+                          page: const CategorySearchDetailScreen(),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Icon(IconlyLight.search, color: Colors.grey),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            enabled: false,
+                            controller: searchController,
+                            onChanged: (value) {},
+                            decoration: const InputDecoration(
+                              hintText: 'Search',
+                              border: InputBorder.none,
+                              hintStyle:
+                                  TextStyle(color: Colors.grey, fontSize: 14),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -229,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         height: screenHeight * 0.22,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(16),
                           image: DecorationImage(
                             image: const AssetImage('assets/man_image.jpg'),
                             colorFilter: ColorFilter.mode(
@@ -351,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text(categoryProvider.errorMessage!),
                       );
                     }
-                    if (categoryProvider.filteredCategories.isEmpty) {
+                    if (categoryProvider.categories.isEmpty) {
                       return const SizedBox(
                         height: 120,
                         child: Center(
@@ -362,8 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        children:
-                            categoryProvider.filteredCategories.map((category) {
+                        children: categoryProvider.categories.map((category) {
                           return CategoryItem(category: category);
                         }).toList(),
                       ),

@@ -30,7 +30,7 @@ class SmallServiceCard extends StatelessWidget {
         color: isDarkMode ? AppTheme.fdarkBlue : Colors.white,
         spreadRadius: 0,
         blurRadius: 1,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         shadowColor: isDarkMode ? AppTheme.fdarkBlue : Colors.grey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,8 +39,8 @@ class SmallServiceCard extends StatelessWidget {
             service.coverPhoto != null && service.coverPhoto!.isNotEmpty
                 ? ClipRRect(
                     borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16)),
                     child: Image.network(
                       '${service.coverPhoto}',
                       width: double.infinity,
@@ -50,8 +50,8 @@ class SmallServiceCard extends StatelessWidget {
                   )
                 : ClipRRect(
                     borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16)),
                     child: Image.asset(
                       'assets/images/content-writer.webp', // Placeholder cover image from assets
                       width: double.infinity,

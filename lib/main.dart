@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
         title: 'Hire Service',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.light,
+        themeMode: ThemeMode.dark,
         home: const SplashScreen(),
       ),
     );

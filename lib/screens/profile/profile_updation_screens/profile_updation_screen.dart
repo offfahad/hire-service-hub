@@ -237,7 +237,7 @@ class ProfileCompleteScreen extends StatelessWidget {
                               fontSize: 14),
                           labelText: 'Gender',
                           border: OutlineInputBorder(
-                            borderSide: BorderSide(width: 0.5),
+                            borderSide: const BorderSide(width: 0.5),
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),

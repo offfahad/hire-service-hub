@@ -4,7 +4,6 @@ import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
 import 'package:e_commerce/models/service/create_service_model.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
-import 'package:e_commerce/utils/app_theme.dart';
 import 'package:e_commerce/utils/bottom_sheet_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
@@ -97,7 +96,6 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                             ? ThemeData.dark().scaffoldBackgroundColor
                             : Colors.white,
                         borderRadius: BorderRadius.circular(8.0),
-                        
                       ),
                       child: serviceProvider.coverPhoto == null
                           ? const Center(
@@ -166,7 +164,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                     ),
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 12,
                   ),
                   // Name Field
                   CustomTextFormField(
@@ -174,13 +172,18 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                     label: "Enter service name",
                     borderWidth: 0.5,
                   ),
-
+                  const SizedBox(
+                    height: 12,
+                  ),
                   // Description Field
                   CustomTextFormField(
                     controller: serviceProvider.descriptionController,
                     label: "Enter service description",
                     maxLines: 3,
                     borderWidth: 0.5,
+                  ),
+                  const SizedBox(
+                    height: 12,
                   ),
 
                   // Price Field
@@ -190,7 +193,9 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                     keyboardType: TextInputType.number,
                     borderWidth: 0.5,
                   ),
-
+                  const SizedBox(
+                    height: 12,
+                  ),
                   // Start and End Time
                   Row(
                     children: [
@@ -245,7 +250,9 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                       ),
                     ],
                   ),
-
+                  const SizedBox(
+                    height: 12,
+                  ),
                   // Availability Checkbox
                   Row(
                     children: [

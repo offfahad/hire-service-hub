@@ -228,9 +228,11 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 12.0),
                       decoration: BoxDecoration(
-                        color:
-                            isDarkMode ? AppTheme.fdarkBlue : Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8.0),
+                        border: Border.all(width: 0.5),
+                        color: isDarkMode
+                            ? ThemeData().scaffoldBackgroundColor
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Text(
                         serviceProvider.selectedCategory.isEmpty
@@ -249,28 +251,34 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
                     ),
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 16,
                   ),
                   // Name Field
                   CustomTextFormField(
                     controller: serviceProvider.nameController,
                     label: "Enter service name",
                   ),
-
+                  const SizedBox(
+                    height: 16,
+                  ),
                   // Description Field
                   CustomTextFormField(
                     controller: serviceProvider.descriptionController,
                     label: "Enter service description",
                     maxLines: 2,
                   ),
-
+                  const SizedBox(
+                    height: 16,
+                  ),
                   // Price Field
                   CustomTextFormField(
                     controller: serviceProvider.priceController,
                     label: "Enter service price (Rs)",
                     keyboardType: TextInputType.number,
                   ),
-
+                  const SizedBox(
+                    height: 16,
+                  ),
                   // Start and End Time
                   Row(
                     children: [
@@ -325,7 +333,9 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
                       ),
                     ],
                   ),
-
+                  const SizedBox(
+                    height: 16,
+                  ),
                   // Availability Checkbox
                   Row(
                     children: [
@@ -347,7 +357,9 @@ class _UpdateServiceScreenState extends State<UpdateServiceScreen> {
                       const Text('Available'),
                     ],
                   ),
-                  const SizedBox(height: 10.0),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   // Save Button
                   SizedBox(
                     width: double.infinity,

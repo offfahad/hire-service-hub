@@ -119,6 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                                 showIcon: true,
                               ),
+                              SizedBox(height: height * 0.02),
                               CustomTextFormField(
                                 label: 'Password',
                                 controller: loginProvider.passwordController,

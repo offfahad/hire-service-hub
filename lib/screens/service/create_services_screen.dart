@@ -92,9 +92,12 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                       height: MediaQuery.of(context).size.height * 0.25,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color:
-                            isDarkMode ? AppTheme.fdarkBlue : Colors.grey[200],
+                        border: Border.all(width: 0.5),
+                        color: isDarkMode
+                            ? ThemeData.dark().scaffoldBackgroundColor
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(8.0),
+                        
                       ),
                       child: serviceProvider.coverPhoto == null
                           ? const Center(
@@ -140,8 +143,10 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 12.0),
                       decoration: BoxDecoration(
-                        color:
-                            isDarkMode ? AppTheme.fdarkBlue : Colors.grey[200],
+                        border: Border.all(width: 0.5),
+                        color: isDarkMode
+                            ? ThemeData.dark().scaffoldBackgroundColor
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Text(
@@ -167,13 +172,15 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                   CustomTextFormField(
                     controller: serviceProvider.nameController,
                     label: "Enter service name",
+                    borderWidth: 0.5,
                   ),
 
                   // Description Field
                   CustomTextFormField(
                     controller: serviceProvider.descriptionController,
                     label: "Enter service description",
-                    maxLines: 2,
+                    maxLines: 3,
+                    borderWidth: 0.5,
                   ),
 
                   // Price Field
@@ -181,6 +188,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                     controller: serviceProvider.priceController,
                     label: "Enter service price (Rs)",
                     keyboardType: TextInputType.number,
+                    borderWidth: 0.5,
                   ),
 
                   // Start and End Time

@@ -109,7 +109,7 @@ class RegisterScreen extends StatelessWidget {
                                   return null;
                                 },
                               ),
-                              const SizedBox(width: 10),
+                              SizedBox(height: height * 0.02),
                               CustomTextFormField(
                                 label: 'Last Name',
                                 controller:
@@ -129,6 +129,7 @@ class RegisterScreen extends StatelessWidget {
                                   return null;
                                 },
                               ),
+                              SizedBox(height: height * 0.02),
                               CustomTextFormField(
                                 label: 'Email',
                                 controller: registrationProvider.emailController,
@@ -151,10 +152,10 @@ class RegisterScreen extends StatelessWidget {
                                   return null;
                                 },
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: height * 0.02),
                               customPhoneNumberTextFormField(
                                   context, registrationProvider),
-                              const SizedBox(height: 8),
+                              SizedBox(height: height * 0.02),
                               CustomTextFormField(
                                 label: 'Password',
                                 controller:
@@ -337,30 +338,30 @@ TextFormField customPhoneNumberTextFormField(
       counterText: '',
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
       hintStyle: TextStyle(
-        color: isDarkMode ? Colors.white : Colors.grey.shade500,
+        color: isDarkMode ? Colors.white : Colors.black,
         fontSize: 14,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(
-            color: isDarkMode ? Colors.white : Colors.grey.shade500,
-            width: 0.2),
+            color: isDarkMode ? Colors.white : Colors.black,
+            width: 0.5),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(
-            color: isDarkMode ? Colors.white : Colors.grey.shade500,
-            width: 0.2),
+            color: isDarkMode ? Colors.white : Colors.black,
+            width: 0.5),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.red.shade900, width: 0.2),
+        borderSide: BorderSide(color: Colors.red.shade900, width: 0.5),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide(
             color: isDarkMode ? Colors.white : Colors.grey.shade500,
-            width: 0.2),
+            width: 0.5),
       ),
       prefixIcon: Container(
         padding: const EdgeInsets.fromLTRB(8.0, 14.0, 8.0, 12.0),

@@ -60,12 +60,12 @@ class _ForgetPasswordOtpScreenState extends State<ForgetPasswordOtpScreen> {
                 top: height * 0.1,
               ),
               child: BackIconButtonWithTitle(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  title: "Verfication",
-                  icon: IconlyLight
-                      .arrow_left_2), // Replace with your custom widget
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                title: "Verfication",
+                icon: IconlyLight.arrow_left_2,
+              ), // Replace with your custom widget
             ),
             // Login Form Container
             Align(

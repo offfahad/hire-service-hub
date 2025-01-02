@@ -188,7 +188,9 @@ class ProfileCompleteScreen extends StatelessWidget {
                               isDarkMode ? Colors.white : Colors.grey.shade600,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(
+                        height: 12,
+                      ),
                       CustomTextFormField(
                         maxLines: 2,
                         label: 'Bio',
@@ -201,7 +203,7 @@ class ProfileCompleteScreen extends StatelessWidget {
                         },
                       ),
                       const SizedBox(
-                        height: 5,
+                        height: 12,
                       ),
                       CustomTextFormField(
                         label: 'CNIC (XXXXX-XXXXXXX-X)',
@@ -219,14 +221,15 @@ class ProfileCompleteScreen extends StatelessWidget {
                         },
                       ),
                       const SizedBox(
-                        height: 5,
+                        height: 12,
                       ),
                       DropdownButtonFormField<String>(
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: isDarkMode
-                              ? AppTheme.fdarkBlue
-                              : Colors.grey.shade200,
+                              ? ThemeData().scaffoldBackgroundColor
+                              : Colors.white,
+                          
                           labelStyle: TextStyle(
                               color: isDarkMode
                                   ? Colors.white
@@ -234,7 +237,7 @@ class ProfileCompleteScreen extends StatelessWidget {
                               fontSize: 14),
                           labelText: 'Gender',
                           border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
+                            borderSide: BorderSide(width: 0.5),
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
@@ -262,7 +265,7 @@ class ProfileCompleteScreen extends StatelessWidget {
                         },
                       ),
                       const SizedBox(
-                        height: 5,
+                        height: 12,
                       ),
                       CustomTextFormField(
                         label: 'Country',
@@ -277,6 +280,9 @@ class ProfileCompleteScreen extends StatelessWidget {
                           }
                           return null;
                         },
+                      ),
+                      const SizedBox(
+                        height: 12,
                       ),
                       Row(
                         children: [
@@ -295,7 +301,7 @@ class ProfileCompleteScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(
-                            width: 10,
+                            width: 12,
                           ),
                           Expanded(
                             child: CustomTextFormField(
@@ -315,6 +321,9 @@ class ProfileCompleteScreen extends StatelessWidget {
                             ),
                           ),
                         ],
+                      ),
+                      const SizedBox(
+                        height: 12,
                       ),
                       Row(
                         children: [

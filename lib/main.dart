@@ -6,27 +6,21 @@ import 'package:e_commerce/providers/authentication/login_provider.dart';
 import 'package:e_commerce/providers/authentication/registration_provider.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/chatting/chatting_provider.dart';
+import 'package:e_commerce/providers/network_provider_controller.dart';
 import 'package:e_commerce/providers/orders/orders_provider.dart';
 import 'package:e_commerce/providers/profile_updation/profile_updation_provider.dart';
 import 'package:e_commerce/providers/profile_updation/update_password_provider.dart';
 import 'package:e_commerce/providers/service/service_filter_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
-import 'package:e_commerce/screens/authentication/opt_verification_screen/opt_verification_screen.dart';
 import 'package:e_commerce/screens/authentication/splash_screen/splash_screen.dart';
-import 'package:e_commerce/screens/authentication/starting_screen/get_started.dart';
 import 'package:e_commerce/utils/app_theme.dart';
+import 'package:e_commerce/utils/network_observer_provider.dart.dart';
 import 'package:flutter/material.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //bool connected = await InternetConnection().hasInternetAccess;
-  // if (connected) {
   runApp(const MyApp());
-  // } else {
-  //runApp(const NoConnectionScreen());
-  //}
 }
 
 final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
@@ -55,10 +49,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ProfileUpdationProvider()),
         ChangeNotifierProvider(create: (_) => ServiceProvider()),
         ChangeNotifierProvider(create: (_) => FilterProvider()),
-        ChangeNotifierProvider(
-          create: (_) => OrderProvider(),
-        ),
-        ChangeNotifierProvider(create: (_) => ChattingProvider())
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
+        ChangeNotifierProvider(create: (_) => ChattingProvider()),
+        ChangeNotifierProvider(create: (_) => NetworkProviderController())
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,

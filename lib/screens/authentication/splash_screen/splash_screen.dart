@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:e_commerce/common/buttons/iconbox_with_title.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/common/snakbar/custom_snakbar.dart';
 import 'package:e_commerce/providers/authentication/authentication_provider.dart';
@@ -13,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -39,7 +37,9 @@ class _SplashScreenState extends State<SplashScreen> {
           Provider.of<AuthenticationProvider>(context, listen: false);
       final statusCode = await authProvider.getUserData();
 
-      await Future.delayed(const Duration(milliseconds: 500)); // Adjusted delay
+      await Future.delayed(
+        const Duration(milliseconds: 500),
+      ); // Adjusted delay
 
       if (statusCode == 200) {
         // User is logged in, navigate to home screen

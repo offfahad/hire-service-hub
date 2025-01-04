@@ -1,10 +1,10 @@
 import 'package:carded/carded.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
-import 'package:e_commerce/screens/home/categories/category_widget.dart';
 import 'package:e_commerce/screens/service/service_screen.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesDetailScreen extends StatefulWidget {
@@ -29,19 +29,44 @@ class _CategoriesDetailScreenState extends State<CategoriesDetailScreen> {
     Brightness brightness = Theme.of(context).brightness;
     bool isDarkMode = brightness == Brightness.dark;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "View All Categories",
-          style: TextStyle(fontSize: 18),
-        ),
-        forceMaterialTransparency: true,
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: CardyContainer(
+                        borderRadius: BorderRadius.circular(15),
+                        color: isDarkMode ? AppTheme.fdarkBlue : Colors.white,
+                        spreadRadius: 0,
+                        blurRadius: 1,
+                        height: 45,
+                        shadowColor:
+                            isDarkMode ? AppTheme.fdarkBlue : Colors.grey,
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(IconlyLight.arrow_left_2),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    const Expanded(
+                      flex: 12,
+                      child: Text("View All Categories", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
                 Consumer<CategoryProvider>(
                   builder: (context, categoryProvider, child) {
                     if (categoryProvider.isLoading) {

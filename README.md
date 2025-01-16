@@ -1,16 +1,11 @@
-# e_commerce
+# Hire Serivce Hub (E-Services)
 
-A new Flutter project.
+A Hire Services App built with Flutter for the mobile platform and a Node.js + PostgreSQL backend. The app features dual roles, allowing users to act as service providers or customers to buy and sell services. It supports online payments and cash on delivery options. Additionally, the app includes a mobile admin panel for streamlined management.
 
-## Getting Started
+# UI
 
-This project is a starting point for a Flutter application.
+![Frame 929](https://github.com/user-attachments/assets/41b1f201-0df6-4f86-8d9f-7c2914dad08e)
+![Frame 930](https://github.com/user-attachments/assets/a17529f7-025e-4d17-8e54-317af641fff1)
+![Frame 931](https://github.com/user-attachments/assets/6f721d8f-47e8-4269-9722-234d14b95086)
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

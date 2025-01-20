@@ -54,6 +54,7 @@ dependencies:
   shimmer: ^3.0.0
   connectivity_plus: '5.0.2'
   flutter_tts: ^4.2.1
+  change_app_package_name: ^1.4.0
 
 dev_dependencies:
   flutter_test:

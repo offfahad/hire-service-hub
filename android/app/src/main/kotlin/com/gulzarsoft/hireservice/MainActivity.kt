@@ -1,4 +1,4 @@
-package com.example.e_commerce
+package com.gulzarsoft.hireservice
 
 import io.flutter.embedding.android.FlutterActivity
 

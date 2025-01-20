@@ -14,7 +14,6 @@ import 'package:e_commerce/providers/service/service_filter_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/authentication/splash_screen/splash_screen.dart';
 import 'package:e_commerce/utils/app_theme.dart';
-import 'package:e_commerce/utils/network_observer_provider.dart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

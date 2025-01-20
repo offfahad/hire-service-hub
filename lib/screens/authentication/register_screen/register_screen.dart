@@ -207,6 +207,7 @@ class RegisterScreen extends StatelessWidget {
                                 text: "Sign Up",
                                 onPressed: () async {
                                   if (registrationProvider.validateForm()) {
+                                    FocusScope.of(context).unfocus();
                                     final statusCode =
                                         await authProvider.registerUser(
                                       email: registrationProvider

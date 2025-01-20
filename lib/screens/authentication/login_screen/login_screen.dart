@@ -160,7 +160,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           text: "Login",
                           isLoading: authProvider.isLoading, // Show loading state
                           onPressed: () async {
+                            
                             if (loginProvider.validateForm()) {
+                              FocusScope.of(context).unfocus();
                               // Call login and handle navigation based on the returned status code
                               final statusCode = await authProvider.login(
                                 loginProvider.emailController.text

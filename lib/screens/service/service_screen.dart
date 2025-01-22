@@ -130,6 +130,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
                   return const Center(child: Text('No services available'));
                 } else {
                   return ListView.builder(
+                    
                     itemCount: provider.filteredServices.length,
                     itemBuilder: (context, index) {
                       final service = provider.filteredServices[index];

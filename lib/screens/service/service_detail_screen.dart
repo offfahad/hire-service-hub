@@ -383,6 +383,8 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         ),
         bottomNavigationBar: Consumer<ServiceProvider>(
           builder: (context, serviceProvider, child) {
+            final isServiceByMe = authProvider.user?.id ==
+                serviceProvider.service?.data?.specificService?.userId;
             Brightness brightness = Theme.of(context).brightness;
             bool isDarkMode = brightness == Brightness.dark;
             final price = serviceProvider.service?.data?.specificService?.price;
@@ -413,53 +415,55 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: AppTheme.fMainColor,
-                        radius: 26,
-                        child: Consumer<ChattingProvider>(
-                            builder: (context, chatProvider, child) {
-                          return IconButton(
-                            onPressed: () async {
-                              await handleConversation(
-                                context,
-                                chatProvider,
-                                serviceProvider
-                                    .service!.data!.specificService!.userId!,
-                                authProvider.user!.id!,
-                              );
-                            },
-                            icon: const Icon(
-                              IconlyLight.chat,
-                              color: Colors.white,
-                            ),
-                          );
-                        }),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      CustomElevatedButton(
-                        width: 150,
-                        height: 50,
-                        backgroundColor: AppTheme.fMainColor,
-                        foregroundColor: Colors.white,
-                        text: "Book Now!",
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            SlidePageRoute(
-                              page: BookOrderScreen(
-                                service: serviceProvider
-                                    .service?.data?.specificService,
+                  if (!isServiceByMe) ...[
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: AppTheme.fMainColor,
+                          radius: 26,
+                          child: Consumer<ChattingProvider>(
+                              builder: (context, chatProvider, child) {
+                            return IconButton(
+                              onPressed: () async {
+                                await handleConversation(
+                                  context,
+                                  chatProvider,
+                                  serviceProvider
+                                      .service!.data!.specificService!.userId!,
+                                  authProvider.user!.id!,
+                                );
+                              },
+                              icon: const Icon(
+                                IconlyLight.chat,
+                                color: Colors.white,
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  )
+                            );
+                          }),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        CustomElevatedButton(
+                          width: 150,
+                          height: 50,
+                          backgroundColor: AppTheme.fMainColor,
+                          foregroundColor: Colors.white,
+                          text: "Book Now!",
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              SlidePageRoute(
+                                page: BookOrderScreen(
+                                  service: serviceProvider
+                                      .service?.data?.specificService,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    )
+                  ]
                 ],
               ),
             );

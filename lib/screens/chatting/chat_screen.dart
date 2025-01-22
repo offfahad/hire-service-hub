@@ -254,6 +254,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 chatProvider.sendMessage(
                     widget.conversation.id, text, authUserId, reevicerId);
                 _messageController.clear();
+                FocusScope.of(context).unfocus();
                 // Scroll to bottom after sending
                 SchedulerBinding.instance.addPostFrameCallback((_) {
                   _scrollToBottom();

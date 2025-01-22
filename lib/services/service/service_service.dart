@@ -21,7 +21,6 @@ class ServiceService {
     try {
       final response = await http
           .get(Uri.parse("${Constants.baseUrl}${Constants.userApiService}"));
-
       if (response.statusCode == 200) {
         final data = json.decode(response.body)['data'] as List;
         return data.map((service) => ServiceModel.fromJson(service)).toList();

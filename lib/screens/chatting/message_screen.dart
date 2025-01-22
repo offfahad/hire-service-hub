@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carded/carded.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/models/chat/conversation.dart';
@@ -71,10 +72,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
                           : getFormattedTime12Hour(
                               conversation.messages!.last.createdAt.toString(),
                             ),
-                      avatarColor: Theme.of(context).primaryColor,
-                      avatarUrl:
-                          //conversation.otherUser!.profilePicture ??
-                          'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg',
+                      avatarColor: AppTheme.fMainColor,
+                      avatarUrl: conversation.otherUser!.profilePicture,
                     );
                   },
                 )
@@ -88,42 +87,95 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   Widget _buildMessageItem({
     required Conversation conversation,
+    String? avatarText,
+    String? avatarUrl,
     required String name,
     required String message,
-    required String date,
     required String time,
     required Color avatarColor,
-    String? avatarUrl,
+    required String date,
   }) {
-    Brightness brightness = Theme.of(context).brightness;
-    bool isDarkMode = brightness == Brightness.dark;
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Truncate the message if it's too long
+    String truncatedMessage =
+        message.length > 80 ? "${message.substring(0, 80)}..." : message;
+
     return GestureDetector(
       onTap: () {
+        // Navigate to ChatScreen or any other screen on message tap
         Navigator.of(context).push(
           SlidePageRoute(
-            page: ChatScreen(conversation: conversation),
+            page: ChatScreen(
+              conversation: conversation,
+            ),
           ),
         );
       },
       child: CardyContainer(
-        borderRadius: BorderRadius.circular(10),
-        width: MediaQuery.of(context).size.width,
         color: isDarkMode ? AppTheme.fdarkBlue : Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        margin: const EdgeInsets.only(bottom: 16),
         spreadRadius: 0,
         blurRadius: 1,
         shadowColor: isDarkMode ? AppTheme.fdarkBlue : Colors.grey,
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundImage: avatarUrl != null ? NetworkImage(avatarUrl) : null,
-            backgroundColor: avatarColor,
-          ),
-          title: Text(name),
-          subtitle: Text(message),
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
             children: [
-              Text(date, style: const TextStyle(fontSize: 12)),
-              Text(time, style: const TextStyle(fontSize: 12)),
+              // Avatar
+              avatarUrl != null
+                  ? CircleAvatar(
+                      backgroundImage: CachedNetworkImageProvider(avatarUrl),
+                      radius: 24,
+                    )
+                  : CircleAvatar(
+                      backgroundColor: avatarColor,
+                      radius: 24,
+                      child: Text(
+                        avatarText ?? '',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+              const SizedBox(width: 12),
+              // Message content
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                   
+                    Row(
+                      children: [
+                        Text(
+                          date,
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                        const Text(' - '),
+                        Text(
+                          time,
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(truncatedMessage,
+                        style: TextStyle(
+                          color: isDarkMode ? Colors.white54 : Colors.black54,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

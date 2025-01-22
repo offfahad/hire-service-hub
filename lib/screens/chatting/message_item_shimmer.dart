@@ -1,3 +1,4 @@
+import 'package:carded/carded.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -15,14 +16,12 @@ class MessageItemShimmer extends StatelessWidget {
     final darkBackgroundColor = AppTheme.fdarkBlue.withOpacity(0.9);
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Card(
+      padding: const EdgeInsets.only(top: 0),
+      child: CardyContainer(
         color: isDarkMode ? darkBackgroundColor : Theme.of(context).cardColor,
-        elevation: 2,
-        margin: const EdgeInsets.symmetric(horizontal: 0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        borderRadius: BorderRadius.circular(10),
+        spreadRadius: 0,
+        blurRadius: 2,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(

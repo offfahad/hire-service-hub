@@ -62,7 +62,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     (order) =>
                         order.orderStatus == orderProvider.selectedFilter,
                   )
-                  .toList();
+                  .toList()
+            ..sort((a, b) => b.orderDate.compareTo(a.orderDate));
 
           return Column(
             children: [

@@ -3,6 +3,7 @@ import 'package:e_commerce/providers/authentication/authentication_provider.dart
 import 'package:e_commerce/providers/authentication/forget_password_provider.dart';
 import 'package:e_commerce/providers/authentication/login_provider.dart';
 import 'package:e_commerce/providers/authentication/registration_provider.dart';
+import 'package:e_commerce/providers/bottom_navigation/navigation_provider.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/chatting/chatting_provider.dart';
 import 'package:e_commerce/providers/network_provider_controller.dart';
@@ -42,6 +43,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => NavigationProvider()),
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
         ChangeNotifierProvider(create: (_) => RegistrationProvider()),
         ChangeNotifierProvider(create: (_) => LoginProvider()),

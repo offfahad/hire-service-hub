@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_commerce/common/buttons/custom_elevated_button.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
+import 'package:e_commerce/providers/bottom_navigation/navigation_provider.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/chatting/message_screen.dart';
@@ -305,7 +306,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     bottom: screenHeight * 0.03,
                     child: CustomElevatedButton(
                       text: "Find Now",
-                      onPressed: () {},
+                      onPressed: () {
+                        Provider.of<NavigationProvider>(context, listen: false)
+                            .updateIndex(1);
+                      },
                       backgroundColor: AppTheme.fMainColor,
                       foregroundColor: Colors.white,
                       width: 135,

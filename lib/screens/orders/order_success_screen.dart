@@ -89,7 +89,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                     builder: (context) => const BottomNavigationBarScreen(),
                   ),
                   (route) => false, // This removes all previous routes
-                ); 
+                );
               },
               text: "Explore More",
             ),

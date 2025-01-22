@@ -1,3 +1,4 @@
+import 'package:e_commerce/providers/authentication/authentication_provider.dart';
 import 'package:e_commerce/providers/bottom_navigation/navigation_provider.dart';
 import 'package:e_commerce/screens/home/home_screen.dart';
 import 'package:e_commerce/screens/orders/orders_screen.dart';
@@ -14,46 +15,51 @@ class BottomNavigationBarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final navigationProvider = Provider.of<NavigationProvider>(context);
 
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: navigationProvider.currentIndex,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          navigationProvider.updateIndex(index); // Update index and animate
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(IconlyLight.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(IconlyLight.category),
-            label: 'Services',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(IconlyLight.bag),
-            label: 'Orders',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(IconlyLight.profile),
-            label: 'Profile',
-          ),
-        ],
-      ),
-      body: PageView(
-        controller: navigationProvider.pageController,
-        onPageChanged: (index) {
-          navigationProvider.updateIndex(index); // Sync index with PageView
-        },
-        physics:
-            const NeverScrollableScrollPhysics(), // Disable swipe if needed
-        children: const [
-          HomeScreen(),
-          ServiceScreen(),
-          OrdersScreen(),
-          ProfileScreen(),
-        ],
-      ),
-    );
+    return Consumer<AuthenticationProvider>(
+        builder: (context, authProvider, child) {
+      return Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: navigationProvider.currentIndex,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            navigationProvider.updateIndex(index); // Update index and animate
+          },
+          items: [
+            const BottomNavigationBarItem(
+              icon: Icon(IconlyLight.home),
+              label: 'Home',
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(IconlyLight.category),
+              label: 'Services',
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(IconlyLight.bag),
+              label: authProvider.user?.role?.title == "service_provider"
+                  ? 'Orders'
+                  : 'My Orders',
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(IconlyLight.profile),
+              label: 'Profile',
+            ),
+          ],
+        ),
+        body: PageView(
+          controller: navigationProvider.pageController,
+          onPageChanged: (index) {
+            navigationProvider.updateIndex(index); // Sync index with PageView
+          },
+          physics:
+              const NeverScrollableScrollPhysics(), // Disable swipe if needed
+          children: const [
+            HomeScreen(),
+            ServiceScreen(),
+            OrdersScreen(),
+            ProfileScreen(),
+          ],
+        ),
+      );
+    });
   }
 }

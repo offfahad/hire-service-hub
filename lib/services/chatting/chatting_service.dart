@@ -52,9 +52,9 @@ class ChatService {
       final data = jsonDecode(response.body);
       if (data['success'] == true) {
         List conversations = data['data'];
-        
+
         return conversations
-            .map((conv) => Conversation.fromJson(conv))
+            .map((conv) => Conversation.fromJsonGetConversations(conv))
             .toList();
       } else {
         throw Exception('Failed to load conversations');

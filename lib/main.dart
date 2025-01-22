@@ -1,5 +1,4 @@
-import 'package:e_commerce/common/no_internet_connection/no_internet_connection_screen.dart';
-import 'package:e_commerce/jazzcash_screen.dart';
+import 'package:e_commerce/firebase_options.dart';
 import 'package:e_commerce/providers/authentication/authentication_provider.dart';
 import 'package:e_commerce/providers/authentication/forget_password_provider.dart';
 import 'package:e_commerce/providers/authentication/login_provider.dart';
@@ -13,12 +12,16 @@ import 'package:e_commerce/providers/profile_updation/update_password_provider.d
 import 'package:e_commerce/providers/service/service_filter_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/authentication/splash_screen/splash_screen.dart';
+import 'package:e_commerce/services/firebase_notification/notification_service.dart';
 import 'package:e_commerce/utils/app_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationService.instance.initialize();
   runApp(const MyApp());
 }
 
@@ -59,7 +62,7 @@ class _MyAppState extends State<MyApp> {
         title: 'Hire Service',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.light,
+        themeMode: ThemeMode.system,
         home: const SplashScreen(),
       ),
     );

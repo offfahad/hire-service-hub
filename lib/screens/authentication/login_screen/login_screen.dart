@@ -24,7 +24,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -90,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         SizedBox(height: height * 0.03),
-      
+
                         Form(
                           key: loginProvider.loginFormKey,
                           child: Column(
@@ -138,11 +137,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                     return 'Please enter your password';
                                   } else if (value.length < 8) {
                                     return 'Password must be at least 8 characters long';
-                                  } else if (!RegExp(r'[a-z]').hasMatch(value)) {
+                                  } else if (!RegExp(r'[a-z]')
+                                      .hasMatch(value)) {
                                     return 'Password must contain at least one lowercase\nletter';
-                                  } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
+                                  } else if (!RegExp(r'[A-Z]')
+                                      .hasMatch(value)) {
                                     return 'Password must contain at least one uppercase\nletter';
-                                  } else if (!RegExp(r'[0-9]').hasMatch(value)) {
+                                  } else if (!RegExp(r'[0-9]')
+                                      .hasMatch(value)) {
                                     return 'Password must contain at least one number';
                                   } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]')
                                       .hasMatch(value)) {
@@ -158,9 +160,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         //Login Button
                         CustomGradientButton(
                           text: "Login",
-                          isLoading: authProvider.isLoading, // Show loading state
+                          isLoading:
+                              authProvider.isLoading, // Show loading state
                           onPressed: () async {
-                            
                             if (loginProvider.validateForm()) {
                               FocusScope.of(context).unfocus();
                               // Call login and handle navigation based on the returned status code
@@ -170,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     .trim(),
                                 loginProvider.passwordController.text.trim(),
                               );
-      
+
                               if (statusCode == 200) {
                                 loginProvider.clearControllers();
                                 // Login successful, navigate to the BottomNavigationBarScreen
@@ -181,10 +183,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   (Route<dynamic> route) =>
                                       false, // Removes all previous routes
                                 );
-      
-                                showCustomSnackBar(
-                                    context, "Login Successfully!", Colors.green);
-                              } else if (statusCode == 401 || statusCode == 400) {
+                                await authProvider.sendFCMToken();
+
+                                showCustomSnackBar(context,
+                                    "Login Successfully!", Colors.green);
+                              } else if (statusCode == 401 ||
+                                  statusCode == 400) {
                                 // Invalid credentials
                                 showCustomSnackBar(
                                     context, "Invalid Credentials", Colors.red);

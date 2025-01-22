@@ -58,22 +58,19 @@ class _MessagesScreenState extends State<MessagesScreen> {
                       conversation: conversation,
                       name:
                           "${conversation.otherUser?.firstName} ${conversation.otherUser?.lastName}",
-                      message: "Hi There",
-                      // conversation.messages!.isEmpty
-                      //     ? " "
-                      //     : conversation.messages!.last.text,
-                      date: "25-10-2015",
-                      //conversation.messages!.isEmpty
-                      //  ? " "
-                      // : formatDateWithTime(
-                      //     conversation.messages!.last.createdAt.toString(),
-                      //   ),
-                      time: "10:00 AM",
-                      // conversation.messages!.isEmpty
-                      //     ? " "
-                      //     : getFormattedTime12Hour(
-                      //         conversation.messages!.last.createdAt.toString(),
-                      //       ),
+                      message: conversation.messages!.isEmpty
+                          ? " "
+                          : conversation.messages!.last.text,
+                      date: conversation.messages!.isEmpty
+                          ? " "
+                          : formatDateWithTime(
+                              conversation.messages!.last.createdAt.toString(),
+                            ),
+                      time: conversation.messages!.isEmpty
+                          ? " "
+                          : getFormattedTime12Hour(
+                              conversation.messages!.last.createdAt.toString(),
+                            ),
                       avatarColor: Theme.of(context).primaryColor,
                       avatarUrl:
                           //conversation.otherUser!.profilePicture ??

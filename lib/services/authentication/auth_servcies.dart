@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:e_commerce/utils/api_constnsts.dart';
+import 'package:e_commerce/utils/device_info/get_device_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -396,6 +398,49 @@ class AuthService {
       // Log the error for debugging
       print("Error updating profile picture: $e");
       rethrow; // Rethrow to allow higher-level handling
+    }
+  }
+
+  Future<String?> getFcmToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('fcm_token');
+  }
+
+  Future<void> sendFCMTokenToBackend() async {
+    try {
+      final deviceId =
+          await getId(); // Ensure `getId()` returns a resolved value if it's async
+      final accessToken = await getAccessToken();
+      final fcmToken =
+          await getFcmToken(); // Ensure this returns a resolved String value
+      final deviceName = Platform.isAndroid ? 'android' : 'ios';
+      print(deviceId);
+      print(fcmToken);
+      if (deviceId == null || fcmToken == null) {
+        throw Exception('Device ID or FCM token is missing.');
+      }
+      // Construct the body with resolved values
+      final body = {
+        'deviceId': deviceId,
+        'deviceName': deviceName,
+        'fcmToken': fcmToken,
+      };
+
+      final response = await http.put(
+        Uri.parse(
+            '${Constants.baseUrl}${Constants.userApiPath}/upsert-fcm-token'),
+        body: jsonEncode(body),
+        headers: _generateHeaders(accessToken: accessToken),
+      );
+
+
+      if (response.statusCode == 200) {
+        print('FCM token saved successfully.');
+      } else {
+        throw Exception('Error saving FCM token: ${response.body}');
+      }
+    } catch (e) {
+      print('Error sending FCM token: $e');
     }
   }
 }

@@ -540,6 +540,17 @@ class AuthenticationProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> sendFCMToken() async {
+    try {
+      await _authService.sendFCMTokenToBackend();
+      // Notify listeners or handle additional logic if needed
+      notifyListeners();
+    } catch (error) {
+      // Handle the error, log it, or update state
+      print('Error sending FCM token: $error');
+    }
+  }
+
   // Future<Map<String, dynamic>?> registerWithGoogle({
   //   required String email,
   //   required String displayName,

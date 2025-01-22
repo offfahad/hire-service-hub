@@ -27,7 +27,7 @@ class Conversation {
         id: json["id"],
         members: List<String>.from(json["members"].map((x) => x)),
         createdAt: DateTime.parse(json["created_at"]),
-        otherUser: UserModel.fromJsonForLogin(json["otherUser"]),
+        otherUser: UserModel.fromJson(json["otherUser"]),
         messages: List<Messages>.from(
             json["messages"].map((x) => Messages.fromJson(x))),
       );

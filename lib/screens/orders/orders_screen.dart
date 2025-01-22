@@ -34,6 +34,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        forceMaterialTransparency: true,
         title: const Text(
           'Orders',
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -70,6 +71,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   scrollDirection: Axis.horizontal,
                   children: [
                     buildFilterChip("All"),
+                    buildFilterChip("processing"),
                     buildFilterChip("pending"),
                     buildFilterChip("cancelled"),
                     buildFilterChip("completed"),
@@ -252,6 +254,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   Color getStatusColor(String status) {
     switch (status) {
+      case "processing":
+        return Colors.grey;
       case "pending":
         return Colors.orange;
       case "cancelled":
@@ -259,7 +263,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       case "completed":
         return Colors.green;
       default:
-        return Colors.grey;
+        return Colors.blue;
     }
   }
 }

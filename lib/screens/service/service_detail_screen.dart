@@ -8,8 +8,9 @@ import 'package:e_commerce/providers/chatting/chatting_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/chatting/chat_screen.dart';
 import 'package:e_commerce/screens/orders/book_order_screen.dart';
+import 'package:e_commerce/screens/reviews/service_review_detail_screen.dart';
 import 'package:e_commerce/screens/service/update_service_screen.dart';
-import 'package:e_commerce/screens/service/widgets/service_review_widget.dart';
+import 'package:e_commerce/screens/reviews/service_review_widget.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:e_commerce/utils/date_and_time_formatting.dart';
 import 'package:flutter/material.dart';
@@ -316,21 +317,32 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                               itemCount: serviceProvider.service!.data!
                                   .specificService!.reviews!.length,
                               itemBuilder: (ctx, index) {
-                                final review = serviceProvider.service!.data!
-                                    .specificService!.reviews![index];
+                                final reversedReviews = serviceProvider.service!
+                                    .data!.specificService!.reviews!.reversed
+                                    .toList();
+                                final review = reversedReviews[index];
+
+                                // final review = serviceProvider.service!.data!
+                                //     .specificService!.reviews![index];
                                 // Only display reviews that are not empty
-                                return ReviewWidget(
-                                    review:
-                                        review); // Custom widget for displaying review
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      SlidePageRoute(
+                                        page:
+                                            ReviewDetailsScreen(review: review),
+                                      ),
+                                    );
+                                  },
+                                  child: ReviewWidget(review: review),
+                                ); // Custom widget for displaying review
                               },
                             ),
                           )
-                        : const Padding(
-                            padding: EdgeInsets.only(top: 8, left: 16),
-                            child: Text(
-                              'No reviews available for this yet.',
-                              style: TextStyle(fontSize: 14),
-                            ),
+                        : const Text(
+                            'No reviews available for this yet.',
+                            style: TextStyle(fontSize: 14),
                           ),
                   ),
                   const SizedBox(

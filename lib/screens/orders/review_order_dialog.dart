@@ -34,7 +34,7 @@ class _ReviewDialogState extends State<ReviewDialog> {
             initialRating: 0,
             minRating: 0.5, // Allow half-star ratings
             direction: Axis.horizontal,
-            allowHalfRating: true,
+            allowHalfRating: false,
             itemCount: 5,
             itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
             itemBuilder: (context, _) => const Icon(

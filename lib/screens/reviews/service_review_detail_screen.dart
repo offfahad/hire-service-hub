@@ -1,6 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
+
+import 'package:e_commerce/common/snakbar/custom_snakbar.dart';
+import 'package:e_commerce/providers/authentication/authentication_provider.dart';
+import 'package:e_commerce/providers/reviews/reviews_provider.dart';
 import 'package:e_commerce/utils/date_and_time_formatting.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce/models/service/fetch_signle_service_model.dart';
+import 'package:iconly/iconly.dart';
+import 'package:provider/provider.dart';
 
 class ReviewDetailsScreen extends StatelessWidget {
   final Review review;
@@ -9,40 +18,57 @@ class ReviewDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider =
+        Provider.of<AuthenticationProvider>(context, listen: false);
+    bool isMyReview = authProvider.user?.id == review.reviewerId;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Review Details'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () {
-              // Show confirmation dialog before deleting
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Delete Review'),
-                  content: const Text(
-                      'Are you sure you want to delete this review?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () =>
-                          Navigator.pop(context), // Close the dialog
-                      child: const Text('Cancel'),
+          if (isMyReview)
+            Consumer<ReviewsProvider>(builder: (context, provider, child) {
+              return IconButton(
+                icon: const Icon(IconlyBold.delete),
+                onPressed: () {
+                  // Show confirmation dialog before deleting
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Delete Review'),
+                      content: const Text(
+                          'Are you sure you want to delete this review?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () =>
+                              Navigator.pop(context), // Close the dialog
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            final response =
+                                await provider.deleteReview(review.id);
+                            final responseData = jsonDecode(response.body);
+                            if (response.statusCode == 200) {
+                              showCustomSnackBar(context,
+                                  responseData["message"], Colors.green);
+                              Navigator.pop(context); // Close the dialog
+                              Navigator.pop(
+                                  context); // Close the screen after deletion
+                            } else {
+                              showCustomSnackBar(
+                                  context, responseData["message"], Colors.red);
+                            }
+                          },
+                          child: provider.isLoading
+                              ? const CircularProgressIndicator.adaptive()
+                              : const Text('Delete'),
+                        ),
+                      ],
                     ),
-                    TextButton(
-                      onPressed: () {
-                        // Add logic to delete the review
-                        Navigator.pop(context); // Close the dialog
-                        Navigator.pop(
-                            context); // Close the screen after deletion
-                      },
-                      child: const Text('Delete'),
-                    ),
-                  ],
-                ),
+                  );
+                },
               );
-            },
-          ),
+            }),
         ],
       ),
       body: Padding(

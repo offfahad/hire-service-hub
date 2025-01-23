@@ -17,4 +17,9 @@ class ReviewsRepository {
       rating: rating,
     );
   }
+
+  //delete review
+  Future<http.Response> deleteReview(String reviewId) async {
+    return await _reviewsService.deleteReview(reviewId);
+  }
 }

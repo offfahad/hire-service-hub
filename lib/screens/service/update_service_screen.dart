@@ -1,7 +1,6 @@
 import 'package:e_commerce/common/buttons/custom_gradient_button.dart';
 import 'package:e_commerce/common/snakbar/custom_snakbar.dart';
 import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
-import 'package:e_commerce/models/orders/get_my_orders.dart';
 import 'package:e_commerce/models/service/create_service_model.dart';
 import 'package:e_commerce/models/service/fetch_signle_service_model.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';

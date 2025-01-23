@@ -2,7 +2,6 @@ import 'package:carded/carded.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/models/service/service_model.dart';
 import 'package:e_commerce/screens/service/service_detail_screen.dart';
-import 'package:e_commerce/utils/api_constnsts.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';

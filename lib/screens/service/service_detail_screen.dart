@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:carded/carded.dart';
 import 'package:e_commerce/common/buttons/custom_elevated_button.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
@@ -42,8 +44,6 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
   Widget build(BuildContext context) {
     return Consumer2<AuthenticationProvider, ServiceProvider>(
         builder: (context, authProvider, serviceProvider, child) {
-      print(serviceProvider.service?.data?.specificService?.reviews);
-      print(widget.service.id);
       Future<void> handleConversation(
           BuildContext context,
           ChattingProvider chatProvider,
@@ -58,7 +58,6 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                 conversation.members.contains(currentUserId) &&
                 conversation.members.contains(hostId),
           );
-          print("This is existing user result ${existingConversation}");
         } catch (e) {
           if (e is StateError) {
             existingConversation = null;
@@ -406,7 +405,9 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
               height: 100,
               padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: isServiceByMe
+                    ? MainAxisAlignment.end
+                    : MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

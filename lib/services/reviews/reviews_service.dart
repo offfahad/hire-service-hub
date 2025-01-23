@@ -30,4 +30,18 @@ class ReviewService {
     print(response.body);
     return response;
   }
+
+  Future<http.Response> deleteReview(String reviewId) async {
+    String? accessToken = await AuthService.getAccessToken();
+    if (accessToken == null) throw Exception("Access token is missing.");
+    final url = Uri.parse('${Constants.baseUrl}/api/review/$reviewId');
+    final response = await http.delete(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken', // Replace with your token logic
+      },
+    );
+    return response;
+  }
 }

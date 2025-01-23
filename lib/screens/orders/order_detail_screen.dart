@@ -188,29 +188,27 @@ class OrderCard extends StatelessWidget {
                 },
               ),
             ] else if (order.orderStatus == "pending") ...[
-              if (!isServiceProvider)
-                _ActionButton(
-                  label: 'Update Order',
-                  color: Colors.orange,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      SlidePageRoute(
-                        page: OrderUpdateScreen(
-                          order: order,
-                        ),
+              _ActionButton(
+                label: 'Update Order',
+                color: Colors.orange,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    SlidePageRoute(
+                      page: OrderUpdateScreen(
+                        order: order,
                       ),
-                    );
-                  },
-                ),
-              if (!isServiceProvider)
-                _ActionButton(
-                  label: 'Cancel Order',
-                  color: Colors.red,
-                  onPressed: () {
-                    _showCancelOrderDialog(context, order);
-                  },
-                ),
+                    ),
+                  );
+                },
+              ),
+              _ActionButton(
+                label: 'Cancel Order',
+                color: Colors.red,
+                onPressed: () {
+                  _showCancelOrderDialog(context, order);
+                },
+              ),
             ] else
               ...[],
           ] else

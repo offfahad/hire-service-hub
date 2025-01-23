@@ -46,6 +46,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       ),
       body: Consumer2<OrderProvider, AuthenticationProvider>(
         builder: (context, orderProvider, authProvider, child) {
+          bool isCustomer = authProvider.user?.role?.title == 'customer';
           if (orderProvider.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -204,9 +205,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                               borderRadius:
                                                   BorderRadius.circular(16),
                                               child: CachedNetworkImage(
-                                                imageUrl: order.customer
-                                                        ?.profilePicture ??
-                                                    "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg",
+                                                imageUrl: isCustomer
+                                                    ? authProvider.user
+                                                            ?.profilePicture ??
+                                                        'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg'
+                                                    : order.customer
+                                                            ?.profilePicture ??
+                                                        "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg",
                                                 width: 30,
                                                 height: 30,
                                                 fit: BoxFit.cover,
@@ -216,7 +221,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                               width: 8,
                                             ),
                                             Text(
-                                              "${order.customer?.firstName ?? "N/A"} ${order.customer?.lastName ?? "N/A"}",
+                                              isCustomer
+                                                  ? "${authProvider.user?.firstName} "
+                                                      "${authProvider.user?.lastName}"
+                                                  : "${order.customer?.firstName} "
+                                                      " ${order.customer?.lastName}",
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.bold,

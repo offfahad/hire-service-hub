@@ -38,7 +38,7 @@ class CreateService {
       price: int.parse(json['price']),
       isAvailable: json['is_available'],
       coverPhoto: json["cover_photo"] != null
-          ? "${Constants.baseUrl}/${json["cover_photo"]}"
+          ? "${Constants.baseUrl}${json["cover_photo"]}"
           : null,
       startTime: json['start_time'],
       endTime: json['end_time'],

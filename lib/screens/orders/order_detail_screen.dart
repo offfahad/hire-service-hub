@@ -5,11 +5,10 @@ import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/common/snakbar/custom_snakbar.dart';
 import 'package:e_commerce/providers/orders/orders_provider.dart';
 import 'package:e_commerce/screens/orders/order_update_screen.dart';
+import 'package:e_commerce/screens/orders/review_order_dialog.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // For Clipboard
 import 'package:e_commerce/models/orders/get_my_orders.dart';
-import 'package:e_commerce/utils/api_constnsts.dart';
 import 'package:e_commerce/utils/date_and_time_formatting.dart';
 import 'package:provider/provider.dart';
 
@@ -177,7 +176,13 @@ class OrderCard extends StatelessWidget {
               _ActionButton(
                 label: 'Give Order Review',
                 color: Colors.green,
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) =>
+                        ReviewDialog(serviceId: order.service.id, orderId: order.id,),
+                  );
+                },
               ),
             ] else if (order.orderStatus == "processing") ...[
               _ActionButton(

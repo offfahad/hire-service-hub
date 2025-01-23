@@ -10,6 +10,7 @@ import 'package:e_commerce/providers/network_provider_controller.dart';
 import 'package:e_commerce/providers/orders/orders_provider.dart';
 import 'package:e_commerce/providers/profile_updation/profile_updation_provider.dart';
 import 'package:e_commerce/providers/profile_updation/update_password_provider.dart';
+import 'package:e_commerce/providers/reviews/reviews_provider.dart';
 import 'package:e_commerce/providers/service/service_filter_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/authentication/splash_screen/splash_screen.dart';
@@ -55,7 +56,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => FilterProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => ChattingProvider()),
-        ChangeNotifierProvider(create: (_) => NetworkProviderController())
+        ChangeNotifierProvider(create: (_) => NetworkProviderController()),
+        ChangeNotifierProvider(create: (_) => ReviewsProvider())
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,

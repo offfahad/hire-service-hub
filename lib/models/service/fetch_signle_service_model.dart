@@ -99,7 +99,7 @@ class SpecificService {
   String? city;
   User? user;
   Category? category;
-  List<dynamic>? reviews;
+  List<Review>? reviews;
 
   SpecificService({
     this.id,
@@ -132,7 +132,7 @@ class SpecificService {
     String? city,
     User? user,
     Category? category,
-    List<dynamic>? reviews,
+    List<Review>? reviews,
   }) =>
       SpecificService(
         id: id ?? this.id,
@@ -161,7 +161,7 @@ class SpecificService {
         price: json["price"],
         isAvailable: json["is_available"],
         coverPhoto: json["cover_photo"] != null
-            ? "${Constants.baseUrl}/${json["cover_photo"]}"
+            ? "${Constants.baseUrl}${json["cover_photo"]}"
             : null,
         startTime: json["start_time"] == null
             ? null
@@ -173,9 +173,13 @@ class SpecificService {
         category: json["category"] == null
             ? null
             : Category.fromJson(json["category"]),
-        reviews: json["reviews"] == null
-            ? []
-            : List<dynamic>.from(json["reviews"]!.map((x) => x)),
+        reviews: json['reviews'] != null
+            ? List<Review>.from(
+                json['reviews'].map(
+                  (review) => Review.fromJson(review),
+                ),
+              )
+            : [],
       );
 
   Map<String, dynamic> toJson() => {
@@ -193,7 +197,77 @@ class SpecificService {
         "user": user?.toJson(),
         "category": category?.toJson(),
         "reviews":
-            reviews == null ? [] : List<dynamic>.from(reviews!.map((x) => x)),
+            reviews == null ? [] : List<Review>.from(reviews!.map((x) => x)),
+      };
+}
+
+class Review {
+  String id;
+  String reviewerId;
+  String serviceId;
+  String reviewMessage;
+  int rating;
+  DateTime addedAt;
+  Reviewer reviewer;
+
+  Review({
+    required this.id,
+    required this.reviewerId,
+    required this.serviceId,
+    required this.reviewMessage,
+    required this.rating,
+    required this.addedAt,
+    required this.reviewer,
+  });
+
+  factory Review.fromJson(Map<String, dynamic> json) => Review(
+        id: json["id"],
+        reviewerId: json["reviewer_id"],
+        serviceId: json["service_id"],
+        reviewMessage: json["review_message"],
+        rating: json["rating"],
+        addedAt: DateTime.parse(json["added_at"]),
+        reviewer: Reviewer.fromJson(json["reviewer"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "reviewer_id": reviewerId,
+        "service_id": serviceId,
+        "review_message": reviewMessage,
+        "rating": rating,
+        "added_at": addedAt.toIso8601String(),
+        "reviewer": reviewer.toJson(),
+      };
+}
+
+class Reviewer {
+  String firstName;
+  String lastName;
+  String email;
+  String profilePicture;
+
+  Reviewer({
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.profilePicture,
+  });
+
+  factory Reviewer.fromJson(Map<String, dynamic> json) => Reviewer(
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        email: json["email"],
+        profilePicture: json['profile_picture'] != null
+            ? "${Constants.baseUrl}${json['profile_picture']}"
+            : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg',
+      );
+
+  Map<String, dynamic> toJson() => {
+        "first_name": firstName,
+        "last_name": lastName,
+        "email": email,
+        "profile_picture": profilePicture,
       };
 }
 
@@ -321,7 +395,7 @@ class User {
         phone: json["phone"],
         gender: json["gender"],
         profilePicture: json['profile_picture'] != null
-            ? "${Constants.baseUrl}/${json['profile_picture']}"
+            ? "${Constants.baseUrl}${json['profile_picture']}"
             : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg',
         otp: json["otp"],
         cnic: json["cnic"],

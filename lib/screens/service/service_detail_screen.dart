@@ -9,6 +9,7 @@ import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/chatting/chat_screen.dart';
 import 'package:e_commerce/screens/orders/book_order_screen.dart';
 import 'package:e_commerce/screens/service/update_service_screen.dart';
+import 'package:e_commerce/screens/service/widgets/service_review_widget.dart';
 import 'package:e_commerce/utils/app_theme.dart';
 import 'package:e_commerce/utils/date_and_time_formatting.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,8 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
   Widget build(BuildContext context) {
     return Consumer2<AuthenticationProvider, ServiceProvider>(
         builder: (context, authProvider, serviceProvider, child) {
+      print(serviceProvider.service?.data?.specificService?.reviews);
+      print(widget.service.id);
       Future<void> handleConversation(
           BuildContext context,
           ChattingProvider chatProvider,
@@ -301,38 +304,33 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
+
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.only(left: 16, top: 8),
                     child: serviceProvider
-                                    .service!.data!.specificService!.reviews ==
-                                null ||
-                            serviceProvider.service!.data!.specificService!
-                                .reviews!.isEmpty
-                        ? const Center(
-                            child: Text(
-                              "No reviews yet!",
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
+                            .service!.data!.specificService!.reviews!.isNotEmpty
+                        ? SizedBox(
+                            height: 150, // Adjust height to fit your UI needs
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: serviceProvider.service!.data!
+                                  .specificService!.reviews!.length,
+                              itemBuilder: (ctx, index) {
+                                final review = serviceProvider.service!.data!
+                                    .specificService!.reviews![index];
+                                // Only display reviews that are not empty
+                                return ReviewWidget(
+                                    review:
+                                        review); // Custom widget for displaying review
+                              },
                             ),
                           )
-                        : Column(
-                            children: serviceProvider
-                                .service!.data!.specificService!.reviews!
-                                .map(
-                                  (review) => ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                        review.userImage ??
-                                            "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg", // Placeholder image
-                                      ),
-                                    ),
-                                    title: Text(review.userName ?? "Anonymous"),
-                                    subtitle: Text(review.comment ??
-                                        "No comment provided."),
-                                  ),
-                                )
-                                .toList(), // Convert iterable to a list of widgets
+                        : const Padding(
+                            padding: EdgeInsets.only(top: 8, left: 16),
+                            child: Text(
+                              'No reviews available for this yet.',
+                              style: TextStyle(fontSize: 14),
+                            ),
                           ),
                   ),
                   const SizedBox(
@@ -367,7 +365,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              service.user?.address?.city ?? "",
+                              service.user?.address?.location ?? "",
                               style: const TextStyle(fontSize: 12),
                             ),
                           ],

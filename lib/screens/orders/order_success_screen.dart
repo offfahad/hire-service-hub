@@ -54,10 +54,10 @@ class OrderConfirmationScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _DetailRow(
-                      label: "Order ID:",
-                      value: orderDetails?.data?.id ?? "N/A",
-                    ),
+                    // _DetailRow(
+                    //   label: "Order ID:",
+                    //   value: orderDetails?.data?.id ?? "N/A",
+                    // ),
                     _DetailRow(
                       label: "Order Date:",
                       value:

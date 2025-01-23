@@ -77,37 +77,37 @@ class OrderCard extends StatelessWidget {
           //         ),
           // ),
           // const SizedBox(height: 20),
-          Column(
+          const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Order ID",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      order.id,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.copy, color: AppTheme.fMainColor),
-                    onPressed: () {
-                      Clipboard.setData(ClipboardData(text: order.id));
-                      showCustomSnackBar(context,
-                          "Order ID copied to clipboard!", Colors.green);
-                    },
-                  ),
-                ],
-              )
+              // const Text(
+              //   "Order ID",
+              //   style: TextStyle(
+              //     fontSize: 16,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: Text(
+              //         order.id,
+              //         style: TextStyle(
+              //           fontSize: 14,
+              //           color: Colors.grey[600],
+              //         ),
+              //       ),
+              //     ),
+              //     IconButton(
+              //       icon: Icon(Icons.copy, color: AppTheme.fMainColor),
+              //       onPressed: () {
+              //         Clipboard.setData(ClipboardData(text: order.id));
+              //         showCustomSnackBar(context,
+              //             "Order ID copied to clipboard!", Colors.green);
+              //       },
+              //     ),
+              //   ],
+              // )
             ],
           ),
           _DetailRow(label: 'Service', value: order.service.serviceName),
@@ -216,9 +216,7 @@ class OrderCard extends StatelessWidget {
           ] else
             ...[],
           if (isServiceProvider)
-            if (order.orderStatus == "completed")
-              ...[]
-            else ...[
+            if (order.orderStatus == "pending") ...[
               _ActionButton(
                 label: 'Accept Order',
                 color: Colors.green,
@@ -245,7 +243,37 @@ class OrderCard extends StatelessWidget {
                   }
                 },
               ),
-              if (isServiceProvider)
+              _ActionButton(
+                label: 'Reject Order',
+                color: Colors.redAccent,
+                onPressed: () async {
+                  try {
+                    final response = await orderProvider.rejectOrder(order.id);
+                    if (response!.statusCode == 200) {
+                      orderProvider.fetchMyOrders();
+                      final responseData = jsonDecode(response.body);
+                      showCustomSnackBar(
+                          context, responseData['message'], Colors.green);
+                      Navigator.pop(context); // Close the dialog
+                    } else {
+                      final responseData = jsonDecode(response.body);
+                      showCustomSnackBar(
+                          context,
+                          responseData['message'] ?? "An error occurred.",
+                          Colors.red);
+                    }
+                  } catch (e) {
+                    showCustomSnackBar(
+                        context, "An error occurred: $e", Colors.red);
+                  }
+                },
+              ),
+            ] else if (order.orderStatus == "completed")
+              ...[]
+            else if (order.orderStatus == "cancelled")
+              ...[]
+            else ...[
+              if (order.orderStatus == "processing") ...[
                 _ActionButton(
                   label: 'Reject Order',
                   color: Colors.redAccent,
@@ -253,7 +281,6 @@ class OrderCard extends StatelessWidget {
                     try {
                       final response =
                           await orderProvider.rejectOrder(order.id);
-
                       if (response!.statusCode == 200) {
                         orderProvider.fetchMyOrders();
                         final responseData = jsonDecode(response.body);
@@ -273,7 +300,6 @@ class OrderCard extends StatelessWidget {
                     }
                   },
                 ),
-              if (isServiceProvider)
                 _ActionButton(
                   label: 'Complete Order',
                   color: Colors.blue,
@@ -301,6 +327,8 @@ class OrderCard extends StatelessWidget {
                     }
                   },
                 ),
+              ] else
+                ...[],
             ]
         ],
       );

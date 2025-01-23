@@ -121,7 +121,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
             forceMaterialTransparency: true,
             title: const Text(
               "Service Details",
-              style: TextStyle(fontWeight: FontWeight.w600),
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
             ),
             actions: isServiceProvider
                 ? [

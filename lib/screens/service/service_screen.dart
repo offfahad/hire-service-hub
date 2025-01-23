@@ -54,7 +54,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
         forceMaterialTransparency: true,
         title: const Text(
           "Services",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
       body: Column(
@@ -130,7 +130,6 @@ class _ServiceScreenState extends State<ServiceScreen> {
                   return const Center(child: Text('No services available'));
                 } else {
                   return ListView.builder(
-                    
                     itemCount: provider.filteredServices.length,
                     itemBuilder: (context, index) {
                       final service = provider.filteredServices[index];

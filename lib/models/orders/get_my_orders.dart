@@ -163,7 +163,7 @@ class Customer {
         phone: json["phone"],
         gender: json["gender"],
         profilePicture: json['profile_picture'] != null
-            ? "${Constants.baseUrl}/${json['profile_picture']}"
+            ? "${Constants.baseUrl}${json['profile_picture']}"
             : 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg',
         cnic: json["cnic"],
         roleId: json["role_id"],

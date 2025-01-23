@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carded/carded.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/providers/authentication/authentication_provider.dart';
@@ -38,9 +39,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
         forceMaterialTransparency: true,
         title: Text(
           authProvider.user?.role?.title == "service_provider"
-              ? "Orders I've Received"
-              : "Orders I've Placed",
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ? "Received Orders"
+              : "My Orders",
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
       body: Consumer2<OrderProvider, AuthenticationProvider>(
@@ -129,118 +130,147 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 padding: const EdgeInsets.all(12),
-                                child: Row(
+                                child: Column(
                                   children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: order.service.coverPhoto != null
-                                          ? Image.network(
-                                              '${Constants.baseUrl}${order.service.coverPhoto}',
-                                              width: 80,
-                                              height: 80,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Image.asset(
-                                              'assets/images/content-writer.webp',
-                                              width: 80,
-                                              height: 80,
-                                              fit: BoxFit.cover,
-                                            ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          child:
+                                              order.service.coverPhoto != null
+                                                  ? Image.network(
+                                                      '${Constants.baseUrl}${order.service.coverPhoto}',
+                                                      width: 80,
+                                                      height: 60,
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : Image.asset(
+                                                      'assets/images/content-writer.webp',
+                                                      width: 80,
+                                                      height: 60,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                order.service.serviceName,
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "Rs${order.orderPrice}",
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                              CardyContainer(
-                                                padding:
-                                                    const EdgeInsets.all(3),
-                                                spreadRadius: 0,
-                                                blurRadius: 1,
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                color: getStatusColor(
-                                                    order.orderStatus),
-                                                child: Text(
-                                                  order.orderStatus
-                                                      .toUpperCase(),
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 10),
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                order.service.description,
+                                                style: const TextStyle(
+                                                  fontSize: 12,
                                                 ),
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
                                             ],
                                           ),
-                                          const SizedBox(height: 8),
-                                          Text(
-                                            order.service.description,
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              child: CachedNetworkImage(
+                                                imageUrl: order.customer
+                                                        ?.profilePicture ??
+                                                    "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small_2x/default-avatar-icon-of-social-media-user-vector.jpg",
+                                                width: 30,
+                                                height: 30,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            Text(
+                                              "${order.customer?.firstName ?? "N/A"} ${order.customer?.lastName ?? "N/A"}",
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        CardyContainer(
+                                          padding: const EdgeInsets.all(3),
+                                          spreadRadius: 0,
+                                          blurRadius: 1,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          color:
+                                              getStatusColor(order.orderStatus),
+                                          child: Text(
+                                            order.orderStatus.toUpperCase(),
                                             style: const TextStyle(
-                                              fontSize: 12,
-                                            ),
-                                            maxLines: 3,
-                                            overflow: TextOverflow.ellipsis,
+                                                color: Colors.white,
+                                                fontSize: 10),
                                           ),
-                                          const SizedBox(height: 8),
-                                          Row(
-                                            children: [
-                                              const Icon(
-                                                IconlyLight.time_circle,
-                                                size: 16,
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                formatDate(
-                                                  order.orderDate.toString(),
-                                                ),
-                                                style: const TextStyle(
-                                                    fontSize: 12),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-                                          InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  SlidePageRoute(
-                                                      page: OrderDetailsScreen(
-                                                    order: order,
-                                                    isServiceProvider:
-                                                        authProvider.user?.role!
-                                                                    .title ==
-                                                                "service_provider"
-                                                            ? true
-                                                            : false,
-                                                  )));
-                                            },
-                                            child: const Align(
-                                              alignment: Alignment.bottomRight,
-                                              child: Text(
-                                                "See More",
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    decoration: TextDecoration
-                                                        .underline),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
+                                    const Divider(),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Icon(
+                                              IconlyLight.time_circle,
+                                              size: 18,
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              formatDate(
+                                                order.orderDate.toString(),
+                                              ),
+                                              style:
+                                                  const TextStyle(fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                        const Icon(Icons.more_vert_outlined)
+                                      ],
+                                    )
                                   ],
                                 ),
                               ),

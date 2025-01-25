@@ -62,7 +62,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (_) => NotificationBadgeProvider()
             ..loadNotificationCount('chat')
-            ..loadNotificationCount('order'),
+            ..loadNotificationCount('order')
+            ..loadNotification(),
         ),
       ],
       child: MaterialApp(

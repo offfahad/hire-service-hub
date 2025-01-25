@@ -13,6 +13,13 @@ class NotificationsScreen extends StatelessWidget {
     final notifications =
         context.watch<NotificationBadgeProvider>().orderNotifications;
 
+    // Sort the notifications by 'time' field (most recent first)
+    notifications.sort((a, b) {
+      DateTime timeA = DateTime.parse(a['time']);
+      DateTime timeB = DateTime.parse(b['time']);
+      return timeB.compareTo(timeA); // Descending order
+    });
+
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
@@ -55,10 +62,9 @@ class NotificationsScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(message),
-          Text(formatDateWithTime(time), style: const TextStyle(fontSize: 12)),
+          Text(formatTime(time), style: const TextStyle(fontSize: 12)),
         ],
       ),
-     
     );
   }
 }

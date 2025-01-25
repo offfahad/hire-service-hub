@@ -94,16 +94,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           .resetCount('chat');
                     });
                   },
-                  child: badges.Badge(
-                    badgeStyle: badges.BadgeStyle(
-                      badgeColor: AppTheme.fMainColor,
-                    ),
-                    badgeContent: Text(
-                      chatBadgeCount.toString(),
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
-                    ),
-                    child: const Icon(IconlyLight.message),
-                  ),
+                  child: chatBadgeCount > 0
+                      ? badges.Badge(
+                          badgeStyle: badges.BadgeStyle(
+                            badgeColor: AppTheme.fMainColor,
+                          ),
+                          badgeContent: Text(
+                            chatBadgeCount.toString(),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 12),
+                          ),
+                          child: const Icon(IconlyLight.message),
+                        )
+                      : const Icon(IconlyLight.message),
                 ),
                 const SizedBox(width: 20),
                 InkWell(
@@ -119,16 +122,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           .resetCount('order');
                     });
                   },
-                  child: badges.Badge(
-                    badgeStyle: badges.BadgeStyle(
-                      badgeColor: AppTheme.fMainColor,
-                    ),
-                    badgeContent: Text(
-                      orderBadgeCount.toString(),
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
-                    ),
-                    child: const Icon(IconlyLight.notification),
-                  ),
+                  child: orderBadgeCount > 0
+                      ? badges.Badge(
+                          badgeStyle: badges.BadgeStyle(
+                            badgeColor: AppTheme.fMainColor,
+                          ),
+                          badgeContent: Text(
+                            orderBadgeCount.toString(),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 12),
+                          ),
+                          child: const Icon(IconlyLight.notification),
+                        )
+                      : const Icon(IconlyLight.notification),
                 ),
               ],
             ),

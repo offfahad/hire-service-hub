@@ -45,16 +45,19 @@ class BottomNavigationBarScreen extends StatelessWidget {
               label: 'Services',
             ),
             BottomNavigationBarItem(
-              icon: badges.Badge(
-                badgeStyle: badges.BadgeStyle(
-                  badgeColor: AppTheme.fMainColor,
-                ),
-                badgeContent: Text(
-                  orderBadgeCount.toString(),
-                  style: const TextStyle(color: Colors.white, fontSize: 12),
-                ),
-                child: const Icon(IconlyLight.bag),
-              ),
+              icon: orderBadgeCount > 0
+                  ? badges.Badge(
+                      badgeStyle: badges.BadgeStyle(
+                        badgeColor: AppTheme.fMainColor,
+                      ),
+                      badgeContent: Text(
+                        orderBadgeCount.toString(),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                      child: const Icon(IconlyLight.bag),
+                    )
+                  : const Icon(IconlyLight.bag),
               label: authProvider.user?.role?.title == "service_provider"
                   ? 'Orders'
                   : 'My Orders',

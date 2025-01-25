@@ -43,6 +43,17 @@ class _OrdersScreenState extends State<OrdersScreen> {
               : "My Orders",
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: IconButton(
+              icon: Icon(IconlyLight.info_circle, color: isDarkMode? Colors.white : Colors.black),
+              onPressed: () {
+                
+              },
+            ),
+          ),
+        ],
       ),
       body: Consumer2<OrderProvider, AuthenticationProvider>(
         builder: (context, orderProvider, authProvider, child) {

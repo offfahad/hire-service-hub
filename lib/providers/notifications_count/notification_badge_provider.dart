@@ -34,15 +34,10 @@ class NotificationBadgeProvider with ChangeNotifier {
 
   Future<void> saveNotifications(String title, String body, String time) async {
     final prefs = await SharedPreferences.getInstance();
-
     final notification = {'title': title, 'body': body, 'time': time};
-
     _notifications.add(notification);
-
     final notificationsJson = jsonEncode(notification);
-
     await prefs.setString(notificationsJson, 'notification');
-
     notifyListeners();
   }
 

@@ -1,4 +1,8 @@
+import 'package:e_commerce/providers/notifications_count/notification_badge_provider.dart';
+import 'package:e_commerce/utils/app_theme.dart';
+import 'package:e_commerce/utils/date_and_time_formatting.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
@@ -6,38 +10,31 @@ class NotificationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final notifications =
+        context.watch<NotificationBadgeProvider>().orderNotifications;
 
     return Scaffold(
       appBar: AppBar(
+        forceMaterialTransparency: true,
         title: const Text("Notifications"),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _buildNotificationItem(
-            name: "Listing Published Successfully!",
-            message: "Your gig is now live on Hire Service. Get ready!",
-            time: "Just Now",
-            avatarColor: Theme.of(context).primaryColor,
-          ),
-          const SizedBox(height: 16),
-          _buildNotificationItem(
-            name: "New Order Booked!",
-            message:
-                "You have a order a service. Review and confirm now!",
-            time: "10 Minutes Ago",
-            avatarColor: Theme.of(context).primaryColor,
-          ),
-          const SizedBox(height: 16),
-          _buildNotificationItem(
-            name: "Order Cancelled!",
-            message:
-                "The order has cancelled. See the order for details!",
-            time: "1 Hour Ago",
-            avatarColor: Theme.of(context).primaryColor,
-          ),
-        ],
-      ),
+      body: notifications.isEmpty
+          ? const Center(
+              child: Text("No notifications yet!"),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+              itemCount: notifications.length,
+              itemBuilder: (context, index) {
+                final notification = notifications[index];
+                return _buildNotificationItem(
+                  name: notification['title'],
+                  message: notification['body'],
+                  time: notification['time'],
+                  avatarColor: AppTheme.fMainColor,
+                );
+              },
+            ),
     );
   }
 
@@ -48,13 +45,20 @@ class NotificationsScreen extends StatelessWidget {
     required Color avatarColor,
   }) {
     return ListTile(
+      contentPadding: EdgeInsets.zero,
       leading: CircleAvatar(
         backgroundColor: avatarColor,
         child: const Icon(Icons.notifications, color: Colors.white),
       ),
       title: Text(name),
-      subtitle: Text(message),
-      trailing: Text(time, style: const TextStyle(fontSize: 12)),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(message),
+          Text(formatDateWithTime(time), style: const TextStyle(fontSize: 12)),
+        ],
+      ),
+     
     );
   }
 }

@@ -1,9 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'package:e_commerce/main.dart';
+import 'package:e_commerce/providers/notifications_count/notification_badge_provider.dart';
 import 'package:e_commerce/screens/authentication/splash_screen/splash_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @pragma('vm:entry-point')
@@ -147,37 +151,45 @@ class NotificationService {
     }
   }
 
-  Future<void> incrementNotificationCount(String type) async {
-    final prefs = await SharedPreferences.getInstance();
-    int currentCount = prefs.getInt('${type}_notification_count') ?? 0;
-    currentCount++;
-    await prefs.setInt('${type}_notification_count', currentCount);
-  }
-
-  Future<int> getNotificationCount(String type) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt('${type}_notification_count') ?? 0;
-  }
-
-  Future<void> resetNotificationCount(String type) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('${type}_notification_count', 0);
-  }
-
   Future<void> _setupMessageHandlers() async {
     //foreground message
     FirebaseMessaging.onMessage.listen((message) async {
       final type = message.data['type'] ?? 'default'; // Get type from data
-      await incrementNotificationCount(
-          type); // Increment count for the specific type
+      final title = message.data['title'] ?? 'default';
+      final body = message.data['body'] ?? 'default'; // Get body from data
+      final time = DateTime.now().toString();
+
+      // Use navigatorKey to get the provider and increment count
+      final context = navigatorKey.currentState?.context;
+      if (context != null) {
+        context.read<NotificationBadgeProvider>().incrementCount(type);
+
+        if (type != 'chat') {
+          await context
+              .read<NotificationBadgeProvider>()
+              .saveNotifications(title, body, time);
+        }
+      }
       showNotification(message);
     });
 
     // background message
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
       final type = message.data['type'] ?? 'default'; // Get type from data
-      await resetNotificationCount(
-          type); // Reset count when notification is opened
+      final title = message.data['title'] ?? 'default';
+      final body = message.data['body'] ?? 'default'; // Get body from data
+      final time = DateTime.now().toString();
+      // Reset notification count when the app is opened
+      final context = navigatorKey.currentState?.context;
+      if (context != null) {
+        context.read<NotificationBadgeProvider>().resetCount(type);
+        if (type != 'chat') {
+          await context
+              .read<NotificationBadgeProvider>()
+              .saveNotifications(title, body, time);
+        }
+      }
+
       _handleBackgroundMessage(message);
     });
 

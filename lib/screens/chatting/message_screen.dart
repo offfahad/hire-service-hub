@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carded/carded.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
 import 'package:e_commerce/models/chat/conversation.dart';
+import 'package:e_commerce/providers/notifications_count/notification_badge_provider.dart';
 import 'package:e_commerce/screens/chatting/chat_screen.dart';
 import 'package:e_commerce/screens/chatting/message_item_shimmer.dart';
 import 'package:e_commerce/utils/app_theme.dart';
@@ -40,7 +41,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
         builder: (context, chattingProvider, _) {
           if (chattingProvider.isConversationFetchingLoading) {
             return ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               itemCount: 3,
               itemBuilder: (context, index) => const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -48,13 +50,14 @@ class _MessagesScreenState extends State<MessagesScreen> {
               ),
             );
           }
-
+    
           return chattingProvider.conversations.isNotEmpty
               ? ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: chattingProvider.conversations.length,
                   itemBuilder: (context, index) {
-                    final conversation = chattingProvider.conversations[index];
+                    final conversation =
+                        chattingProvider.conversations[index];
                     return _buildMessageItem(
                       conversation: conversation,
                       name:
@@ -65,12 +68,14 @@ class _MessagesScreenState extends State<MessagesScreen> {
                       date: conversation.messages!.isEmpty
                           ? " "
                           : formatDateWithTime(
-                              conversation.messages!.last.createdAt.toString(),
+                              conversation.messages!.last.createdAt
+                                  .toString(),
                             ),
                       time: conversation.messages!.isEmpty
                           ? " "
                           : getFormattedTime12Hour(
-                              conversation.messages!.last.createdAt.toString(),
+                              conversation.messages!.last.createdAt
+                                  .toString(),
                             ),
                       avatarColor: AppTheme.fMainColor,
                       avatarUrl: conversation.otherUser!.profilePicture,
@@ -150,7 +155,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
                         fontSize: 16,
                       ),
                     ),
-                   
                     Row(
                       children: [
                         Text(

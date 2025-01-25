@@ -1,10 +1,9 @@
 import 'package:carded/carded.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_commerce/common/buttons/custom_elevated_button.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
-import 'package:e_commerce/common/text_form_fields/custom_text_form_field.dart';
 import 'package:e_commerce/providers/bottom_navigation/navigation_provider.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
+import 'package:e_commerce/providers/notifications_count/notification_badge_provider.dart';
 import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/screens/chatting/message_screen.dart';
 import 'package:e_commerce/screens/home/categories/categories_detail_screen.dart';
@@ -18,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:iconly/iconly.dart';
+import 'package:badges/badges.dart' as badges;
 
 import '../../providers/chatting/chatting_provider.dart';
 
@@ -64,7 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     Brightness brightness = Theme.of(context).brightness;
     bool isDarkMode = brightness == Brightness.dark;
-
+    final chatBadgeCount =
+        context.watch<NotificationBadgeProvider>().getNotificationCount('chat');
+    final orderBadgeCount = context
+        .watch<NotificationBadgeProvider>()
+        .getNotificationCount('order');
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -84,11 +88,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       SlidePageRoute(
                         page: const MessagesScreen(),
                       ),
-                    );
+                    ).then((_) async {
+                      await context
+                          .read<NotificationBadgeProvider>()
+                          .resetCount('chat');
+                    });
                   },
-                  child: const Badge(
-                    smallSize: 8,
-                    child: Icon(IconlyLight.message),
+                  child: badges.Badge(
+                    badgeStyle: badges.BadgeStyle(
+                      badgeColor: AppTheme.fMainColor,
+                    ),
+                    badgeContent: Text(
+                      chatBadgeCount.toString(),
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                    child: const Icon(IconlyLight.message),
                   ),
                 ),
                 const SizedBox(width: 20),
@@ -99,11 +113,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       SlidePageRoute(
                         page: const NotificationsScreen(),
                       ),
-                    );
+                    ).then((_) async {
+                      await context
+                          .read<NotificationBadgeProvider>()
+                          .resetCount('order');
+                    });
                   },
-                  child: const Badge(
-                    smallSize: 8,
-                    child: Icon(IconlyLight.notification),
+                  child: badges.Badge(
+                    badgeStyle: badges.BadgeStyle(
+                      badgeColor: AppTheme.fMainColor,
+                    ),
+                    badgeContent: Text(
+                      orderBadgeCount.toString(),
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                    child: const Icon(IconlyLight.notification),
                   ),
                 ),
               ],

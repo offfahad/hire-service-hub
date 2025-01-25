@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/info_helper_widget.dart';
+
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
 
@@ -28,31 +30,41 @@ class _OrdersScreenState extends State<OrdersScreen> {
     });
   }
 
+// Helper method to return the correct message based on the user role
+  String _getHelperMessage(String role) {
+    if (role == "service_provider") {
+      return "You are currently in seller mode. You can view orders from customers who have bought your services. If you'd like to view your own orders as a customer, switch to customer mode.";
+    } else if (role == "customer") {
+      return "You are currently in customer mode. You can view the orders you have made from service providers. If you'd like to manage services as a seller, switch to seller mode.";
+    } else {
+      return "Explore available orders and services.";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Brightness brightness = Theme.of(context).brightness;
     bool isDarkMode = brightness == Brightness.dark;
-    final authProvider =
-        Provider.of<AuthenticationProvider>(context, listen: true);
+    final authProvider = context.watch<
+        AuthenticationProvider>(); // Assuming this provides user role info
+    final role = authProvider.user?.role?.title ?? "customer"; // Get user role
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
         title: Text(
-          authProvider.user?.role?.title == "service_provider"
-              ? "Received Orders"
-              : "My Orders",
+          role == "service_provider" ? "Received Orders" : "My Orders",
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: IconButton(
-              icon: Icon(IconlyLight.info_circle, color: isDarkMode? Colors.white : Colors.black),
-              onPressed: () {
-                
-              },
-            ),
-          ),
+              padding: const EdgeInsets.only(right: 16),
+              child: InfoWidget(
+                  elevation: 6,
+                  infoTextStyle: const TextStyle(
+                      fontWeight: FontWeight.normal, fontSize: 14),
+                  infoText: _getHelperMessage(role),
+                  iconData: Icons.help,
+                  iconColor: AppTheme.fMainColor)),
         ],
       ),
       body: Consumer2<OrderProvider, AuthenticationProvider>(

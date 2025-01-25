@@ -147,14 +147,37 @@ class NotificationService {
     }
   }
 
+  Future<void> incrementNotificationCount(String type) async {
+    final prefs = await SharedPreferences.getInstance();
+    int currentCount = prefs.getInt('${type}_notification_count') ?? 0;
+    currentCount++;
+    await prefs.setInt('${type}_notification_count', currentCount);
+  }
+
+  Future<int> getNotificationCount(String type) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('${type}_notification_count') ?? 0;
+  }
+
+  Future<void> resetNotificationCount(String type) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('${type}_notification_count', 0);
+  }
+
   Future<void> _setupMessageHandlers() async {
     //foreground message
-    FirebaseMessaging.onMessage.listen((message) {
+    FirebaseMessaging.onMessage.listen((message) async {
+      final type = message.data['type'] ?? 'default'; // Get type from data
+      await incrementNotificationCount(
+          type); // Increment count for the specific type
       showNotification(message);
     });
 
     // background message
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+      final type = message.data['type'] ?? 'default'; // Get type from data
+      await resetNotificationCount(
+          type); // Reset count when notification is opened
       _handleBackgroundMessage(message);
     });
 
@@ -171,24 +194,24 @@ class NotificationService {
   }
 
   void _handleBackgroundMessage(RemoteMessage message) {
-    if (message.data['type'] == 'chat') {
-      // Fetch the current context
+    //if (message.data['type'] == 'chat') {
+    // Fetch the current context
 
-      //pass this data from the server
-      // {
-      //   "type": "chat",
-      //   "data": {
-      //     "conversationId": "12345",
-      //     "senderId": "67890",
-      //     "senderName": "John Doe",
-      //     "message": "Hey, how are you?",
-      //     "timestamp": "2024-11-15T12:34:56Z"
-      //   }
-      // }
+    //pass this data from the server
+    // {
+    //   "type": "chat",
+    //   "data": {
+    //     "conversationId": "12345",
+    //     "senderId": "67890",
+    //     "senderName": "John Doe",
+    //     "message": "Hey, how are you?",
+    //     "timestamp": "2024-11-15T12:34:56Z"
+    //   }
+    // }
 
-      // final conversationId = message.data['conversationId'];
-      // final senderName = message.data['senderName'];
-    }
+    // final conversationId = message.data['conversationId'];
+    // final senderName = message.data['senderName'];
+    //}
     navigatorKey.currentState!.pushReplacement(
       MaterialPageRoute(
         builder: (context) => const SplashScreen(),

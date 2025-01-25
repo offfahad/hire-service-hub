@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:e_commerce/common/snakbar/custom_snakbar.dart';
 import 'package:e_commerce/providers/authentication/authentication_provider.dart';
 import 'package:e_commerce/providers/reviews/reviews_provider.dart';
+import 'package:e_commerce/providers/service/service_provider.dart';
 import 'package:e_commerce/utils/date_and_time_formatting.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce/models/service/fetch_signle_service_model.dart';
@@ -20,6 +21,8 @@ class ReviewDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final authProvider =
         Provider.of<AuthenticationProvider>(context, listen: false);
+    final serviceProvider =
+        Provider.of<ServiceProvider>(context, listen: false);
     bool isMyReview = authProvider.user?.id == review.reviewerId;
     return Scaffold(
       appBar: AppBar(
@@ -52,11 +55,15 @@ class ReviewDetailsScreen extends StatelessWidget {
                               showCustomSnackBar(context,
                                   responseData["message"], Colors.green);
                               Navigator.pop(context); // Close the dialog
+                              await serviceProvider
+                                  .fetchSingleServiceDetail(review.serviceId);
                               Navigator.pop(
                                   context); // Close the screen after deletion
                             } else {
                               showCustomSnackBar(
                                   context, responseData["message"], Colors.red);
+                              Navigator.pop(
+                                  context); // Close the screen after deletion
                             }
                           },
                           child: provider.isLoading

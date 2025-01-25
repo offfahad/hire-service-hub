@@ -7,6 +7,7 @@ import 'package:e_commerce/providers/bottom_navigation/navigation_provider.dart'
 import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/chatting/chatting_provider.dart';
 import 'package:e_commerce/providers/network_provider_controller.dart';
+import 'package:e_commerce/providers/notifications_count/notification_badge_provider.dart';
 import 'package:e_commerce/providers/orders/orders_provider.dart';
 import 'package:e_commerce/providers/profile_updation/profile_updation_provider.dart';
 import 'package:e_commerce/providers/profile_updation/update_password_provider.dart';
@@ -57,7 +58,12 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => ChattingProvider()),
         ChangeNotifierProvider(create: (_) => NetworkProviderController()),
-        ChangeNotifierProvider(create: (_) => ReviewsProvider())
+        ChangeNotifierProvider(create: (_) => ReviewsProvider()),
+        ChangeNotifierProvider(
+          create: (_) => NotificationBadgeProvider()
+            ..loadNotificationCount('chat')
+            ..loadNotificationCount('order'),
+        ),
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,

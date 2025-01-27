@@ -170,6 +170,7 @@ class AuthService {
         headers: _generateHeaders(),
         body: json.encode({'refreshToken': refreshToken}),
       );
+      print(response.body);
       return response; // Returning the http.Response
     } catch (e) {
       print('Error during token refresh: $e');
@@ -453,7 +454,7 @@ class AuthService {
     }
 
     try {
-      final response = await http.get(
+      final response = await http.post(
         url,
         headers: {
           'Authorization': 'Bearer $accessToken',

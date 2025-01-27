@@ -26,6 +26,7 @@ class ProfileCompleteScreen extends StatelessWidget {
       builder: (context, profileUpdationProvider, authProvider, child) {
         return Scaffold(
           appBar: AppBar(
+            forceMaterialTransparency: true,
             centerTitle: true,
             title: const Text(
               "Complete Your Profile",
@@ -125,6 +126,8 @@ class ProfileCompleteScreen extends StatelessWidget {
                                                       'Profile photo updated successfully!',
                                                       Colors.green,
                                                     );
+                                                    await authProvider
+                                                        .getProfileCompletion();
                                                   } else {
                                                     showCustomSnackBar(
                                                       context,
@@ -153,6 +156,8 @@ class ProfileCompleteScreen extends StatelessWidget {
                                                       'Profile photo updated successfully!',
                                                       Colors.green,
                                                     );
+                                                    await authProvider
+                                                        .getProfileCompletion();
                                                   } else {
                                                     showCustomSnackBar(
                                                       context,
@@ -229,7 +234,6 @@ class ProfileCompleteScreen extends StatelessWidget {
                           fillColor: isDarkMode
                               ? ThemeData().scaffoldBackgroundColor
                               : Colors.white,
-                          
                           labelStyle: TextStyle(
                               color: isDarkMode
                                   ? Colors.white
@@ -410,6 +414,7 @@ class ProfileCompleteScreen extends StatelessWidget {
                                 "Profile is Updated!",
                                 Colors.green,
                               );
+                              await authProvider.getProfileCompletion();
                               Navigator.pop(context);
                             } else {
                               showCustomSnackBar(

@@ -141,7 +141,9 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 12.0),
                       decoration: BoxDecoration(
-                        border: Border.all(width: 0.5),
+                        border: Border.all(
+                            width: 0.5,
+                            color: isDarkMode ? Colors.white : Colors.black),
                         color: isDarkMode
                             ? ThemeData.dark().scaffoldBackgroundColor
                             : Colors.white,

@@ -109,6 +109,8 @@ class ProfileDetailsScreen extends StatelessWidget {
                                                         'Profile photo updated successfully!',
                                                         Colors.green,
                                                       );
+                                                      await authProvider
+                                                          .getProfileCompletion();
                                                     } else {
                                                       showCustomSnackBar(
                                                         context,
@@ -137,6 +139,8 @@ class ProfileDetailsScreen extends StatelessWidget {
                                                         'Profile photo updated successfully!',
                                                         Colors.green,
                                                       );
+                                                      await authProvider
+                                                          .getProfileCompletion();
                                                     } else {
                                                       showCustomSnackBar(
                                                         context,

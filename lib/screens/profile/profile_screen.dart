@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce/common/dialog_box/logout_dialogbox.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
+import 'package:e_commerce/common/snakbar/custom_snakbar.dart';
 import 'package:e_commerce/providers/authentication/authentication_provider.dart';
 import 'package:e_commerce/screens/profile/more_screens/account_screens/account_screen.dart';
 import 'package:e_commerce/screens/profile/profile_updation_screens/profile_details_screen.dart';
@@ -59,8 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         errorWidget: (context, url, error) {
                           // Print the error to debug
                           debugPrint('Image load error: $error');
-                          return Image.asset(
-                              'assets/images/default-user.jpg');
+                          return Image.asset('assets/images/default-user.jpg');
                         },
                       ),
                     ),
@@ -109,14 +109,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Icon(
-                                authProvider.user!.isComplete == true
-                                    ? IconlyLight.tick_square
-                                    : Icons.error,
-                                size: 25,
-                                color: authProvider.user!.isComplete == true
-                                    ? AppTheme.fMainColor
-                                    : Colors.red),
+                            Text(
+                              '${authProvider.profileCompletion?.userCompletionPercentage}%',
+                              style: const TextStyle(fontSize: 14),
+                            ),
                           ],
                         ),
                         const SizedBox(
@@ -165,9 +161,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontWeight: FontWeight.w500, fontSize: 14),
                       ),
                       onTap: () {
-                        Navigator.of(context).push(
-                          SlidePageRoute(page: const CreateServiceScreen()),
-                        );
+                        if (authProvider
+                                .profileCompletion?.userCompletionPercentage
+                                .toString() !=
+                            "100") {
+                          showCustomSnackBar(
+                              context,
+                              'Please complete your profile to create a new service.',
+                              Colors.red);
+                          return;
+                        } else {
+                          Navigator.of(context).push(
+                            SlidePageRoute(page: const CreateServiceScreen()),
+                          );
+                        }
                       },
                     ),
                     const Divider(),
@@ -184,11 +191,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontWeight: FontWeight.w500, fontSize: 14),
                       ),
                       onTap: () {
-                        Navigator.of(context).push(
-                          SlidePageRoute(
-                            page: const MyServicesScreen(),
-                          ),
-                        );
+                        if (authProvider
+                                .profileCompletion?.userCompletionPercentage
+                                .toString() !=
+                            "100") {
+                          showCustomSnackBar(
+                              context,
+                              'Please complete your profile to view your services.',
+                              Colors.red);
+                        } else {
+                          Navigator.of(context).push(
+                            SlidePageRoute(
+                              page: const MyServicesScreen(),
+                            ),
+                          );
+                        }
                       },
                     ),
                     const Divider(),

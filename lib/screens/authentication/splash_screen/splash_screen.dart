@@ -37,10 +37,6 @@ class _SplashScreenState extends State<SplashScreen> {
           Provider.of<AuthenticationProvider>(context, listen: false);
       final statusCode = await authProvider.getUserData();
 
-      await Future.delayed(
-        const Duration(milliseconds: 500),
-      ); // Adjusted delay
-
       if (statusCode == 200) {
         // User is logged in, navigate to home screen
         showCustomSnackBar(context, "Welcome Back!", Colors.green);

@@ -433,7 +433,6 @@ class AuthService {
         headers: _generateHeaders(accessToken: accessToken),
       );
 
-
       if (response.statusCode == 200) {
         print('FCM token saved successfully.');
       } else {
@@ -441,6 +440,30 @@ class AuthService {
       }
     } catch (e) {
       print('Error sending FCM token: $e');
+    }
+  }
+
+  Future<http.Response> fetchProfileCompletion() async {
+    final url = Uri.parse(
+        '${Constants.baseUrl}${Constants.userApiPath}/calculate-profile-completion');
+    final accessToken = await getAccessToken();
+
+    if (accessToken == null) {
+      throw Exception("Access token is missing.");
+    }
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+      print(response.body);
+      return response;
+    } catch (e) {
+      throw Exception('Failed to fetch profile completion: $e');
     }
   }
 }

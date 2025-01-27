@@ -179,18 +179,14 @@ class ProfileDetailsScreen extends StatelessWidget {
                             const Text(
                               "Profile Completion",
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Icon(
-                                authProvider.user!.isComplete == true
-                                    ? IconlyLight.tick_square
-                                    : Icons.error,
-                                size: 25,
-                                color: authProvider.user!.isComplete == true
-                                    ? AppTheme.fMainColor
-                                    : Colors.red),
+                            Text(
+                              '${authProvider.profileCompletion?.userCompletionPercentage}%',
+                              style: const TextStyle(fontSize: 14),
+                            ),
                           ],
                         ),
                         const SizedBox(

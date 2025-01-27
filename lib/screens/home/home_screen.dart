@@ -1,6 +1,7 @@
 import 'package:carded/carded.dart';
 import 'package:e_commerce/common/buttons/custom_elevated_button.dart';
 import 'package:e_commerce/common/slide_page_routes/slide_page_route.dart';
+import 'package:e_commerce/providers/authentication/authentication_provider.dart';
 import 'package:e_commerce/providers/bottom_navigation/navigation_provider.dart';
 import 'package:e_commerce/providers/category/category_provider.dart';
 import 'package:e_commerce/providers/notifications_count/notification_badge_provider.dart';
@@ -48,6 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Provider.of<ServiceProvider>(context, listen: false).fetchServices();
       Provider.of<ChattingProvider>(context, listen: false)
           .fetchConversations();
+      Provider.of<AuthenticationProvider>(context, listen: false)
+          .getProfileCompletion();
     });
   }
 

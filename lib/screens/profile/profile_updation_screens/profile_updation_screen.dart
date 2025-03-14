@@ -379,7 +379,6 @@ class ProfileCompleteScreen extends StatelessWidget {
                                 context, "Please select a gender.", Colors.red);
                             return; // Exit the method to prevent further execution
                           }
-
                           // Proceed to validate the rest of the form
                           if (profileUpdationProvider
                               .validateProfileUpdationForm()) {
@@ -406,7 +405,6 @@ class ProfileCompleteScreen extends StatelessWidget {
                                   .addressPostalCodeController.text
                                   .trim(),
                             );
-
                             // Handle navigation based on status code
                             if (statusCode == 200) {
                               showCustomSnackBar(

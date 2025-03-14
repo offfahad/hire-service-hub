@@ -409,8 +409,7 @@ class AuthService {
 
   Future<void> sendFCMTokenToBackend() async {
     try {
-      final deviceId =
-          await getId(); // Ensure `getId()` returns a resolved value if it's async
+      final String? deviceId = await getDeviceId();
       final accessToken = await getAccessToken();
       final fcmToken =
           await getFcmToken(); // Ensure this returns a resolved String value
